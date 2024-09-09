@@ -34,28 +34,34 @@ class MainActivity : AppCompatActivity() {
 
         // Verificar permisos
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(android.Manifest.permission.RECORD_AUDIO),
-                RECORD_AUDIO_REQUEST_CODE)
+                RECORD_AUDIO_REQUEST_CODE
+            )
         }
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
 
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Idioma inglés
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) // Preferir reconocimiento offline
+            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
         }
 
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
-                showToast("Ready for speech")
+                showToast("Listo para escuchar")
             }
 
             override fun onBeginningOfSpeech() {
-                showToast("Listening...")
+                showToast("Escuchando...")
             }
 
             override fun onRmsChanged(rmsdB: Float) {}
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             override fun onBufferReceived(buffer: ByteArray?) {}
 
             override fun onEndOfSpeech() {
-                showToast("Processing...")
+                showToast("Procesando...")
             }
 
             override fun onError(error: Int) {
@@ -82,9 +88,8 @@ class MainActivity : AppCompatActivity() {
             override fun onEvent(eventType: Int, params: Bundle?) {}
         })
 
-        // Verifica si el reconocimiento de voz está disponible
         if (!SpeechRecognizer.isRecognitionAvailable(this)) {
-            Toast.makeText(this, "Speech recognition not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Reconocimiento de voz no disponible", Toast.LENGTH_SHORT).show()
             val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
             try {
                 startActivity(intent)
@@ -99,13 +104,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startVoiceRecognition(intent: Intent) {
+        private fun startVoiceRecognition(intent: Intent) {
         speechRecognizer.startListening(intent)
     }
 
     private fun showToast(message: String) {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastToastTime > 2000) { // Limita a 1 Toast cada 2 segundos
+        if (currentTime - lastToastTime > 2000) {
             Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
             lastToastTime = currentTime
         }
