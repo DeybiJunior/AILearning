@@ -1,4 +1,4 @@
-package com.dapm.ailearning
+package com.dapm.ailearning.Aprende
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -19,8 +19,9 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.dapm.ailearning.R
 
-class InicioFragment : Fragment() {
+class Aprende_speack : Fragment() {
 
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var txtSpeechResult: TextView
@@ -33,7 +34,7 @@ class InicioFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inicio, container, false)
+        return inflater.inflate(R.layout.fragment_aprende_speacking, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
