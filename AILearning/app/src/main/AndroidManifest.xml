@@ -16,14 +16,12 @@
         android:theme="@style/Theme.AILearning"
         tools:targetApi="31" >
 
-        <!-- Declarar las actividades -->
+        <activity android:name=".MainActivity" />
+        <activity android:name=".RegistroActivity" />
 
 
-
-
-        <!-- Actividad principal que se inicia al lanzar la aplicación -->
-        <activity android:name=".MainActivity"
-            android:exported="true"> <!-- Explicitly specify the `android:exported` attribute -->
+        <activity android:name=".InicioSesionActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
