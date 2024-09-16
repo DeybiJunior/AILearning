@@ -1,6 +1,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#F1F1F0"/> <!-- Color de fondo gris -->
+    <solid android:color="@color/md_theme_inverseOnSurface"/> <!-- Color de fondo gris -->
     <corners android:radius="500dp"/> <!-- Bordes redondeados -->
 </shape>
 

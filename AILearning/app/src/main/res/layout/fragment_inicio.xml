@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txtBienvenida"
         android:layout_marginTop="8dp"
-        android:textColor="@color/md_theme_primary"
+        android:textColor="@color/md_theme_primary_mediumContrast"
         android:textSize="32sp"
         android:textStyle="bold"/>
     <TextView
@@ -28,7 +28,7 @@
         android:text = "¿Que vamos a hacer hoy?"
         android:layout_below="@id/txtNombreUsuario"
         android:layout_marginTop="8dp"
-        android:textColor="@color/md_theme_primary"
+        android:textColor="@color/md_theme_primary_mediumContrast"
         android:textSize="20sp" />
 
     <LinearLayout
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text = "Estudio por temas"
-                android:textColor="@color/md_theme_primary"
+                android:textColor="@color/md_theme_primary_mediumContrast"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text = "Buscar lecciones"
-                android:textColor="@color/md_theme_primary"
+                android:textColor="@color/md_theme_primary_mediumContrast"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
