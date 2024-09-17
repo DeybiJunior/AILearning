@@ -4,17 +4,15 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="50dp">
+    android:padding="16dp">
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:src="@drawable/icon_close"
         android:background="?attr/selectableItemBackgroundBorderless"
-
         android:contentDescription="Volver"
         android:layout_gravity="start"
-
         android:layout_marginBottom="16dp" />
 
     <TextView
