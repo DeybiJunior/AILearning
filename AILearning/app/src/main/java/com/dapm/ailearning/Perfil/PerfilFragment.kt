@@ -2,20 +2,38 @@ package com.dapm.ailearning.Perfil
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.dapm.ailearning.Login.InicioSesionActivity
 import com.dapm.ailearning.R
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
+import kotlin.properties.Delegates
 
 class PerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var loginButton: Button
     private lateinit var logoutButton: Button
+
+    private lateinit var circularProgressIndicator: CircularProgressIndicator
+    private lateinit var progressText: TextView
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
+        progressText = view.findViewById(R.id.progressText)
+
+        // Llama a increaseProgress() para iniciar el progreso automáticamente
+        increaseProgress()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +62,35 @@ class PerfilFragment : Fragment() {
             }
         }
 
+        circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
+        progressText = view.findViewById(R.id.progressText)
+
+        // Establece el progreso inicial
+        updateProgress(0)
+
         return view
+    }
+
+    // Función para actualizar el progreso
+    private fun updateProgress(progress: Int) {
+        circularProgressIndicator.setProgress(progress)
+        progressText.text = "$progress%"
+    }
+    // Ejemplo de cómo variar el progreso
+    private fun increaseProgress() {
+        var progress = 0
+        var current_progress = 60
+        // Aumenta el progreso en un ciclo
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (progress < current_progress) {
+                    progress += 1
+                    updateProgress(progress)
+                    handler.postDelayed(this, 30) // Actualiza cada 30ms
+                }
+            }
+        }, 500)
     }
 
     private fun handleLogout() {
