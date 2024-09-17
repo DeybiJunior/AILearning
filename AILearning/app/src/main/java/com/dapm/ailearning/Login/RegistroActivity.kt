@@ -1,4 +1,4 @@
-package com.dapm.ailearning
+package com.dapm.ailearning.Login
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.dapm.ailearning.MainActivity
+import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -62,10 +64,11 @@ class RegistroActivity : AppCompatActivity() {
         edadLayout: TextInputLayout, edadStr: String,
         emailLayout: TextInputLayout, email: String,
         passwordLayout: TextInputLayout, password: String,
-        confirmPasswordLayout: TextInputLayout, confirmPassword: String  // Nuevo
+        confirmPasswordLayout: TextInputLayout, confirmPassword: String
     ) {
         val edad = edadStr.toIntOrNull()
 
+        // Limpiar errores previos
         nombresLayout.error = null
         apellidosLayout.error = null
         edadLayout.error = null
@@ -73,6 +76,7 @@ class RegistroActivity : AppCompatActivity() {
         passwordLayout.error = null
         confirmPasswordLayout.error = null
 
+        // Validación de los campos
         if (nombres.isEmpty()) {
             nombresLayout.error = getString(R.string.error_nombres)
             return
@@ -97,17 +101,14 @@ class RegistroActivity : AppCompatActivity() {
         if (passwordValidationResult != null) {
             passwordLayout.error = passwordValidationResult
             return
-        } else {
-            passwordLayout.error = null
         }
 
         if (password != confirmPassword) {
             confirmPasswordLayout.error = getString(R.string.error_password_mismatch)
             return
-        } else {
-            confirmPasswordLayout.error = null
         }
 
+        // Crear el usuario
         val user = hashMapOf(
             "nombres" to nombres,
             "apellidos" to apellidos,
@@ -115,17 +116,30 @@ class RegistroActivity : AppCompatActivity() {
             "email" to email,
             "password" to password
         )
+
+        // Guardar el usuario en Firestore
         firestore.collection("users")
             .add(user)
             .addOnSuccessListener { documentReference ->
+                // Registro exitoso
+                Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
+
+                // Guardar en SharedPreferences que ya no es la primera vez
+                val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putBoolean("isFirstTime", false)
+                editor.apply()
+
+                // Redirigir al MainActivity
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
+                finish()
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error al registrar usuario: $e", Toast.LENGTH_SHORT).show()
             }
     }
+
 
     private fun validatePassword(password: String): String? {
         if (password.length < 8) {

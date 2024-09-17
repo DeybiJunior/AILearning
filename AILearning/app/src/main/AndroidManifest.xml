@@ -16,18 +16,17 @@
         android:theme="@style/Theme.AILearning"
         tools:targetApi="31" >
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".RegistroActivity" />
 
-
-        <activity android:name=".InicioSesionActivity"
+        <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Login.InicioSesionActivity" />
+        <activity android:name=".Login.RegistroActivity" />
 
     </application>
 

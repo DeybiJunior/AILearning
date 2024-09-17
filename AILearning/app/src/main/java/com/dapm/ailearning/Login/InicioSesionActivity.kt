@@ -1,4 +1,4 @@
-package com.dapm.ailearning
+package com.dapm.ailearning.Login
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.dapm.ailearning.MainActivity
+import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 class InicioSesionActivity : AppCompatActivity() {
@@ -36,9 +37,15 @@ class InicioSesionActivity : AppCompatActivity() {
                 emailLayout, emailEditText.text.toString().trim(),
                 passwordLayout, passwordEditText.text.toString().trim()
             )
+
         }
 
         registarseButton.setOnClickListener {
+            val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("isFirstTime", false)
+            editor.apply()
+
             val intentRegistro = Intent(this, RegistroActivity::class.java)
             startActivity(intentRegistro)
         }
@@ -75,21 +82,23 @@ class InicioSesionActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
                     statusTextView.text = getString(R.string.error_login)
-                    // Alternativamente, si prefieres usar Snackbar
-                    // Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_login), Snackbar.LENGTH_SHORT).show()
                 } else {
                     statusTextView.text = getString(R.string.success_login)
-                    // Alternativamente, si prefieres usar Snackbar
-                    // Snackbar.make(findViewById(android.R.id.content), getString(R.string.success_login), Snackbar.LENGTH_SHORT).show()
+
+                    // Guardar en SharedPreferences que ya no es la primera vez
+                    val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("isFirstTime", false)
+                    editor.apply()
+
+                    // Redirigir al MainActivity
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                    finish()
                 }
             }
             .addOnFailureListener { e ->
                 statusTextView.text = getString(R.string.error_login_failure, e.message)
-                // Alternativamente, si prefieres usar Snackbar
-                // Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_login_failure, e.message), Snackbar.LENGTH_SHORT).show()
             }
-
     }
 }
