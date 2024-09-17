@@ -18,7 +18,7 @@
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
 
     //login
-        <!-- Mensajes de error -->
+    <!-- Mensajes de error -->
     <string name="error_email_inicio">Por favor, ingresa un correo electrónico válido.</string>
     <string name="error_password">Por favor, ingresa una contraseña.</string>
     <string name="remember_me">Recordar contraseña.</string>
@@ -32,7 +32,6 @@
     <string name="error_login_failure">Error al iniciar sesión: %1$s</string>
 
 
-
     <string name="lorem_ipsum">
         cola
     </string>
@@ -40,4 +39,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Seleccion de Tema-->
+    <string-array name="simple_items">
+        <item>Gramática</item>
+        <item>Pronunciación</item>
+        <item>Vocabulario</item>
+        <item>Escucha</item>
+    </string-array>
 </resources>

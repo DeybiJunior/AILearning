@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +27,18 @@ class InicioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Inicializar los botones
+        val btnOpcion1 = view.findViewById<Button>(R.id.btnOpcion1)
+        val btnOpcion2 = view.findViewById<Button>(R.id.btnOpcion2)
+
+        // Navegación a SeleccionTemaFragment
+        btnOpcion1.setOnClickListener {
+            (activity as MainActivity).loadFragment(SeleccionTemaFragment())
+        }
+        btnOpcion2.setOnClickListener {
+            (activity as MainActivity).loadFragment(BusquedaLeccionFragment())
+        }
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
