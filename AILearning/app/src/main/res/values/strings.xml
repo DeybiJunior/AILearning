@@ -22,6 +22,8 @@
     <string name="error_email_inicio">Por favor, ingresa un correo electrónico válido.</string>
     <string name="error_password">Por favor, ingresa una contraseña.</string>
     <string name="remember_me">Recordar contraseña.</string>
+    <string name="error_no_user">No se encuentra ningún usuario con este correo electrónico.</string>
+    <string name="error_wrong_password">La contraseña es incorrecta.</string>
 
 
     <!-- Otros mensajes -->

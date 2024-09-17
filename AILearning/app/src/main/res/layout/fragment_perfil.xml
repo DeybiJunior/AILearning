@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_perfil.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Contenido del Fragmento de Perfil -->
+    <!-- Otros elementos de diseño -->
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iniciar sesión"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar sesión"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" />
 
 </RelativeLayout>

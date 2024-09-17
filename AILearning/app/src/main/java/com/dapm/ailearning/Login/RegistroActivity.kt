@@ -11,16 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class RegistroActivity : AppCompatActivity() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
 
+        auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -68,7 +71,6 @@ class RegistroActivity : AppCompatActivity() {
     ) {
         val edad = edadStr.toIntOrNull()
 
-        // Limpiar errores previos
         nombresLayout.error = null
         apellidosLayout.error = null
         edadLayout.error = null
@@ -76,7 +78,6 @@ class RegistroActivity : AppCompatActivity() {
         passwordLayout.error = null
         confirmPasswordLayout.error = null
 
-        // Validación de los campos
         if (nombres.isEmpty()) {
             nombresLayout.error = getString(R.string.error_nombres)
             return
@@ -108,38 +109,39 @@ class RegistroActivity : AppCompatActivity() {
             return
         }
 
-        // Crear el usuario
-        val user = hashMapOf(
-            "nombres" to nombres,
-            "apellidos" to apellidos,
-            "edad" to edad,
-            "email" to email,
-            "password" to password
-        )
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Registration successful
+                    Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
 
-        // Guardar el usuario en Firestore
-        firestore.collection("users")
-            .add(user)
-            .addOnSuccessListener { documentReference ->
-                // Registro exitoso
-                Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
+                    // Save user data in Firestore
+                    val user = hashMapOf(
+                        "nombres" to nombres,
+                        "apellidos" to apellidos,
+                        "edad" to edad
+                    )
 
-                // Guardar en SharedPreferences que ya no es la primera vez
-                val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putBoolean("isFirstTime", false)
-                editor.apply()
-
-                // Redirigir al MainActivity
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Error al registrar usuario: $e", Toast.LENGTH_SHORT).show()
+                    val userId = auth.currentUser?.uid
+                    if (userId != null) {
+                        firestore.collection("users")
+                            .document(userId)
+                            .set(user)
+                            .addOnSuccessListener {
+                                // User data saved successfully
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Error al guardar datos del usuario: $e", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                } else {
+                    Toast.makeText(this, "Error al registrar usuario: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
             }
     }
-
 
     private fun validatePassword(password: String): String? {
         if (password.length < 8) {
@@ -158,4 +160,3 @@ class RegistroActivity : AppCompatActivity() {
         }
     }
 }
-

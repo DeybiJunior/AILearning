@@ -11,18 +11,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+
 class InicioSesionActivity : AppCompatActivity() {
 
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var statusTextView: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iniciosesion)
 
-        firestore = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
         statusTextView = findViewById(R.id.status_text_view)
         val emailLayout = findViewById<TextInputLayout>(R.id.emailLayout)
         val passwordLayout = findViewById<TextInputLayout>(R.id.passwordLayout)
@@ -37,7 +37,6 @@ class InicioSesionActivity : AppCompatActivity() {
                 emailLayout, emailEditText.text.toString().trim(),
                 passwordLayout, passwordEditText.text.toString().trim()
             )
-
         }
 
         registarseButton.setOnClickListener {
@@ -51,12 +50,10 @@ class InicioSesionActivity : AppCompatActivity() {
         }
 
         continueWithoutLoginButton.setOnClickListener {
-            // Lógica para continuar sin iniciar sesión
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }
-
 
     private fun handleLogin(
         emailLayout: TextInputLayout, email: String,
@@ -75,30 +72,29 @@ class InicioSesionActivity : AppCompatActivity() {
             return
         }
 
-        firestore.collection("users")
-            .whereEqualTo("email", email)
-            .whereEqualTo("password", password)
-            .get()
-            .addOnSuccessListener { result ->
-                if (result.isEmpty) {
-                    statusTextView.text = getString(R.string.error_login)
-                } else {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
                     statusTextView.text = getString(R.string.success_login)
 
-                    // Guardar en SharedPreferences que ya no es la primera vez
                     val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
                     val editor = sharedPreferences.edit()
                     editor.putBoolean("isFirstTime", false)
                     editor.apply()
 
-                    // Redirigir al MainActivity
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
+                } else {
+                    val exception = task.exception
+                    val errorMessage = when {
+                        exception?.message?.contains("There is no user record") == true -> getString(R.string.error_no_user)
+                        exception?.message?.contains("The password is invalid") == true -> getString(R.string.error_wrong_password)
+                        else -> getString(R.string.error_login_failure, exception?.message)
+                    }
+                    statusTextView.text = errorMessage
                 }
             }
-            .addOnFailureListener { e ->
-                statusTextView.text = getString(R.string.error_login_failure, e.message)
-            }
     }
+
 }
