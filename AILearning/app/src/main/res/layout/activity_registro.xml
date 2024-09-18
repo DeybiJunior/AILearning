@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         app:cardElevation="4dp"
         app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="@color/md_theme_onTertiaryContainer_mediumContrast"
+        app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
         android:layout_marginTop="16dp">
 
         <LinearLayout

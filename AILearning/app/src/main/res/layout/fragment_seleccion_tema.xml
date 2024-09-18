@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:hintTextColor="@color/md_theme_outline"
+        app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
         android:hint="Selecciona un Tema">
 
         <AutoCompleteTextView
