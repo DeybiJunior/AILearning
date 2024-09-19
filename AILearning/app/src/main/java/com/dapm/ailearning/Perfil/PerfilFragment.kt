@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.dapm.ailearning.Login.InicioSesionActivity
 import com.dapm.ailearning.R
@@ -19,8 +20,8 @@ import kotlin.properties.Delegates
 class PerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var loginButton: Button
-    private lateinit var logoutButton: Button
+    private lateinit var loginCard: CardView
+    private lateinit var logoutCard: CardView
 
     private lateinit var circularProgressIndicator: CircularProgressIndicator
     private lateinit var progressText: TextView
@@ -43,21 +44,21 @@ class PerfilFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_perfil, container, false)
 
-        loginButton = view.findViewById(R.id.loginButton)
-        logoutButton = view.findViewById(R.id.logoutButton)
+        loginCard = view.findViewById(R.id.loginCard)
+        logoutCard = view.findViewById(R.id.logoutCard)
 
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            loginButton.visibility = View.VISIBLE
-            loginButton.setOnClickListener {
+            loginCard.visibility = View.VISIBLE
+            loginCard.setOnClickListener {
                 // Redirigir al usuario a la pantalla de inicio de sesión
                 val intent = Intent(requireContext(), InicioSesionActivity::class.java)
                 startActivity(intent)
             }
         } else {
-            loginButton.visibility = View.GONE
-            logoutButton.visibility = View.VISIBLE
-            logoutButton.setOnClickListener {
+            loginCard.visibility = View.GONE
+            logoutCard.visibility = View.VISIBLE
+            logoutCard.setOnClickListener {
                 handleLogout()
             }
         }
@@ -76,15 +77,16 @@ class PerfilFragment : Fragment() {
         circularProgressIndicator.setProgress(progress)
         progressText.text = "$progress%"
     }
+
     // Ejemplo de cómo variar el progreso
     private fun increaseProgress() {
         var progress = 0
-        var current_progress = 60
+        val currentProgress = 60
         // Aumenta el progreso en un ciclo
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(object : Runnable {
             override fun run() {
-                if (progress < current_progress) {
+                if (progress < currentProgress) {
                     progress += 1
                     updateProgress(progress)
                     handler.postDelayed(this, 30) // Actualiza cada 30ms

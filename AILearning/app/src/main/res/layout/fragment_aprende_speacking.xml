@@ -8,6 +8,8 @@
         android:id="@+id/txtSpeechResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
         android:text="Speech result will appear here"
         android:textSize="18sp" />
 
@@ -15,6 +17,7 @@
         android:id="@+id/btnStartSpeech"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Start Speech Recognition"
         android:layout_below="@id/txtSpeechResult"
         android:layout_marginTop="16dp" />

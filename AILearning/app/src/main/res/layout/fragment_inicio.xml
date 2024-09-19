@@ -4,114 +4,146 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
-    <TextView
-        android:id="@+id/txtBienvenida"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text = "Bienvenido"
-        android:textColor="@color/md_theme_outline"
-        android:textSize="20sp">
-    </TextView>
-    <TextView
-        android:id="@+id/txtNombreUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtBienvenida"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/md_theme_primary_mediumContrast"
-        android:textSize="32sp"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/txtTexto1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "¿Que vamos a hacer hoy?"
-        android:layout_below="@id/txtNombreUsuario"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/md_theme_primary_mediumContrast"
-        android:textSize="20sp" />
 
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtTexto1"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/background_round">
-            <TextView
-                android:id="@+id/txtOpcion1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text = "Estudio por temas"
-                android:textColor="@color/md_theme_primary_mediumContrast"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOpcion1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                app:icon="@drawable/icon_flecha_derecha"
-                app:iconSize="30dp"
-                app:iconPadding="0dp"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                app:iconTint="@color/blancosiempre"
-                android:backgroundTint="#3DC2DF"
-                app:cornerRadius="140dp"
-                android:padding="0dp"
-                android:layout_margin="0dp"
-                app:iconGravity="textStart" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/background_round">
-            <TextView
-                android:id="@+id/txtOpcion2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text = "Buscar lecciones"
-                android:textColor="@color/md_theme_primary_mediumContrast"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"/>
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOpcion2"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                app:icon="@drawable/icon_flecha_derecha"
-                app:iconSize="30dp"
-                app:iconPadding="0dp"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                app:iconTint="@color/blancosiempre"
-                android:backgroundTint="#54F0A5"
-                app:cornerRadius="140dp"
-                android:padding="0dp"
-                android:layout_margin="0dp"
-                app:iconGravity="textStart" />
-        </LinearLayout>
-    </LinearLayout>
+            android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/txtBienvenida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bienvenido"
+                android:textColor="@color/md_theme_outline"
+                android:textSize="20sp"></TextView>
+
+            <TextView
+                android:id="@+id/txtNombreUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTexto1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="¿Que vamos a hacer hoy?"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/txtOpcion1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="Estudio por temas"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOpcion1"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="0dp"
+                            android:backgroundTint="#3DC2DF"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="0dp"
+                            app:cornerRadius="140dp"
+                            app:icon="@drawable/icon_flecha_derecha"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconSize="30dp"
+                            app:iconTint="@color/blancosiempre" />
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginTop="10dp"
+                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/txtOpcion2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="Buscar lecciones"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOpcion2"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="0dp"
+                            android:backgroundTint="#54F0A5"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:padding="0dp"
+                            app:cornerRadius="140dp"
+                            app:icon="@drawable/icon_flecha_derecha"
+                            app:iconGravity="textStart"
+                            app:iconPadding="0dp"
+                            app:iconSize="30dp"
+                            app:iconTint="@color/blancosiempre" />
+
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
     <!-- Contenido del Fragmento de Perfil -->

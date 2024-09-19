@@ -38,8 +38,13 @@
         android:layout_height="wrap_content"
         app:cardElevation="4dp"
         app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+        app:cardBackgroundColor="@color/md_theme_background"
         android:layout_marginTop="16dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +109,8 @@
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="filled"
                 app:boxStrokeColor="@color/md_theme_secondary"
-                app:hintTextColor="@color/md_theme_onSurface">
+                app:hintTextColor="@color/md_theme_onSurface"
+                app:boxBackgroundColor="@color/md_theme_inverseOnSurface">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailEditText"
@@ -127,7 +133,8 @@
                 app:boxBackgroundMode="filled"
                 app:errorEnabled="true"
                 app:boxStrokeColor="@color/md_theme_secondary"
-                app:hintTextColor="@color/md_theme_onSurface">
+                app:hintTextColor="@color/md_theme_onSurface"
+                app:boxBackgroundColor="@color/md_theme_inverseOnSurface">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordEditText"
@@ -187,9 +194,8 @@
                 app:cornerRadius="8dp"
                 android:textColor="@color/md_theme_onSecondary" />
 
-
-
         </LinearLayout>
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 

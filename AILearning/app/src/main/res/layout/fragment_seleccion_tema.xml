@@ -5,81 +5,93 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
+
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_close"
+        android:layout_gravity="start"
+        android:layout_marginBottom="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Volver"
-        android:layout_gravity="start"
-        android:layout_marginBottom="16dp" />
+        android:src="@drawable/icon_close" />
 
-    <TextView
-        android:id="@+id/txtTexto1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "¿Sobre que tema quieres mejorar tu ingles?"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtTexto1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="¿Sobre que tema quieres mejorar tu ingles?"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/menu"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Selecciona un Tema"
+                app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+                app:hintTextColor="@color/md_theme_outline">
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    app:simpleItems="@array/simple_items" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/txtTexto2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="O escribe sobre un tema en especifico"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/temaEspecifico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeColor="@color/md_theme_secondary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/temaEspecificoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tema a Estudiar"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Guardar"
+                android:textColor="@color/blancosiempre"
+                android:textSize="16sp"
+                app:backgroundTint="#3DC2DF"
+                app:cornerRadius="18dp" />
+        </LinearLayout>
+    </ScrollView>
 
 
     <!-- MaterialAutoCompleteTextView para seleccionar opciones -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:hintTextColor="@color/md_theme_outline"
-        app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-        android:hint="Selecciona un Tema">
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            app:simpleItems="@array/simple_items"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/txtTexto2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "O escribe sobre un tema en especifico"
-        android:layout_marginTop="30dp"
-        android:textSize="16sp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/temaEspecifico"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:boxBackgroundMode="filled"
-        app:boxStrokeColor="@color/md_theme_secondary"
-        app:hintTextColor="@color/md_theme_onSurface">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/temaEspecificoText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tema a Estudiar"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón Guardar -->
-    <Button
-        android:id="@+id/btnGuardar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Guardar"
-        android:layout_marginTop="30dp"
-        android:textSize="16sp"
-        app:cornerRadius="18dp"
-        android:textColor="@color/blancosiempre"
-        app:backgroundTint="#3DC2DF" />
 
 </LinearLayout>
