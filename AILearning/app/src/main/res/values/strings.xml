@@ -42,6 +42,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="recopilacion_datos_personales">Al utilizar AI Learning, recopilamos información que puedes proporcionar, como tu nombre, dirección de correo electrónico y preferencias de aprendizaje. También recopilamos datos sobre tu uso de la aplicación, incluyendo el tiempo de uso y las lecciones completadas.</string>
+
+    <string name="datos_de_audio">AI Learning registra grabaciones de tu pronunciación para ofrecerte retroalimentación personalizada y mejorar tu aprendizaje. Estas grabaciones se utilizan únicamente con este propósito.</string>
+
+    <string name="uso_de_datos">La información recopilada se utiliza para personalizar tu experiencia de aprendizaje, mejorar nuestros servicios y comunicarnos contigo sobre actualizaciones o novedades de la aplicación.</string>
+
+    <string name="medidas_de_seguridad">Implementamos medidas técnicas y organizativas adecuadas para proteger tus datos personales contra el acceso no autorizado, la alteración, divulgación o destrucción.</string>
+
+    <string name="comparticion_de_datos">No compartiremos tus datos personales con terceros sin tu consentimiento, salvo en situaciones donde la ley lo requiera o sea necesario para el funcionamiento de la aplicación.</string>
+
     <!-- Seleccion de Tema-->
     <string-array name="simple_items">
         <item>Gramática</item>

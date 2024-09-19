@@ -3,9 +3,12 @@ package com.dapm.ailearning.Login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.MainActivity
@@ -18,6 +21,7 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var checkBoxTerminos: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,19 +49,42 @@ class RegistroActivity : AppCompatActivity() {
         val confirmPasswordEditText = findViewById<EditText>(R.id.confirmPasswordEditText)
 
         val registerButton = findViewById<Button>(R.id.registerButton)
+
+        //TERMINOS Y CONDICIONES
+        // Inicializa el CheckBox
+        checkBoxTerminos = findViewById(R.id.checkBoxTerminos)
+
+        // Configura el click en los términos y condiciones
+        val txtTerminos = findViewById<TextView>(R.id.txtTerminos)
+        txtTerminos.setOnClickListener {
+            // Abre el DialogFragment de términos y condiciones
+            val dialog = TerminosDialogFragment {
+                // Si acepta, se marca el CheckBox
+                checkBoxTerminos.isChecked = true
+            }
+            // Muestra el DialogFragment desde la Activity
+            dialog.show(supportFragmentManager, "TerminosDialogFragment")
+        }
+
+        //REGISTRO
         CloseRegistro.setOnClickListener {
             val intent = Intent(this, InicioSesionActivity::class.java)
             startActivity(intent)
         }
         registerButton.setOnClickListener {
-            handleRegister(
-                nombresLayout, nombresEditText.text.toString().trim(),
-                apellidosLayout, apellidosEditText.text.toString().trim(),
-                edadLayout, edadEditText.text.toString().trim(),
-                emailLayout, emailEditText.text.toString().trim(),
-                passwordLayout, passwordEditText.text.toString().trim(),
-                confirmPasswordLayout, confirmPasswordEditText.text.toString().trim()
-            )
+            if (checkBoxTerminos.isChecked) {
+                handleRegister(
+                    nombresLayout, nombresEditText.text.toString().trim(),
+                    apellidosLayout, apellidosEditText.text.toString().trim(),
+                    edadLayout, edadEditText.text.toString().trim(),
+                    emailLayout, emailEditText.text.toString().trim(),
+                    passwordLayout, passwordEditText.text.toString().trim(),
+                    confirmPasswordLayout, confirmPasswordEditText.text.toString().trim()
+                )
+            } else{
+                Toast.makeText(this, "Debes aceptar los términos y condiciones", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
@@ -159,4 +186,6 @@ class RegistroActivity : AppCompatActivity() {
             else -> null
         }
     }
+
+
 }
