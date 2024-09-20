@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Inicio
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,8 @@ class InicioFragment : Fragment() {
             (activity as MainActivity).loadFragment(SeleccionTemaFragment())
         }
         btnOpcion2.setOnClickListener {
-            (activity as MainActivity).loadFragment(BusquedaLeccionFragment())
+            val intent = Intent(activity, BusquedaLeccionActivity::class.java)
+            startActivity(intent)
         }
 
         auth = FirebaseAuth.getInstance()
