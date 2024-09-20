@@ -54,9 +54,21 @@
 
     <!-- Seleccion de Tema-->
     <string-array name="simple_items">
-        <item>Gramática</item>
-        <item>Pronunciación</item>
-        <item>Vocabulario</item>
-        <item>Escucha</item>
+        <item>Animales</item>
+        <item>Historia</item>
+        <item>Fútbol</item>
+        <item>Ciencia</item>
+        <item>Geografía</item>
+        <item>Comida y cocina</item>
+        <item>Cultura pop</item>
+        <item>Viajes y turismo</item>
+        <item>Deportes</item>
+        <item>Música</item>
+        <item>Cine y televisión</item>
+        <item>Medio ambiente</item>
+        <item>Salud y bienestar</item>
+        <item>Tecnología</item>
+        <item>Literatura</item>
     </string-array>
+
 </resources>

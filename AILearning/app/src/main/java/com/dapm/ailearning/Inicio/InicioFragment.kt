@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Inicio
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,8 +35,14 @@ class InicioFragment : Fragment() {
 
         // Navegación a SeleccionTemaFragment
         btnOpcion1.setOnClickListener {
-            (activity as MainActivity).loadFragment(SeleccionTemaFragment())
+            activity?.let { context ->
+                val intent = Intent(context, SeleccionTemaActivity::class.java)
+                startActivity(intent)
+            }
         }
+
+
+
         btnOpcion2.setOnClickListener {
             (activity as MainActivity).loadFragment(BusquedaLeccionFragment())
         }

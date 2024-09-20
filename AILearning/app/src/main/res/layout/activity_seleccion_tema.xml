@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Botón de regreso -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
@@ -16,23 +17,36 @@
         android:contentDescription="Volver"
         android:src="@drawable/icon_close" />
 
+    <!-- Contenido principal con ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
+            <!-- Descripción del aprendizaje -->
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="Explora una variedad de temas que te ayudarán a mejorar tus habilidades en inglés. Desde aprender sobre historia hasta deportes y tecnología." />
+
+            <!-- Pregunta sobre el tema -->
             <TextView
                 android:id="@+id/txtTexto1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="¿Sobre que tema quieres mejorar tu ingles?"
-                android:textSize="16sp" />
+                android:text="¿Sobre qué tema quieres mejorar tu inglés?"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_primary" />
 
+            <!-- Menú desplegable para seleccionar un tema -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/menu"
                 style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
@@ -40,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Selecciona un Tema"
-                app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+                app:boxBackgroundMode="filled"
+                app:boxStrokeColor="@color/md_theme_secondary"
                 app:hintTextColor="@color/md_theme_outline">
 
                 <AutoCompleteTextView
@@ -48,18 +63,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    app:simpleItems="@array/simple_items" />
-
+                    android:textColor="@color/md_theme_onSurface"
+                    android:textColorHint="@color/md_theme_outline"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Texto para tema específico -->
             <TextView
                 android:id="@+id/txtTexto2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="O escribe sobre un tema en especifico"
-                android:textSize="16sp" />
+                android:layout_marginTop="24dp"
+                android:text="O escribe sobre un tema en específico"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_primary" />
 
+            <!-- Campo de entrada para tema específico -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/temaEspecifico"
                 android:layout_width="match_parent"
@@ -73,9 +93,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Tema a Estudiar"
-                    android:inputType="text" />
+                    android:maxLength="80"
+                    android:inputType="text"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Botón para guardar los datos -->
             <Button
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"
@@ -88,10 +112,5 @@
                 app:cornerRadius="18dp" />
         </LinearLayout>
     </ScrollView>
-
-
-    <!-- MaterialAutoCompleteTextView para seleccionar opciones -->
-
-    <!-- Botón Guardar -->
-
 </LinearLayout>
+
