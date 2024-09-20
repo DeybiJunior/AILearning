@@ -44,7 +44,8 @@ class InicioFragment : Fragment() {
 
 
         btnOpcion2.setOnClickListener {
-            (activity as MainActivity).loadFragment(BusquedaLeccionFragment())
+            val intent = Intent(activity, BusquedaLeccionActivity::class.java)
+            startActivity(intent)
         }
 
         auth = FirebaseAuth.getInstance()

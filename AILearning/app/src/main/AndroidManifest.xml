@@ -32,6 +32,7 @@
         <activity android:name=".Login.InicioSesionActivity" />
         <activity android:name=".Login.RegistroActivity" />
         <activity android:name=".Inicio.SeleccionTemaActivity"></activity>
+        <activity android:name=".Inicio.BusquedaLeccionActivity" />
 
     </application>
 
