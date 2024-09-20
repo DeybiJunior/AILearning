@@ -85,6 +85,7 @@ class SeleccionTemaActivity : AppCompatActivity() {
                 .set(temaData)
                 .addOnSuccessListener {
                     showToast("Tema guardado exitosamente")
+                    finish()
                 }
                 .addOnFailureListener { e ->
                     showToast("Error al guardar el tema: $e")
