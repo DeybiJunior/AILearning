@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página Web</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body class="fondo-login">
+    <main>
+        <div class="container-fluid align-items-center p-5">
+            <div class="card mx-auto mt-3 mt-lg-5" style="max-width: 500px;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mx-auto mb-0">Registro</h4>
+                    <button type="button" class="btn btn-close" aria-label="Close" onclick="window.location.href='login.html'"></button>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="nombres" class="form-label">Nombres</label>
+                            <input type="text" class="form-control" id="nombres" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellidos" class="form-label">Apellidos</label>
+                            <input type="text" class="form-control" id="apellidos" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" class="form-control" id="edad" required min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contraseña" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="contraseña" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmarContraseña" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmarContraseña" required>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
