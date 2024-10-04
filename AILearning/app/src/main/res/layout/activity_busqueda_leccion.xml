@@ -1,317 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-
-    <ImageButton
-        android:id="@+id/btnBack"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Volver"
-        android:src="@drawable/icon_close" />
+        android:text="Lecciones Agregadas"
+        android:textSize="18sp"
+        android:padding="16dp"/>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAgregadas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lecciones Disponibles"
+        android:textSize="18sp"
+        android:padding="16dp"/>
 
-            <TextView
-                android:id="@+id/txtTexto1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Agregar"
-                android:textColor="@color/md_theme_outline"
-                android:textSize="16sp" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:columnCount="2"
-                android:orientation="horizontal">
-
-                <!-- Primer CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Lección por RolePlay"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8 Lecciones"
-                                android:textColor="@color/md_theme_outline"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAgregar1"
-                            android:layout_width="53dp"
-                            android:layout_height="53dp"
-                            android:layout_margin="0dp"
-                            android:backgroundTint="#63DF3D"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:padding="0dp"
-                            app:cornerRadius="18dp"
-                            app:icon="@drawable/icon_add"
-                            app:iconGravity="textStart"
-                            app:iconPadding="0dp"
-                            app:iconSize="30dp"
-                            app:iconTint="@color/blancosiempre" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Segundo CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Lección por Imagenes"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8 Lecciones"
-                                android:textColor="@color/md_theme_outline"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAgregar2"
-                            android:layout_width="53dp"
-                            android:layout_height="53dp"
-                            android:layout_margin="0dp"
-                            android:backgroundTint="#63DF3D"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:padding="0dp"
-                            app:cornerRadius="18dp"
-                            app:icon="@drawable/icon_add"
-                            app:iconGravity="textStart"
-                            app:iconPadding="0dp"
-                            app:iconSize="30dp"
-                            app:iconTint="@color/blancosiempre" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-
-            <TextView
-                android:id="@+id/txtTexto2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Mi Lista"
-                android:textColor="@color/md_theme_outline"
-                android:textSize="16sp" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:columnCount="2"
-                android:orientation="horizontal">
-
-                <!-- Primer CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Lección por Repeticion"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8 Lecciones"
-                                android:textColor="@color/md_theme_outline"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnEliminar1"
-                            android:layout_width="53dp"
-                            android:layout_height="53dp"
-                            android:layout_margin="0dp"
-                            android:backgroundTint="#DF4B3D"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:padding="0dp"
-                            app:cornerRadius="18dp"
-                            app:icon="@drawable/icon_close"
-                            app:iconGravity="textStart"
-                            app:iconPadding="0dp"
-                            app:iconSize="30dp"
-                            app:iconTint="@color/blancosiempre" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Segundo CardView -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="14dp"
-                    app:cardElevation="4dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-
-                        android:padding="10dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Lección por  Lectura"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="8 Lecciones"
-                                android:textColor="@color/md_theme_outline"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnEliminar2"
-                            android:layout_width="53dp"
-                            android:layout_height="53dp"
-                            android:layout_margin="0dp"
-                            android:backgroundTint="#DF4B3D"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:padding="0dp"
-                            app:cornerRadius="18dp"
-                            app:icon="@drawable/icon_close"
-                            app:iconGravity="textStart"
-                            app:iconPadding="0dp"
-                            app:iconSize="30dp"
-                            app:iconTint="@color/blancosiempre" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-
-            <Button
-                android:id="@+id/btnGuardar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Guardar"
-                android:textColor="@color/blancosiempre"
-                android:textSize="16sp"
-                app:backgroundTint="#54F0A5"
-                app:cornerRadius="18dp" />
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Botón Guardar -->
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDisponibles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"/>
 </LinearLayout>

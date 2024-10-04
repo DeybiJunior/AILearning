@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Aprende
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import com.dapm.ailearning.R
+import com.dapm.ailearning.SolicituLocal.ApiService
 
 class AprendeFragment : Fragment() {
 
@@ -35,12 +37,20 @@ class AprendeFragment : Fragment() {
                 .commit()
         }
         btnContinuar2.setOnClickListener {
-            // Regresa al Aprende_Speack
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, Aprende_speack())
-                .addToBackStack(null)  // Opcional: Agrega la transacción a la pila de retroceso
-                .commit()
+            // Deshabilitar el botón para evitar múltiples clics mientras se espera la respuesta
+            btnContinuar2.isEnabled = false
+
+            // Llamar a la API usando requireContext()
+            ApiService.solicitarAPI("Mi mascota favorita", requireContext()) { error ->
+                // Volver a habilitar el botón en caso de error
+                btnContinuar2.isEnabled = true
+
+                // Manejo del error
+                }
         }
+
+
+
         btnContinuar3.setOnClickListener {
             // Regresa al Aprende_Speack
             parentFragmentManager.beginTransaction()
@@ -48,5 +58,7 @@ class AprendeFragment : Fragment() {
                 .addToBackStack(null)  // Opcional: Agrega la transacción a la pila de retroceso
                 .commit()
         }
+
+
     }
 }

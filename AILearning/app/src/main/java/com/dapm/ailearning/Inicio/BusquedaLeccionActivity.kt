@@ -1,33 +1,63 @@
 package com.dapm.ailearning.Inicio
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import com.dapm.ailearning.MainActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.R
 
 class BusquedaLeccionActivity : AppCompatActivity() {
+
+    private lateinit var recyclerViewAgregadas: RecyclerView
+    private lateinit var recyclerViewDisponibles: RecyclerView
+
+    private lateinit var adapterAgregadas: LeccionAdapter
+    private lateinit var adapterDisponibles: LeccionAdapter
+
+    private val lecciones: MutableList<Leccion> = mutableListOf(
+        Leccion(1, "Escucha y escribe", "Descripción 1"),
+        Leccion(2, "Lee y Responde", "Descripción 2"),
+        Leccion(3, "Completa", "Descripción 3"),
+        Leccion(4, "Lee y Repite", "Descripción 4")
+    )
+
+    private val leccionesAgregadas: MutableList<Leccion> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_busqueda_leccion)
 
-        val btnGuardar = findViewById<Button>(R.id.btnGuardar)
-        val btnBack = findViewById<ImageButton>(R.id.btnBack)
+        recyclerViewAgregadas = findViewById(R.id.recyclerViewAgregadas)
+        recyclerViewDisponibles = findViewById(R.id.recyclerViewDisponibles)
 
-        // Configura el botón Guardar
-        btnGuardar.setOnClickListener {
-            // Regresa al InicioFragment
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Cierra la actividad actual
-        }
+        // Configurar los RecyclerViews
+        recyclerViewAgregadas.layoutManager = LinearLayoutManager(this)
+        recyclerViewDisponibles.layoutManager = LinearLayoutManager(this)
 
-        // Configura el botón Back
-        btnBack.setOnClickListener {
-            finish() // Cierra la actividad actual
-        }
+        adapterAgregadas = LeccionAdapter(leccionesAgregadas, leccionesAgregadas,
+            onLeccionAdded = { leccion ->
+                leccionesAgregadas.add(leccion)
+                adapterAgregadas.notifyDataSetChanged()
+            },
+            onLeccionRemoved = { leccion ->
+                leccionesAgregadas.remove(leccion)
+                adapterAgregadas.notifyDataSetChanged()
+            }
+        )
+
+        adapterDisponibles = LeccionAdapter(lecciones, leccionesAgregadas,
+            onLeccionAdded = { leccion ->
+                leccionesAgregadas.add(leccion)
+                adapterDisponibles.notifyDataSetChanged()
+            },
+            onLeccionRemoved = { leccion ->
+                leccionesAgregadas.remove(leccion)
+                adapterDisponibles.notifyDataSetChanged()
+            }
+        )
+
+        recyclerViewAgregadas.adapter = adapterAgregadas
+        recyclerViewDisponibles.adapter = adapterDisponibles
     }
 }
