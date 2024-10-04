@@ -143,5 +143,7 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#37333A</color>
     <color name="blancosiempre">#FFFFFF</color>
     <color name="negrosiempre">#000000</color>
+    <color name="holo_green_ligth">#63DF3D</color>
+
 
 </resources>
