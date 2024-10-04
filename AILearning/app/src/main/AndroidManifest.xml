@@ -18,9 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AILearning"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31" >
 
-
+        <!-- Splash screen activity -->
         <activity android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -28,13 +29,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Otras actividades -->
         <activity android:name=".MainActivity" />
         <activity android:name=".Login.InicioSesionActivity" />
         <activity android:name=".Login.RegistroActivity" />
-        <activity android:name=".Inicio.SeleccionTemaActivity"></activity>
+        <activity android:name=".Inicio.SeleccionTemaActivity" />
         <activity android:name=".Inicio.BusquedaLeccionActivity" />
+
+        <!-- Interacción con la IA -->
+        <activity android:name=".Aprende.Aprendeporrepeticion" />
+
 
     </application>
 
 </manifest>
-
