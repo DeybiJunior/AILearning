@@ -59,7 +59,6 @@ class LeccionAdapter(
         val btnQuitar: Button = itemView.findViewById(R.id.btnQuitar)
 
         fun bind(leccion: Leccion) {
-            textViewNombre.text = leccion.nombre
         }
     }
 }

@@ -16,10 +16,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
     private lateinit var adapterDisponibles: LeccionAdapter
 
     private val lecciones: MutableList<Leccion> = mutableListOf(
-        Leccion(1, "Escucha y escribe", "Descripción 1"),
-        Leccion(2, "Lee y Responde", "Descripción 2"),
-        Leccion(3, "Completa", "Descripción 3"),
-        Leccion(4, "Lee y Repite", "Descripción 4")
+
     )
 
     private val leccionesAgregadas: MutableList<Leccion> = mutableListOf()

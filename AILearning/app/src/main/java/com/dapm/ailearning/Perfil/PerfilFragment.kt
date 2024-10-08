@@ -32,8 +32,15 @@ class PerfilFragment : Fragment() {
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
         progressText = view.findViewById(R.id.progressText)
 
-        // Llama a increaseProgress() para iniciar el progreso automáticamente
-        increaseProgress()
+        // Recuperar el nivel del usuario desde SharedPreferences
+        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
+        val nivel = sharedPref?.getInt("user_nivel", 0) ?: 0 // Obtén el nivel o 0 si no existe
+
+        // Actualiza el progreso con el nivel recuperado
+        updateProgress(nivel)
+
+        // Llama a increaseProgress() para iniciar el progreso automáticamente, pasando el nivel recuperado
+        increaseProgress(nivel) // Pasa el nivel recuperado
     }
 
     override fun onCreateView(
@@ -79,21 +86,26 @@ class PerfilFragment : Fragment() {
     }
 
     // Ejemplo de cómo variar el progreso
-    private fun increaseProgress() {
+    private fun increaseProgress(currentProgress: Int) {
         var progress = 0
-        val currentProgress = 60
-        // Aumenta el progreso en un ciclo
+        // Progreso máximo para la animación
+        val maxProgress = 10
+
+        // Limitar el progreso actual a un máximo de 10
+        val targetProgress = currentProgress.coerceAtMost(maxProgress)
+
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(object : Runnable {
             override fun run() {
-                if (progress < currentProgress) {
+                if (progress < targetProgress) {
                     progress += 1
-                    updateProgress(progress)
+                    updateProgress((progress.toFloat() / maxProgress * 100).toInt()) // Convertir a porcentaje
                     handler.postDelayed(this, 30) // Actualiza cada 30ms
                 }
             }
         }, 500)
     }
+
 
     private fun handleLogout() {
         auth.signOut()

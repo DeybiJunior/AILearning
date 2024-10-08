@@ -37,7 +37,7 @@ object ApiService {
         val mistralApi = retrofit.create(MistralApi::class.java)
 
         // Construye el prompt con el formato requerido
-        val prompt = "Genera un JSON con una lista de 3 frases en inglés de nivel básico sobre $Tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
+        val prompt = "Genera un JSON con una lista de 4 frases en inglés de nivel básico - avanzado sobre $Tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
         Log.d("ApiService", "Prompt construido: $prompt") // Log para verificar el prompt construido
 
         // Crea el objeto de la solicitud con modelo y stream predeterminados

@@ -1,7 +1,9 @@
 package com.dapm.ailearning.Login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
@@ -11,17 +13,23 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.Usuario
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RegistroActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var checkBoxTerminos: CheckBox
+    private lateinit var database: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +37,7 @@ class RegistroActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        database = AppDatabase.getDatabase(applicationContext)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -139,14 +148,16 @@ class RegistroActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Registration successful
                     Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
 
-                    // Save user data in Firestore
+                    val nivel = 0 // Puedes cambiar este valor según la lógica de tu aplicación
+
+                    // Guarda los datos del usuario en Firestore
                     val user = hashMapOf(
                         "nombres" to nombres,
                         "apellidos" to apellidos,
-                        "edad" to edad
+                        "edad" to edad,
+                        "nivel" to nivel
                     )
 
                     val userId = auth.currentUser?.uid
@@ -155,19 +166,41 @@ class RegistroActivity : AppCompatActivity() {
                             .document(userId)
                             .set(user)
                             .addOnSuccessListener {
-                                // User data saved successfully
+                                guardarUsuarioEnSharedPreferences(Usuario(userId, nombres, apellidos, edad, nivel))
+
+                                // Redirigir al usuario a MainActivity
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
                             .addOnFailureListener { e ->
-                                Toast.makeText(this, "Error al guardar datos del usuario: $e", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Error al guardar datos del usuario en Firestore: $e", Toast.LENGTH_SHORT).show()
                             }
                     }
                 } else {
                     Toast.makeText(this, "Error al registrar usuario: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+
+
+    private fun guardarUsuarioEnSharedPreferences(usuario: Usuario) {
+        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE) // Cambia el nombre aquí
+        val editor = sharedPreferences.edit()
+        editor.putString("user_id", usuario.id)
+        editor.putString("user_nombres", usuario.nombres) // Manten la clave coherente
+        editor.putString("user_apellidos", usuario.apellidos)
+        editor.putInt("user_edad", usuario.edad)
+        editor.putInt("user_nivel", usuario.nivel)
+        editor.apply()
+
+        Log.d("SharedPrefs", "Guardando datos de usuario: " +
+                "ID: ${usuario.id}, " +
+                "Nombres: ${usuario.nombres}, " +
+                "Apellidos: ${usuario.apellidos}, " +
+                "Edad: ${usuario.edad}, " +
+                "Nivel: ${usuario.nivel}")
     }
 
     private fun validatePassword(password: String): String? {
