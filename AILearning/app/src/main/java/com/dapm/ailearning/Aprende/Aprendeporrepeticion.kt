@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Aprende
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
@@ -30,15 +31,23 @@ import android.text.style.StyleSpan
 import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 
 class Aprendeporrepeticion : AppCompatActivity() {
 
     private lateinit var frases: List<Frase>
+    private var Indexprogres = 0
+
     private var fraseIndex = 0
     private var puntajeUsuarioPorLeccion = 0
     private var totalFrases = 0
     private var textoFormateado: String = ""
+    private var esPrimerClick = true // Variable para determinar si es el primer clic
+    private lateinit var progressBar: ProgressBar
 
+    private lateinit var btnEscucha: Button // Declarar btnEscucha
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tvFrase: TextView
     private lateinit var tvFraseFinal: TextView
@@ -52,12 +61,32 @@ class Aprendeporrepeticion : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var lastToastTime: Long = 0
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var resultadoTextView: TextView
+    private lateinit var imagenResultado: ImageView
+    private lateinit var relativeLayout: RelativeLayout
+    private lateinit var tvProgreso: TextView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aprendeporrepeticion)
 
-        // Inicializa tus vistas aquí
+
+
+        inicializarVistas() // Asegúrate de que esto esté primero
+        cargarFrases()
+        configurarBotones()
+        checkAudioPermission()
+
+        // Inicializar el reconocimiento de voz
+        iniciarReconocimientoDeVoz()
+        cargarFrases()
+
+    }
+
+
+    private fun inicializarVistas() {
         tvFraseFinal = findViewById(R.id.tvFraseFinal)
         tvFrase = findViewById(R.id.tvFrase)
         tilSpeechResult = findViewById(R.id.tilSpeechResult)
@@ -66,86 +95,184 @@ class Aprendeporrepeticion : AppCompatActivity() {
         tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal)
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
         imageContacto = findViewById(R.id.imageContacto)
-        val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
-        val btnEscucha: Button = findViewById(R.id.btnEscucha)
 
-        // Manejo de frases
+        // Inicializa las nuevas variables
+        resultadoTextView = findViewById(R.id.resultadoTextView) // Asegúrate de que el ID sea correcto
+        imagenResultado = findViewById(R.id.imagenResultado) // Asegúrate de que el ID sea correcto
+        relativeLayout = findViewById(R.id.relativeLayout) // Asegúrate de que el ID sea correcto
+
+        btnEscucha = findViewById(R.id.btnEscucha)
+        progressBar = findViewById(R.id.progressBar)
+        tvProgreso = findViewById(R.id.tvProgreso)
+    }
+
+
+    private fun cargarFrases() {
         val jsonFrases = intent.getStringExtra("frases")
         val gson = Gson()
         try {
             frases = gson.fromJson(jsonFrases, Array<Frase>::class.java).toList()
-            totalFrases = frases.size // Guardar total de frases
+            totalFrases = frases.size
+            if (frases.isNotEmpty()) {
+                actualizarTextoFrase()
+            } else {
+                tvFrase.text = "No se encontraron frases."
+            }
         } catch (e: JsonSyntaxException) {
             Log.e("Aprendeporrepeticion", "Error al deserializar el JSON: ${e.message}")
         }
+    }
 
-        if (frases.isNotEmpty()) {
-            // Llamar la función para actualizar el texto con el formato correcto
-            actualizarTextoFrase()
-        } else {
-            tvFrase.text = "No se encontraron frases."
-            btnSiguiente.isEnabled = false
-        }
+    private fun configurarBotones() {
+        val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
+        val btnEscucha: Button = findViewById(R.id.btnEscucha)
 
         btnSiguiente.setOnClickListener {
-            // Verifica si la frase escuchada es válida
-            val fraseOriginal = textoFormateado
-            val fraseEscuchada = etSpeechResult.text.toString()
-
-            Log.d("FraseOriginal", fraseOriginal)
-            Log.d("FraseEscuchada", fraseEscuchada)
-            // Siempre avanza al siguiente índice
-            fraseIndex++
-
-            if (validarFrase(fraseOriginal, fraseEscuchada)) {
-                // Si es válida, sumar el puntaje
-                puntajeUsuarioPorLeccion++
-                // Actualizar el TextView de puntaje
-                tvPuntaje.text = "Puntaje: $puntajeUsuarioPorLeccion"
-            } else {
-                showToast("Las frases no coinciden")
-            }
-
-            // Verifica si hay más frases
-            if (fraseIndex < frases.size) {
-                actualizarTextoFrase() // Actualizar la frase con el nuevo índice
-                etSpeechResult.setText("") // Reiniciar resultado de reconocimiento aquí
-            } else {
-                btnSiguiente.isEnabled = false // Deshabilitar botón si se acabaron las frases
-                tvFraseFinal.visibility = View.VISIBLE
-                    tvFraseFinal.alpha = 0f // Comienza invisible
-                    tvFraseFinal.scaleX = 0.5f // Escala inicial
-                    tvFraseFinal.scaleY = 0.5f // Escala inicial
-
-                    tvFraseFinal.animate()
-                        .alpha(1f)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(1000) // Duración de la animación
-                        .setInterpolator(AccelerateDecelerateInterpolator()) // Interpolador para suavizar la animación
-                        .start()
-                imageContacto.visibility = View.GONE
-                tvFrase.visibility = View.GONE
-                etSpeechResult.setText("") // Reiniciar resultado de reconocimiento
-                tvPuntaje.visibility = View.GONE
-                // Ocultar el botón de micrófono
-                btnEscucha.visibility = View.GONE
-                tilSpeechResult.visibility = View.GONE
-                // Mostrar el puntaje final
-                mostrarPuntajeFinal()
-            }
+            manejarSiguiente(btnSiguiente)
         }
-
-        // Manejo de reconocimiento de voz
-        checkAudioPermission()
-
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-        val speechIntent = createSpeechIntent()
-        speechRecognizer.setRecognitionListener(createRecognitionListener())
-
         btnEscucha.setOnClickListener {
-            startVoiceRecognition(speechIntent)
+            startVoiceRecognition(createSpeechIntent())
         }
+    }
+
+    private fun manejarSiguiente(btnSiguiente: Button) {
+        val fraseOriginal = textoFormateado
+        val fraseEscuchada = etSpeechResult.text.toString()
+
+        Log.d("FraseOriginal", fraseOriginal)
+        Log.d("FraseEscuchada", fraseEscuchada)
+
+        // Si coincide
+        if (validarFrase(fraseOriginal, fraseEscuchada)) {
+            if (esPrimerClick) {
+                mostrarResultado("EXCELENTE!", true)
+                esPrimerClick = false // Cambiar a false después del primer clic
+                puntajeUsuarioPorLeccion++
+                tvPuntaje.text = "Puntaje: $puntajeUsuarioPorLeccion"
+                actualizarProgreso()
+                return
+            } else {
+                ocultarElementos() // Asegúrate de implementar esta función
+                esPrimerClick = true
+                fraseIndex++
+            }
+        } else {
+            mostrarResultado("LO SENTIMOS!", false)
+            if (esPrimerClick) {
+                esPrimerClick = false
+                actualizarProgreso()
+                return
+            } else {
+                ocultarElementos() // Asegúrate de implementar esta función
+                esPrimerClick = true
+                fraseIndex++
+            }
+        }
+
+
+        // Actualizar la frase si aún hay más frases
+        if (fraseIndex < frases.size) {
+            actualizarTextoFrase()
+            etSpeechResult.setText("") // Reiniciar resultado de reconocimiento
+        } else {
+            // Finalizar la lección sin mostrar el resultado
+            finalizarLeccion(btnSiguiente)
+        }
+    }
+
+    private fun actualizarProgreso() {
+        Indexprogres++
+        // Calcula el progreso actual basado en el índice de la frase y el total de frases
+        val progreso = ((Indexprogres) * 100) / 4
+
+        // Crear un ObjectAnimator para animar el progreso del ProgressBar
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progreso)
+        animator.duration = 500 // Duración de la animación (medio segundo)
+        animator.interpolator = DecelerateInterpolator() // Para un efecto suave
+        animator.start() // Inicia la animación
+    }
+
+
+
+
+    private fun mostrarResultado(mensaje: String, esCorrecto: Boolean) {
+        // Ocultar btnEscucha y el RelativeLayout
+        btnEscucha.visibility = View.GONE
+        // Suponiendo que tienes un RelativeLayout llamado relativeLayout
+        val relativeLayout: RelativeLayout = findViewById(R.id.relativeLayout) // Asegúrate de que el ID sea correcto
+        relativeLayout.visibility = View.GONE
+
+        // Mostrar mensaje en un TextView
+        val resultadoTextView: TextView = findViewById(R.id.resultadoTextView) // Asegúrate de tener un TextView en tu layout
+        resultadoTextView.text = mensaje
+
+        // Mostrar imagen correspondiente
+        val imagenResultado: ImageView = findViewById(R.id.imagenResultado) // Asegúrate de tener una ImageView en tu layout
+        imagenResultado.setImageResource(if (esCorrecto) R.drawable.excelente else R.drawable.losentimos) // Usa tus imágenes
+
+        resultadoTextView.visibility = View.VISIBLE
+        imagenResultado.visibility = View.VISIBLE
+
+    }
+
+    fun ocultarElementos() {
+        resultadoTextView.visibility = View.GONE
+        imagenResultado.visibility = View.GONE
+        relativeLayout.visibility = View.VISIBLE
+        btnEscucha.visibility =View.VISIBLE
+    }
+
+
+    private fun finalizarLeccion(btnSiguiente: Button) {
+        if (::btnEscucha.isInitialized) {
+            btnEscucha.visibility = View.GONE
+        }
+        btnSiguiente.visibility = View.GONE
+        tvFraseFinal.visibility = View.VISIBLE
+        tvProgreso.visibility = View.GONE
+        progressBar.visibility = View.GONE
+        tvFraseFinal.alpha = 0f
+        tvFraseFinal.scaleX = 0.5f
+        tvFraseFinal.scaleY = 0.5f
+
+        tvFraseFinal.animate()
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(1000)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .start()
+
+        val imagenResultado: ImageView = findViewById(R.id.imagenResultado) // Asegúrate de tener una ImageView en tu layout
+        val estrellas = calcularEstrellas() // Llama a calcularEstrellas
+
+        if (estrellas > 0) {
+            imagenResultado.setImageResource(R.drawable.aprovado)
+        } else {
+            imagenResultado.setImageResource(R.drawable.desaprovado)
+        }
+
+        imagenResultado.visibility = View.VISIBLE
+
+        imageContacto.visibility = View.GONE
+        tvFrase.visibility = View.GONE
+        etSpeechResult.setText("")
+        tvPuntaje.visibility = View.GONE
+        btnEscucha.visibility = View.GONE
+        tilSpeechResult.visibility = View.GONE
+
+
+        mostrarPuntajeFinal()
+        Handler(Looper.getMainLooper()).postDelayed({
+            finish()
+        }, 5000)
+    }
+
+
+
+    private fun iniciarReconocimientoDeVoz() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+        speechRecognizer.setRecognitionListener(createRecognitionListener())
     }
 
     // Función para actualizar el texto con la frase dinámica
@@ -225,7 +352,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
                 imageViewEstrellas.setImageResource(R.drawable.estrella1)
             }
             0 -> {
-                imageViewEstrellas.setImageResource(R.drawable.estrella1)
+                imageViewEstrellas.setImageResource(R.drawable.vuelveintentar)
                 reproducirSonido(R.raw.felicitaciones)
             }
         }
