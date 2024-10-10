@@ -1,6 +1,9 @@
 package com.dapm.ailearning.Inicio
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -39,6 +42,11 @@ class SeleccionTemaActivity : AppCompatActivity() {
                 showToast("Por favor selecciona un tema")
             } else {
                 saveTema(temaSeleccionado, temaEspecifico)
+                // Crear un Intent para redirigir a BusquedaLeccionActivity
+                val intent = Intent(this, BusquedaLeccionActivity::class.java)
+
+                // Iniciar la nueva actividad
+                startActivity(intent)
             }
         }
 
@@ -73,28 +81,18 @@ class SeleccionTemaActivity : AppCompatActivity() {
         } else {
             temaEspecifico
         }
+        // Inicializa SharedPreferences
+        val sharedPreferences = getSharedPreferences("tema", Context.MODE_PRIVATE)
 
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            val temaData = hashMapOf("temaEstudio" to temaEstudio)
+        // Guardar en SharedPreferences
+        val editor = sharedPreferences.edit()
+        editor.putString("temaEstudio", temaEstudio)
+        editor.apply()
 
-            firestore.collection("users")
-                .document(userId)
-                .collection("lecciones")
-                .document("leccionId")
-                .set(temaData)
-                .addOnSuccessListener {
-                    showToast("Tema guardado exitosamente")
-                    finish()
-                }
-                .addOnFailureListener { e ->
-                    showToast("Error al guardar el tema: $e")
-                }
-        } else {
-            showToast("Usuario no autenticado")
-        }
+        showToast("Tema guardado exitosamente")
+        Log.d("SeleccionTemaActivity", "Tema guardado: $temaEstudio")
+        finish()
     }
-
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
