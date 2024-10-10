@@ -29,6 +29,7 @@ class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(DI
             itemView.findViewById<TextView>(R.id.tvTema).text = leccion.tema
             itemView.findViewById<TextView>(R.id.tvDificultad).text = leccion.dificultad
             itemView.findViewById<TextView>(R.id.tvTipo).text = leccion.tipo
+            itemView.findViewById<TextView>(R.id.tvJson).text = leccion.json
         }
     }
 

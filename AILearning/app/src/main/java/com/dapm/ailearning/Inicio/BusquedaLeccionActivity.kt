@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Inicio
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
+import com.dapm.ailearning.SolicituLocal.ApiService
 import kotlin.properties.Delegates
 
 class BusquedaLeccionActivity : AppCompatActivity() {
@@ -151,19 +153,35 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                     Toast.makeText(this, "Debes seleccionar un tipo de lección", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener // Salir del onClick si tipo está vacío
                 }
-                // Crear una nueva lección con datos ficticios por ahora
-                val nuevaLeccion = Leccion(
-                    userId = userId,
-                    tipo = tipo,
-                    dificultad = dificultad,
-                    tema = "$tema",
-                    json = "{\"pregunta\":\"¿Qué animal es este?\"}"
-                )
 
-                // Insertar la lección en la base de datos
-                leccionViewModel.insert(nuevaLeccion)
-                Toast.makeText(this, "Lección agregada", Toast.LENGTH_SHORT).show()
-                finish()
+                // Mostrar un indicador de carga (opcional)
+                val progressDialog = ProgressDialog(this)
+                progressDialog.setMessage("Generando lección...")
+                progressDialog.setCancelable(false)
+                progressDialog.show()
+
+                // Llamar al ApiService para generar el JSON
+                ApiService.solicitarAPI2("$tema", this, { throwable ->
+                    // Manejar error al obtener frases
+                    progressDialog.dismiss()
+                    Log.e("BusquedaLeccionActivity", "Error al obtener frases: ${throwable?.message}")
+                    Toast.makeText(this, "Error al obtener frases de la API", Toast.LENGTH_SHORT).show()
+                }) { jsonFrases ->
+                    // Esta es la nueva función de callback para recibir el JSON
+                    progressDialog.dismiss()
+                    val nuevaLeccion = Leccion(
+                        userId = userId,
+                        tipo = tipo,
+                        dificultad = dificultad,
+                        tema = "$tema",
+                        json = jsonFrases // Usar el JSON obtenido de la API
+                    )
+
+                    // Insertar la lección en la base de datos
+                    leccionViewModel.insert(nuevaLeccion)
+                    Toast.makeText(this, "Lección agregada", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             } else {
                 Log.e("BusquedaLeccionActivity", "userId es nulo, no se puede agregar la lección.")
             }
