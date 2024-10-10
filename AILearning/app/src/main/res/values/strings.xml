@@ -71,4 +71,14 @@
         <item>Literatura</item>
     </string-array>
 
+    <!-- Tipos-->
+    <string name="tipo_1">Lee y Repite</string>
+    <string name="tipo_2">Lee y Responde</string>
+    <string name="tipo_3">Escucha y Selecciona</string>
+    <string name="tipo_4">Completar Frases</string>
+    <string name="desc_tipo_1">Lee la frase, repítela, ¡y mejora tu pronunciación!</string>
+    <string name="desc_tipo_2">Lee un pequeño texto y responde preguntas sobre él.</string>
+    <string name="desc_tipo_3">Escucha atentamente y selecciona la opción correcta.</string>
+    <string name="desc_tipo_4">Termina la frase eligiendo la opción correcta.</string>
+
 </resources>

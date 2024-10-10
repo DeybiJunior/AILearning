@@ -2,6 +2,9 @@ package com.dapm.ailearning.Inicio
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -60,41 +63,83 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         val btn3 = findViewById<Button>(R.id.btn3)
         val btn4 = findViewById<Button>(R.id.btn4)
 
-        // Función para restablecer colores de botones
-        fun resetButtonColors() {
+        // Función para restablecer textos y colores de los botones
+        fun resetButtons() {
+            btn1.text = getString(R.string.tipo_1)
+            btn2.text = getString(R.string.tipo_2)
+            btn3.text = getString(R.string.tipo_3)
+            btn4.text = getString(R.string.tipo_4)
+
             btn1.setBackgroundColor(colorNoSeleccionado)
             btn2.setBackgroundColor(colorNoSeleccionado)
             btn3.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
         }
 
-        // Asignar valores a tipo según el botón clickeado
+        // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
         btn1.setOnClickListener {
-            resetButtonColors() // Restablece los colores antes de cambiar
-            tipo = "Lee y Repite" // Asigna el valor correspondiente
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_1) // Asigna el valor correspondiente
+
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_1)
+            val descripcion = getString(R.string.desc_tipo_1)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn1.text = spannable
             btn1.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: Lee y Repite", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
-
         btn2.setOnClickListener {
-            resetButtonColors()
-            tipo = "Lee y Responde"
-            btn2.setBackgroundColor(colorSeleccionado)
-            Toast.makeText(this, "Seleccionaste: Lee y Responde", Toast.LENGTH_SHORT).show()
-        }
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_2) // Asigna el valor correspondiente
 
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_2)
+            val descripcion = getString(R.string.desc_tipo_2)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn2.text = spannable
+            btn2.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
+        }
         btn3.setOnClickListener {
-            resetButtonColors()
-            tipo = "Escucha y Selecciona"
-            btn3.setBackgroundColor(colorSeleccionado)
-            Toast.makeText(this, "Seleccionaste: Escucha y Selecciona", Toast.LENGTH_SHORT).show()
-        }
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_3) // Asigna el valor correspondiente
 
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_3)
+            val descripcion = getString(R.string.desc_tipo_3)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn3.text = spannable
+            btn3.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
+        }
         btn4.setOnClickListener {
-            resetButtonColors()
-            tipo = "Completar Frases"
-            btn4.setBackgroundColor(colorSeleccionado)
-            Toast.makeText(this, "Seleccionaste: Completar Frases", Toast.LENGTH_SHORT).show()
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_4) // Asigna el valor correspondiente
+
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_4)
+            val descripcion = getString(R.string.desc_tipo_4)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn4.text = spannable
+            btn4.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
 
         // Botón para agregar una nueva lección

@@ -35,6 +35,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:columnCount="2"
         android:rowCount="2"
         android:layout_marginTop="8dp"
@@ -44,45 +45,51 @@
         <Button
             android:id="@+id/btn1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
+            android:padding="4dp"
             android:text="Lee y Repite"
             android:gravity="center"
-            android:padding="16dp"/>
+            app:cornerRadius="8dp" />
 
         <!-- Botón 2 -->
         <Button
             android:id="@+id/btn2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
+            android:padding="4dp"
             android:text="Lee y Responde"
             android:gravity="center"
-            android:padding="16dp"/>
+            app:cornerRadius="8dp"/>
 
         <!-- Botón 3 -->
         <Button
             android:id="@+id/btn3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
+            android:padding="4dp"
             android:text="Escucha y Selecciona"
             android:gravity="center"
-            android:padding="16dp"/>
+            app:cornerRadius="8dp"
+            />
 
         <!-- Botón 4 -->
         <Button
             android:id="@+id/btn4"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
+            android:padding="4dp"
             android:text="Completar Frases"
             android:gravity="center"
-            android:padding="16dp"/>
+            app:cornerRadius="8dp"
+            />
 
     </GridLayout>
     <Button
