@@ -28,13 +28,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/txtBienvenida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Elige tu aventura de Aprendizaje"
+                android:textSize="20sp"/>
+
             <!-- Descripción del aprendizaje -->
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="Explora una variedad de temas que te ayudarán a mejorar tus habilidades en inglés. Desde aprender sobre historia hasta deportes y tecnología." />
+                android:text="Selecciona un tema que te interese y descubre nuevas formas de aprender." />
 
             <!-- Pregunta sobre el tema -->
             <TextView
