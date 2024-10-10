@@ -2,77 +2,48 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="4dp">
-
+    app:cardCornerRadius="4dp"
+    android:layout_margin="4dp"
+    android:layout_marginTop="10dp"
+    >
     <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="8dp">
+        <!-- Título del tema de la lección -->
 
         <TextView
-            android:id="@+id/textViewNombre"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTipo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lección por RolePlay"
-            android:textSize="16sp" />
-
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Tipo"
+            />
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTema"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="8 Lecciones"
-            android:textColor="@color/md_theme_outline"
-            android:textSize="12sp" />
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            tools:text="Tema"
+            />
+
+        <!-- Dificultad de la lección -->
+        <TextView
+            android:id="@+id/tvDificultad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            tools:text="Dificultad"
+            />
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAgregar"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
-        android:layout_margin="0dp"
-        android:backgroundTint="#63DF3D"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:padding="0dp"
-        app:cornerRadius="18dp"
-        app:icon="@drawable/icon_add"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="30dp"
-        app:iconTint="@color/blancosiempre" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnQuitar"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
-        android:layout_margin="0dp"
-        android:backgroundTint="#DF3D3D"
-        android:insetLeft="0dp"
-        android:insetTop="0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:padding="0dp"
-        app:cornerRadius="18dp"
-        app:icon="@drawable/icon_close"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="30dp"
-        app:iconTint="@color/blancosiempre" />
-    </LinearLayout>
 </androidx.cardview.widget.CardView>
+
