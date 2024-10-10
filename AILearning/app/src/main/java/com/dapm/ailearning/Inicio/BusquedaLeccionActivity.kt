@@ -161,7 +161,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                 progressDialog.show()
 
                 // Llamar al ApiService para generar el JSON
-                ApiService.solicitarAPI2("$tema", this, { throwable ->
+                ApiService.solicitarAPI2("$tema", dificultad,this, { throwable ->
                     // Manejar error al obtener frases
                     progressDialog.dismiss()
                     Log.e("BusquedaLeccionActivity", "Error al obtener frases: ${throwable?.message}")

@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Inicio
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -44,15 +45,49 @@ class InicioFragment : Fragment() {
 
         txtNombreUsuario = view.findViewById(R.id.txtNombreUsuario)
 
-        // Recuperar el nombre del usuario desde SharedPreferences
+        // Recuperar o crear usuario
         val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
-        val nombreUsuario = sharedPref?.getString("user_nombres", "Usuario") // Usar la misma clave
+        var nombreUsuario = sharedPref?.getString("user_nombres", null)
+
+        if (nombreUsuario == null) {
+            // Si no hay un usuario guardado, crear un usuario offline
+            guardarUsuarioOfflineEnSharedPreferences()
+            nombreUsuario = sharedPref?.getString("user_nombres", "Usuario Offline")
+        }
 
         Log.d("InicioFragment", "Nombre del usuario recuperado: $nombreUsuario")
         txtNombreUsuario.text = nombreUsuario
 
+        // Obtener el tema de estudio
         val sharedTema = activity?.getSharedPreferences("tema", android.content.Context.MODE_PRIVATE)
         val temaEstudio = sharedTema?.getString("temaEstudio", "")
         Log.d("InicioFragment", "tema: $temaEstudio")
+    }
+
+    // Función para guardar usuario offline
+    private fun guardarUsuarioOfflineEnSharedPreferences() {
+        val sharedPreferences = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+
+        // Crear un usuario "offline" con datos predefinidos o generados
+        val userIdOffline = "offline_user"
+        val nombresOffline = "Usuario"
+        val apellidosOffline = "Offline"
+        val edadOffline = 0 // Edad genérica
+        val nivelOffline = 0 // Nivel básico por defecto
+
+        editor?.putString("user_id", userIdOffline)
+        editor?.putString("user_nombres", nombresOffline)
+        editor?.putString("user_apellidos", apellidosOffline)
+        editor?.putInt("user_edad", edadOffline)
+        editor?.putInt("user_nivel", nivelOffline)
+        editor?.apply()
+
+        Log.d("InicioFragment", "Guardando datos de usuario offline: " +
+                "ID: $userIdOffline, " +
+                "Nombres: $nombresOffline, " +
+                "Apellidos: $apellidosOffline, " +
+                "Edad: $edadOffline, " +
+                "Nivel: $nivelOffline")
     }
 }
