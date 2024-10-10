@@ -42,6 +42,7 @@
         <activity android:name=".Login.RegistroActivity" />
         <activity android:name=".Inicio.SeleccionTemaActivity" />
         <activity android:name=".Inicio.BusquedaLeccionActivity" />
+        <activity android:name=".Inicio.HistorialLeccionesActivity" />
 
         <!-- Interacción con la IA -->
         <activity android:name=".Aprende.Aprendeporrepeticion" />
