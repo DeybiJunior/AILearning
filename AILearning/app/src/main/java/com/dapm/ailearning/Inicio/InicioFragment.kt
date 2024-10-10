@@ -38,7 +38,7 @@ class InicioFragment : Fragment() {
 
         // Navegación a BusquedaLeccionActivity
         btnOpcion2.setOnClickListener {
-            val intent = Intent(activity, BusquedaLeccionActivity::class.java)
+            val intent = Intent(activity, HistorialLeccionesActivity::class.java)
             startActivity(intent)
         }
 
@@ -50,5 +50,9 @@ class InicioFragment : Fragment() {
 
         Log.d("InicioFragment", "Nombre del usuario recuperado: $nombreUsuario")
         txtNombreUsuario.text = nombreUsuario
+
+        val sharedTema = activity?.getSharedPreferences("tema", android.content.Context.MODE_PRIVATE)
+        val temaEstudio = sharedTema?.getString("temaEstudio", "")
+        Log.d("InicioFragment", "tema: $temaEstudio")
     }
 }
