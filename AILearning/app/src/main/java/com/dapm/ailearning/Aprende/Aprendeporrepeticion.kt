@@ -34,6 +34,11 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import com.dapm.ailearning.Datos.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Aprendeporrepeticion : AppCompatActivity() {
 
@@ -71,18 +76,24 @@ class Aprendeporrepeticion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aprendeporrepeticion)
+        val idLeccion = intent.getIntExtra("idLeccion", -1)
 
-
-
-        inicializarVistas() // Asegúrate de que esto esté primero
-        cargarFrases()
+        if (idLeccion != -1) {
+            // Cargar las frases en un hilo separado
+            cargarFrases(idLeccion)
+        } else {
+            // Manejar el error si no se pasó un ID válido
+            Log.e("Aprendeporrepeticion", "ID de lección no válido.")
+        }
+        inicializarVistas()
         configurarBotones()
         checkAudioPermission()
-
-        // Inicializar el reconocimiento de voz
         iniciarReconocimientoDeVoz()
-        cargarFrases()
 
+        val closeButton: ImageView = findViewById(R.id.clouse)
+        closeButton.setOnClickListener {
+            finish()
+        }
     }
 
 
@@ -107,21 +118,39 @@ class Aprendeporrepeticion : AppCompatActivity() {
     }
 
 
-    private fun cargarFrases() {
-        val jsonFrases = intent.getStringExtra("frases")
-        val gson = Gson()
-        try {
-            frases = gson.fromJson(jsonFrases, Array<Frase>::class.java).toList()
-            totalFrases = frases.size
-            if (frases.isNotEmpty()) {
-                actualizarTextoFrase()
-            } else {
-                tvFrase.text = "No se encontraron frases."
+    private fun cargarFrases(lessonId: Int) {
+        Log.d("Aprendeporrepeticion", "Iniciando carga de frases para lessonId: $lessonId")
+
+        // Crear un hilo para realizar la operación de la base de datos
+        CoroutineScope(Dispatchers.IO).launch {
+            // Obtener el DAO de tu base de datos
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao()
+
+            // Obtener el JSON de la base de datos
+            val jsonFrases = leccionDao.getJsonByLessonId(lessonId)
+            Log.d("Aprendeporrepeticion", "JSON recibido: $jsonFrases")
+
+            // Deserializar el JSON en una lista de objetos Frase
+            val gson = Gson()
+            try {
+                frases = gson.fromJson(jsonFrases, Array<Frase>::class.java).toList()
+                totalFrases = frases.size
+                Log.d("Aprendeporrepeticion", "Frases deserializadas: $frases")
+
+                // Actualizar la UI en el hilo principal
+                withContext(Dispatchers.Main) {
+                    if (frases.isNotEmpty()) {
+                        actualizarTextoFrase()
+                    } else {
+                        tvFrase.text = "No se encontraron frases."
+                    }
+                }
+            } catch (e: JsonSyntaxException) {
+                Log.e("Aprendeporrepeticion", "Error al deserializar el JSON: ${e.message}")
             }
-        } catch (e: JsonSyntaxException) {
-            Log.e("Aprendeporrepeticion", "Error al deserializar el JSON: ${e.message}")
         }
     }
+
 
     private fun configurarBotones() {
         val btnSiguiente: Button = findViewById(R.id.btnSiguiente)
@@ -142,33 +171,36 @@ class Aprendeporrepeticion : AppCompatActivity() {
         Log.d("FraseOriginal", fraseOriginal)
         Log.d("FraseEscuchada", fraseEscuchada)
 
+        // Cambia el color por defecto a verde
+        val defaultColor = resources.getColor(R.color.holo_green_ligth, null)
+        val redColor = resources.getColor(R.color.md_theme_error, null)
+
         // Si coincide
         if (validarFrase(fraseOriginal, fraseEscuchada)) {
             if (esPrimerClick) {
-                mostrarResultado("EXCELENTE!", true)
+                mostrarResultado("EXCELENTE!\nSu pronunciamiento fue correcto", true, defaultColor, btnSiguiente)
                 esPrimerClick = false // Cambiar a false después del primer clic
                 puntajeUsuarioPorLeccion++
                 tvPuntaje.text = "Puntaje: $puntajeUsuarioPorLeccion"
                 actualizarProgreso()
                 return
             } else {
-                ocultarElementos() // Asegúrate de implementar esta función
+                ocultarElementos(btnSiguiente) // Llama a la función ocultarElementos
                 esPrimerClick = true
                 fraseIndex++
             }
         } else {
-            mostrarResultado("LO SENTIMOS!", false)
+            mostrarResultado("LO SENTIMOS!\nSu pronunciamiento no fue correcto", false, redColor, btnSiguiente)
             if (esPrimerClick) {
                 esPrimerClick = false
                 actualizarProgreso()
                 return
             } else {
-                ocultarElementos() // Asegúrate de implementar esta función
+                ocultarElementos(btnSiguiente) // Llama a la función ocultarElementos
                 esPrimerClick = true
                 fraseIndex++
             }
         }
-
 
         // Actualizar la frase si aún hay más frases
         if (fraseIndex < frases.size) {
@@ -179,6 +211,38 @@ class Aprendeporrepeticion : AppCompatActivity() {
             finalizarLeccion(btnSiguiente)
         }
     }
+
+    private fun mostrarResultado(mensaje: String, esCorrecto: Boolean, color: Int, btnSiguiente: Button) {
+
+        btnEscucha.visibility = View.GONE
+        val relativeLayout: RelativeLayout = findViewById(R.id.relativeLayout) // Asegúrate de que el ID sea correcto
+        relativeLayout.visibility = View.GONE
+
+        val resultadoTextView: TextView = findViewById(R.id.resultadoTextView) // Asegúrate de tener un TextView en tu layout
+        resultadoTextView.text = mensaje
+
+        val imagenResultado: ImageView = findViewById(R.id.imagenResultado) // Asegúrate de tener una ImageView en tu layout
+        imagenResultado.setImageResource(if (esCorrecto) R.drawable.excelente else R.drawable.losentimos) // Usa tus imágenes
+
+        resultadoTextView.visibility = View.VISIBLE
+        imagenResultado.visibility = View.VISIBLE
+
+        resultadoTextView.text = mensaje
+        resultadoTextView.setTextColor(color) // Cambia el color del texto
+        resultadoTextView.visibility = View.VISIBLE // Asegúrate de que el TextView sea visible
+
+
+        // Cambia el color del botón según el resultado
+        if (!esCorrecto) {
+            btnSiguiente.setBackgroundColor(resources.getColor(R.color.md_theme_error, null))
+        } else {
+            btnSiguiente.setBackgroundColor(resources.getColor(R.color.holo_green_ligth, null)) // Color por defecto si es correcto
+        }
+    }
+
+
+
+
 
     private fun actualizarProgreso() {
         Indexprogres++
@@ -195,27 +259,11 @@ class Aprendeporrepeticion : AppCompatActivity() {
 
 
 
-    private fun mostrarResultado(mensaje: String, esCorrecto: Boolean) {
-        // Ocultar btnEscucha y el RelativeLayout
-        btnEscucha.visibility = View.GONE
-        // Suponiendo que tienes un RelativeLayout llamado relativeLayout
-        val relativeLayout: RelativeLayout = findViewById(R.id.relativeLayout) // Asegúrate de que el ID sea correcto
-        relativeLayout.visibility = View.GONE
 
-        // Mostrar mensaje en un TextView
-        val resultadoTextView: TextView = findViewById(R.id.resultadoTextView) // Asegúrate de tener un TextView en tu layout
-        resultadoTextView.text = mensaje
 
-        // Mostrar imagen correspondiente
-        val imagenResultado: ImageView = findViewById(R.id.imagenResultado) // Asegúrate de tener una ImageView en tu layout
-        imagenResultado.setImageResource(if (esCorrecto) R.drawable.excelente else R.drawable.losentimos) // Usa tus imágenes
-
-        resultadoTextView.visibility = View.VISIBLE
-        imagenResultado.visibility = View.VISIBLE
-
-    }
-
-    fun ocultarElementos() {
+    fun ocultarElementos(btnSiguiente: Button) {
+        resultadoTextView.visibility = View.GONE // Oculta el TextView
+        btnSiguiente.setBackgroundColor(resources.getColor(R.color.holo_green_ligth, null)) // Vuelve al color por defecto
         resultadoTextView.visibility = View.GONE
         imagenResultado.visibility = View.GONE
         relativeLayout.visibility = View.VISIBLE
