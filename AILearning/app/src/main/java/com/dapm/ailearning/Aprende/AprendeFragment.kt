@@ -7,58 +7,82 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
-import com.dapm.ailearning.SolicituLocal.ApiService
 
 class AprendeFragment : Fragment() {
+
+    private lateinit var leccionViewModel: LeccionViewModel
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_aprende, container, false)
+        val view = inflater.inflate(R.layout.fragment_aprende, container, false)
+
+        // Encuentra el LinearLayout donde se agregarán las cards
+        linearLayout = view.findViewById(R.id.linearLayoutContainer)
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnContinuar1 = view.findViewById<Button>(R.id.btnContinuar1)
-        val btnContinuar2 = view.findViewById<Button>(R.id.btnContinuar2)
-        val btnContinuar3 = view.findViewById<Button>(R.id.btnContinuar3)
+        // Inicializar ViewModel
+        leccionViewModel = ViewModelProvider(this).get(LeccionViewModel::class.java)
 
-        // Configurar el botón Continuar
-        btnContinuar1.setOnClickListener {
-            // Regresa al Aprende_Speack
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, Aprende_speack())
-                .addToBackStack(null)  // Opcional: Agrega la transacción a la pila de retroceso
-                .commit()
-        }
-        btnContinuar2.setOnClickListener {
-            // Deshabilitar el botón para evitar múltiples clics mientras se espera la respuesta
-            btnContinuar2.isEnabled = false
+        // Obtener el userId desde SharedPreferences
+        val sharedPreferences = requireActivity().getSharedPreferences("user_data", AppCompatActivity.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", null)
 
-            // Llamar a la API usando requireContext()
-            ApiService.solicitarAPI("Mi mascota favorita", requireContext()) { error ->
-                // Volver a habilitar el botón en caso de error
-                btnContinuar2.isEnabled = true
+        if (userId != null) {
+            // Cargar las lecciones del usuario
+            leccionViewModel.getLeccionesByUserId(userId)
 
-                // Manejo del error
+            // Observar los cambios en las lecciones
+            leccionViewModel.leccionesPorUsuario.observe(viewLifecycleOwner, { lecciones ->
+                lecciones?.let {
+                    for (leccion in it) {
+                        // Crear una card inflando el XML
+                        crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId) // Asegúrate de pasar el id
+                    }
                 }
+            })
         }
-
-
-
-        btnContinuar3.setOnClickListener {
-            // Regresa al Aprende_Speack
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, Aprende_speack())
-                .addToBackStack(null)  // Opcional: Agrega la transacción a la pila de retroceso
-                .commit()
-        }
-
-
     }
+
+    private fun crearCardLeccion(nombre: String, nivel: String, lessonId: Int) {
+        // Inflar el diseño del CardView
+        val cardView = layoutInflater.inflate(R.layout.item_leccion_boton, linearLayout, false)
+
+        // Encontrar los elementos del card inflado
+        val nombreTextView: TextView = cardView.findViewById(R.id.tvLeccionNombre)
+        val nivelTextView: TextView = cardView.findViewById(R.id.tvLeccionNivel)
+        val button: Button = cardView.findViewById(R.id.btnContinuar)
+
+        // Asignar los valores a los elementos
+        nombreTextView.text = nombre
+        nivelTextView.text = "Nivel: $nivel"
+
+        // Configurar el botón
+        button.setOnClickListener {
+            // Crear un Intent para iniciar la actividad Aprendeporrepeticion
+            val intent = Intent(requireContext(), Aprendeporrepeticion::class.java)
+            // Pasar el id de la lección a través del intent
+            intent.putExtra("idLeccion", lessonId) // Asegúrate de pasar el lessonId
+            startActivity(intent)
+        }
+
+        // Añadir el CardView al LinearLayout
+        linearLayout.addView(cardView)
+    }
+
 }
+

@@ -16,4 +16,9 @@ class LeccionRepository(private val leccionDao: LeccionDao) {
     suspend fun delete(leccion: Leccion) {
         leccionDao.delete(leccion)
     }
+
+    // Función para obtener el JSON de una lección por lessonId
+    suspend fun getJsonByLessonId(lessonId: Int): String {
+        return leccionDao.getJsonByLessonId(lessonId)
+    }
 }
