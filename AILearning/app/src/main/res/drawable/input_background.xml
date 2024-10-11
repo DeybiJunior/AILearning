@@ -1,0 +1,5 @@
+<!-- input_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFFFFF" /> <!-- Color de fondo -->
+</shape>

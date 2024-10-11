@@ -3,7 +3,7 @@
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
             <corners android:radius="12dp"/> <!-- Esquinas redondeadas -->
-            <solid android:color="#DDDDDD"/> <!-- Color del fondo gris claro -->
+            <solid android:color="@color/md_theme_inverseOnSurface"/> <!-- Color del fondo gris claro -->
         </shape>
     </item>
 
