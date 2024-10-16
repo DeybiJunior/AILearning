@@ -232,13 +232,14 @@
 
             <!-- Botón de registro -->
             <com.google.android.material.button.MaterialButton
+                android:padding="12dp"
                 android:id="@+id/registerButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Registrar"
                 app:backgroundTint="@color/md_theme_primary"
                 app:iconTint="@color/md_theme_onPrimary"
-                app:cornerRadius="8dp"
+                app:cornerRadius="15dp"
                 android:textColor="@color/md_theme_onPrimary" />
 
         </LinearLayout>

@@ -164,7 +164,7 @@
                 android:text="Iniciar Sesión"
                 app:backgroundTint="@color/md_theme_primary"
                 app:iconTint="@color/md_theme_onPrimary"
-                app:cornerRadius="8dp"
+                app:cornerRadius="15dp"
                 android:textColor="@color/md_theme_onPrimary" />
 
             <!-- Espacio entre botones -->
@@ -185,13 +185,14 @@
 
             <!-- Botón de registro -->
             <com.google.android.material.button.MaterialButton
+                android:padding="12dp"
                 android:id="@+id/registarseButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Regístrate"
                 app:backgroundTint="@color/md_theme_secondary"
                 app:iconTint="@color/md_theme_onSecondary"
-                app:cornerRadius="8dp"
+                app:cornerRadius="15dp"
                 android:textColor="@color/md_theme_onSecondary" />
 
         </LinearLayout>

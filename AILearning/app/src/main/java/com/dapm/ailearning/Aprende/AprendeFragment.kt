@@ -49,9 +49,12 @@ class AprendeFragment : Fragment() {
             // Observar los cambios en las lecciones
             leccionViewModel.leccionesPorUsuario.observe(viewLifecycleOwner, { lecciones ->
                 lecciones?.let {
-                    for (leccion in it) {
-                        // Crear una card inflando el XML
-                        crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId) // Asegúrate de pasar el id
+                    // Ordenar las lecciones por lessonId de manera descendente
+                    val leccionesOrdenadas = it.sortedByDescending { leccion -> leccion.lessonId }
+
+                    // Crear una card para cada lección en el orden descendente
+                    for (leccion in leccionesOrdenadas) {
+                        crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId)
                     }
                 }
             })

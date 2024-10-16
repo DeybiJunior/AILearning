@@ -108,7 +108,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Botón para guardar los datos -->
-            <Button
+            <com.google.android.material.button.MaterialButton
+                android:padding="12dp"
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,7 +118,7 @@
                 android:textColor="@color/blancosiempre"
                 android:textSize="16sp"
                 app:backgroundTint="#3DC2DF"
-                app:cornerRadius="18dp" />
+                app:cornerRadius="15dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

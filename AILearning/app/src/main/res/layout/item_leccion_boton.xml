@@ -5,15 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -25,23 +25,32 @@
                 android:id="@+id/tvLeccionNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp" />
+                android:text="Nombre de la Lección"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp" />
 
             <TextView
                 android:id="@+id/tvLeccionNivel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Nivel: Básico"
                 android:textColor="@color/md_theme_outline"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:padding="12dp"
             android:id="@+id/btnContinuar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#63DF3D"
+            android:backgroundTint="@color/holo_green_ligth"
             android:text="Continuar"
             android:textColor="@color/blancosiempre"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:icon="@drawable/aprovado"
+            app:iconPadding="4dp"
+            app:cornerRadius="15dp"
+            app:iconGravity="textStart" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

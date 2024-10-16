@@ -21,9 +21,9 @@ object ApiService {
 
     fun solicitarAPI(Tema: String, context: Context, onFailure: (Throwable?) -> Unit) {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
             .build()
 
         // Configura Retrofit
@@ -37,7 +37,7 @@ object ApiService {
         val mistralApi = retrofit.create(MistralApi::class.java)
 
         // Construye el prompt con el formato requerido
-        val prompt = "Genera un JSON con una lista de 4 frases en inglés de nivel básico - avanzado sobre $Tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
+        val prompt = "Genera un JSON con una lista de 10 frases en inglés de nivel básico - avanzado sobre $Tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
         Log.d("ApiService", "Prompt construido: $prompt") // Log para verificar el prompt construido
 
         // Crea el objeto de la solicitud con modelo y stream predeterminados

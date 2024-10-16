@@ -96,18 +96,21 @@
                     android:gravity="center"
                     android:layout_marginTop="20dp">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAceptar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Aceptar"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        app:cornerRadius="15dp"/>
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
+                        android:padding="12dp"
                         android:id="@+id/btnCancelar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cancelar"/>
+                        android:text="Cancelar"
+                        app:cornerRadius="15dp"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
