@@ -65,6 +65,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         val btn2 = findViewById<Button>(R.id.btn2)
         val btn3 = findViewById<Button>(R.id.btn3)
         val btn4 = findViewById<Button>(R.id.btn4)
+        val btn5 = findViewById<Button>(R.id.btn5)
+
 
         // Función para restablecer textos y colores de los botones
         fun resetButtons() {
@@ -72,16 +74,21 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn2.text = getString(R.string.tipo_2)
             btn3.text = getString(R.string.tipo_3)
             btn4.text = getString(R.string.tipo_4)
+            btn5.text = getString(R.string.tipo_5)
 
             btn1.setBackgroundColor(colorNoSeleccionado)
             btn2.setBackgroundColor(colorNoSeleccionado)
             btn3.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
+            btn4.setBackgroundColor(colorNoSeleccionado)
+
         }
         prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
         prompts[getString(R.string.tipo_2)] = """Generate a JSON with 1 short reading (max 50 words) in English on $tema for a basic $dificultad. Make a quiz about reading consisting of 3 multiple choice questions with 4 options and 1 correct answer. Example structure: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_3)] = " $tema  $dificultad."
         prompts[getString(R.string.tipo_4)] = " $tema  $dificultad."
+        prompts[getString(R.string.tipo_5)] = " $tema  $dificultad."
+
 
         // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
         btn1.setOnClickListener {
@@ -146,6 +153,23 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn4.text = spannable
             btn4.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
+        }
+
+        btn5.setOnClickListener {
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_5) // Asigna el valor correspondiente
+
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_5)
+            val descripcion = getString(R.string.desc_tipo_5)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn5.text = spannable
+            btn5.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
             Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
 

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
+
     <!-- Botón de regreso -->
     <ImageButton
         android:id="@+id/btnBack"
@@ -21,8 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="¿Como quieres aprender hoy?"
+        android:text="¿Cómo quieres aprender hoy?"
         android:textSize="20sp"/>
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
@@ -31,15 +33,13 @@
         android:layout_marginTop="8dp"
         android:text="Escoge el método que más te guste y comienza tu lección." />
 
-
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:columnCount="2"
-        android:rowCount="2"
-        android:layout_marginTop="8dp"
-        >
+        android:rowCount="3"
+        android:layout_marginTop="8dp">
 
         <!-- Botón 1 -->
         <com.google.android.material.button.MaterialButton
@@ -49,9 +49,9 @@
             android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Lee y Repite"
+            android:text="Pronunciación Perfecta"
             android:gravity="center"
-            app:cornerRadius="8dp" />
+            app:cornerRadius="15dp"/>
 
         <!-- Botón 2 -->
         <com.google.android.material.button.MaterialButton
@@ -61,9 +61,9 @@
             android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Lee y Responde"
+            android:text="Desafío de Comprensión"
             android:gravity="center"
-            app:cornerRadius="8dp"/>
+            app:cornerRadius="15dp"/>
 
         <!-- Botón 3 -->
         <com.google.android.material.button.MaterialButton
@@ -73,10 +73,9 @@
             android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Escucha y Selecciona"
+            android:text="Escucha Activa"
             android:gravity="center"
-            app:cornerRadius="8dp"
-            />
+            app:cornerRadius="15dp"/>
 
         <!-- Botón 4 -->
         <com.google.android.material.button.MaterialButton
@@ -86,12 +85,22 @@
             android:layout_height="120dp"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
-            android:text="Completar Frases"
+            android:text="Frases en Acción"
             android:gravity="center"
-            app:cornerRadius="8dp"
-            />
+            app:cornerRadius="15dp"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:padding="12dp"
+            android:id="@+id/btn5"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            android:text="Desafío de Cartas"
+            android:gravity="center"
+            app:cornerRadius="15dp"/>
     </GridLayout>
+
     <com.google.android.material.button.MaterialButton
         android:padding="12dp"
         android:id="@+id/btnAgregarLeccion"

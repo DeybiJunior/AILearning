@@ -74,14 +74,25 @@ class AprendeFragment : Fragment() {
         nombreTextView.text = nombre
         nivelTextView.text = "Nivel: $nivel"
 
+        val activityMap = mapOf(
+            "Pronunciación Perfecta" to Aprendeporrepeticion::class.java,
+            "Desafío de Comprensión" to DesafioComprensionActivity::class.java,
+            "Escucha Activa" to EscuchaActivaActivity::class.java,
+            "Frases en Acción" to FrasesEnAccionActivity::class.java,
+            "Desafío de Cartas" to DesafioCartasActivity::class.java
+        )
+
         // Configurar el botón
         button.setOnClickListener {
-            // Crear un Intent para iniciar la actividad Aprendeporrepeticion
-            val intent = Intent(requireContext(), Aprendeporrepeticion::class.java)
-            // Pasar el id de la lección a través del intent
-            intent.putExtra("idLeccion", lessonId) // Asegúrate de pasar el lessonId
-            startActivity(intent)
+            val activityClass = activityMap[nombre]
+
+            activityClass?.let {
+                val intent = Intent(requireContext(), it)
+                intent.putExtra("idLeccion", lessonId)
+                startActivity(intent)
+            }
         }
+
 
         // Añadir el CardView al LinearLayout
         linearLayout.addView(cardView)

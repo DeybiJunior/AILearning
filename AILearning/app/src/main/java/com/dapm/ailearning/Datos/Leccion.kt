@@ -10,5 +10,5 @@ data class Leccion(
     val tipo: String,
     val dificultad: String,
     val tema: String,
-    val json: String // Guarda el JSON como un String
+    val json: String
 )
