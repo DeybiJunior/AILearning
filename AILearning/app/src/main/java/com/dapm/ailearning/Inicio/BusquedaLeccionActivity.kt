@@ -28,6 +28,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
     // Colores
     private var colorSeleccionado by Delegates.notNull<Int>()
     private var colorNoSeleccionado by Delegates.notNull<Int>()
+    val prompts = mutableMapOf<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +78,10 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn3.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
         }
+        prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
+        prompts[getString(R.string.tipo_2)] = """Generate a JSON with 1 short reading (max 50 words) in English on $tema for a basic $dificultad. Make a quiz about reading consisting of 3 multiple choice questions with 4 options and 1 correct answer. Example structure: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
+        prompts[getString(R.string.tipo_3)] = " $tema  $dificultad."
+        prompts[getString(R.string.tipo_4)] = " $tema  $dificultad."
 
         // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
         btn1.setOnClickListener {
@@ -160,8 +165,16 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                 progressDialog.setCancelable(false)
                 progressDialog.show()
 
+
+                // Construir el prompt en la actividad
+                val prompt = prompts[tipo] ?: run {
+                    Toast.makeText(this, "Prompt no encontrado para el tipo seleccionado", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                    return@setOnClickListener
+                }
+
                 // Llamar al ApiService para generar el JSON
-                ApiService.solicitarAPI2("$tema", dificultad,this, { throwable ->
+                ApiService.solicitarAPI2(prompt, this, { throwable ->
                     // Manejar error al obtener frases
                     progressDialog.dismiss()
                     Log.e("BusquedaLeccionActivity", "Error al obtener frases: ${throwable?.message}")
