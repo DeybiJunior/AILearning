@@ -85,7 +85,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         }
         prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
         prompts[getString(R.string.tipo_2)] = """Generar un JSON con 1 lectura corta (máximo 50 palabras, en inglés) sobre $tema para una dificultad básica de $dificultad, todo el textto en idioma inglés. Realizar un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta.  La estructura debe ser: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_3)] = " $tema  $dificultad."
+        prompts[getString(R.string.tipo_3)] = """Genera un JSON con 1 lectura corta (max 50 palabras) en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_4)] = " $tema  $dificultad."
         prompts[getString(R.string.tipo_5)] = " $tema  $dificultad."
 

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_above="@id/btnContinuar"
+        tools:ignore="NotSibling">
+
+        <TextView
+            android:id="@+id/tvPuntaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Puntaje: 0"
+            android:textColor="@color/md_theme_onSecondaryContainer"
+            android:textSize="18sp"
+            android:layout_gravity="end" />
+
+        <Button
+            android:id="@+id/btnEscuchar"
+            android:padding="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Escuchar texto"
+            app:icon="@android:drawable/ic_lock_silent_mode_off"
+            android:enabled="false"
+            app:cornerRadius="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tvPregunta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pregunta"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioOpcion1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opción 1"/>
+
+            <RadioButton
+                android:id="@+id/radioOpcion2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opción 2"/>
+
+            <RadioButton
+                android:id="@+id/radioOpcion3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opción 3"/>
+
+            <RadioButton
+                android:id="@+id/radioOpcion4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opción 4"/>
+        </RadioGroup>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-16dp">
+
+            <!-- Texto de Frase Final -->
+            <TextView
+                android:id="@+id/tvFraseFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="¡Has llegado al final!"
+                android:textSize="36sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textAlignment="center"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Imagen de estrellas -->
+            <ImageView
+                android:id="@+id/imageViewEstrellas"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:visibility="gone"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFraseFinal"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Imagen de Resultado -->
+            <ImageView
+                android:id="@+id/imagenResultado"
+                android:layout_width="wrap_content"
+                android:layout_height="524dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/imageViewEstrellas"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="-30dp"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Puntaje Final -->
+            <TextView
+                android:id="@+id/tvPuntajeFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Puntaje Final: 0"
+                android:textSize="24sp"
+                android:visibility="gone"
+                android:background="@drawable/background_round"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="center" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <!-- Contenedor del botón de continuar -->
+    <RelativeLayout
+        android:id="@+id/containerBtnContinuar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="@color/md_theme_inverseOnSurface"
+        android:padding="16dp">
+        <Button
+            android:id="@+id/btnContinuar"
+            android:padding="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="15dp"
+            android:backgroundTint="@color/holo_green_ligth"
+            android:text="  Continuar  "
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+</RelativeLayout>
