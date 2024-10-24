@@ -1,58 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-    app:cardCornerRadius="4dp"
-    android:layout_margin="4dp"
-    android:layout_marginTop="10dp"
-    >
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTema"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-        <!-- Título del tema de la lección -->
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvTipo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="Tipo"
-            />
-        <TextView
-            android:id="@+id/tvTema"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Tema"
-            />
+    <TextView
+        android:id="@+id/textViewDificultad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
 
-        <!-- Dificultad de la lección -->
-        <TextView
-            android:id="@+id/tvDificultad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Dificultad"
-            />
-        <!-- JSON de la lección -->
-        <TextView
-            android:id="@+id/tvJson"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/darker_gray"
-            tools:text="Json"
-            />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
 
-</androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/textViewPuntaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
 
+</LinearLayout>

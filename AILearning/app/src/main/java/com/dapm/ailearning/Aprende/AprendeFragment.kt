@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.dapm.ailearning.Datos.LeccionViewModel
+import com.dapm.ailearning.Inicio.SeleccionTemaActivity
 import com.dapm.ailearning.R
 
 class AprendeFragment : Fragment() {
@@ -42,6 +43,10 @@ class AprendeFragment : Fragment() {
         val sharedPreferences = requireActivity().getSharedPreferences("user_data", AppCompatActivity.MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", null)
 
+        // Referencias a los nuevos elementos
+        val tvNoLecciones: TextView = view.findViewById(R.id.tvNoLecciones)
+        val btnSeleccionTema: Button = view.findViewById(R.id.btnSeleccionTema)
+
         if (userId != null) {
             // Cargar las lecciones del usuario
             leccionViewModel.getLeccionesByUserId(userId)
@@ -49,17 +54,41 @@ class AprendeFragment : Fragment() {
             // Observar los cambios en las lecciones
             leccionViewModel.leccionesPorUsuario.observe(viewLifecycleOwner, { lecciones ->
                 lecciones?.let {
-                    // Ordenar las lecciones por lessonId de manera descendente
-                    val leccionesOrdenadas = it.sortedByDescending { leccion -> leccion.lessonId }
+                    // Filtrar las lecciones con estado false
+                    val leccionesFiltradas = it.filter { leccion -> !leccion.estado }
 
-                    // Crear una card para cada lección en el orden descendente
-                    for (leccion in leccionesOrdenadas) {
-                        crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId)
+                    // Ordenar las lecciones filtradas por lessonId de manera descendente
+                    val leccionesOrdenadas = leccionesFiltradas.sortedByDescending { leccion -> leccion.lessonId }
+
+                    // Limpiar el LinearLayout antes de agregar nuevas lecciones
+                    linearLayout.removeAllViews()
+
+                    if (leccionesOrdenadas.isEmpty()) {
+                        // Mostrar mensaje y botón si no hay lecciones
+                        tvNoLecciones.visibility = View.VISIBLE
+                        btnSeleccionTema.visibility = View.VISIBLE
+                    } else {
+                        // Ocultar mensaje y botón si hay lecciones
+                        tvNoLecciones.visibility = View.GONE
+                        btnSeleccionTema.visibility = View.GONE
+
+                        // Crear una card para cada lección en el orden descendente
+                        for (leccion in leccionesOrdenadas) {
+                            crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId)
+                        }
                     }
                 }
             })
+
+            // Configurar el botón para redirigir a SeleccionTemaActivity
+            btnSeleccionTema.setOnClickListener {
+                val intent = Intent(requireContext(), SeleccionTemaActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
+
+
 
     private fun crearCardLeccion(nombre: String, nivel: String, lessonId: Int) {
         // Inflar el diseño del CardView

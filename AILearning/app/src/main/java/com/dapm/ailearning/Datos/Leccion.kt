@@ -10,5 +10,7 @@ data class Leccion(
     val tipo: String,
     val dificultad: String,
     val tema: String,
-    val json: String
+    val json: String,
+    val estado: Boolean,
+    val puntaje:Int
 )

@@ -59,8 +59,7 @@ class PerfilFragment : Fragment() {
             loginCard.visibility = View.VISIBLE
             loginCard.setOnClickListener {
                 // Redirigir al usuario a la pantalla de inicio de sesión
-                val intent = Intent(requireContext(), InicioSesionActivity::class.java)
-                startActivity(intent)
+                handleLogin()
             }
         } else {
             loginCard.visibility = View.GONE
@@ -106,6 +105,10 @@ class PerfilFragment : Fragment() {
         }, 500)
     }
 
+    private fun handleLogin() {
+        val intent = Intent(requireContext(), InicioSesionActivity::class.java)
+        startActivity(intent)
+    }
 
     private fun handleLogout() {
         auth.signOut()

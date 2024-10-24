@@ -3,7 +3,6 @@ package com.dapm.ailearning.Inicio
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.R
 
-class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(DIFF_CALLBACK) {
+class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(LeccionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeccionViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_leccion, parent, false)
@@ -24,24 +23,26 @@ class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(DI
     }
 
     class LeccionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textViewTema: TextView = itemView.findViewById(R.id.textViewTema)
+        private val textViewDificultad: TextView = itemView.findViewById(R.id.textViewDificultad)
+        private val textViewEstado: TextView = itemView.findViewById(R.id.textViewEstado)
+        private val textViewPuntaje: TextView = itemView.findViewById(R.id.textViewPuntaje)
+
         fun bind(leccion: Leccion) {
-            // Vincula los datos de la lección a los views del layout
-            itemView.findViewById<TextView>(R.id.tvTema).text = leccion.tema
-            itemView.findViewById<TextView>(R.id.tvDificultad).text = leccion.dificultad
-            itemView.findViewById<TextView>(R.id.tvTipo).text = leccion.tipo
-            itemView.findViewById<TextView>(R.id.tvJson).text = leccion.json
+            textViewTema.text = leccion.tema
+            textViewDificultad.text = "Dificultad: ${leccion.dificultad}"
+            textViewEstado.text = "Estado: ${if (leccion.estado) "Completada" else "Pendiente"}"
+            textViewPuntaje.text = "Puntaje: ${leccion.puntaje}"
         }
     }
 
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Leccion>() {
-            override fun areItemsTheSame(oldItem: Leccion, newItem: Leccion): Boolean {
-                return oldItem.lessonId == newItem.lessonId
-            }
+    class LeccionDiffCallback : DiffUtil.ItemCallback<Leccion>() {
+        override fun areItemsTheSame(oldItem: Leccion, newItem: Leccion): Boolean {
+            return oldItem.lessonId == newItem.lessonId
+        }
 
-            override fun areContentsTheSame(oldItem: Leccion, newItem: Leccion): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: Leccion, newItem: Leccion): Boolean {
+            return oldItem == newItem
         }
     }
 }

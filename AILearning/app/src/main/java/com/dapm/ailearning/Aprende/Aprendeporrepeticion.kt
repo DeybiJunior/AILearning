@@ -46,6 +46,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
 
     private lateinit var frases: List<Frase>
     private var Indexprogres = 0
+    private var idLeccion: Int = -1 // Inicializa con un valor por defecto
 
     private var fraseIndex = 0
     private var puntajeUsuarioPorLeccion = 0
@@ -82,7 +83,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aprendeporrepeticion)
-        val idLeccion = intent.getIntExtra("idLeccion", -1)
+        idLeccion = intent.getIntExtra("idLeccion", -1)
 
         if (idLeccion != -1) {
             // Cargar las frases en un hilo separado
@@ -289,7 +290,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
 
     private fun actualizarProgreso() {
         Indexprogres++
-        val progreso = ((Indexprogres) * 100) / 4
+        val progreso = ((Indexprogres) * 100) / frases.size
 
         val animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, progreso)
         animator.duration = 500
@@ -392,7 +393,24 @@ class Aprendeporrepeticion : AppCompatActivity() {
         // Calcular y mostrar estrellas
         val estrellas = calcularEstrellas()
         mostrarEstrellas(estrellas)
+        actualizarLeccion(puntajeUsuarioPorLeccion)
     }
+
+    private fun actualizarLeccion(puntajeFinal: Int) {
+        val estadoFinal = true // Estado de la lección completada
+
+        // Crear una corrutina para actualizar la lección en la base de datos
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Actualiza la lección usando la propiedad de clase
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
+
+            // Log para confirmar la actualización
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
+        }
+    }
+
 
 
 
@@ -461,7 +479,6 @@ class Aprendeporrepeticion : AppCompatActivity() {
     }
 
     // Función para normalizar el texto
-// Función para normalizar el texto
     private fun normalizarTexto(texto: String): String {
         // Elimina puntuaciones y convierte a minúsculas
         return texto

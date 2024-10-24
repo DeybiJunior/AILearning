@@ -157,17 +157,20 @@
                 android:layout_height="24dp" />
 
             <!-- Botón de inicio de sesión -->
+
+            <!-- Espacio entre botones -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginButton"
+                android:padding="12dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Iniciar Sesión"
+                android:textColor="@color/md_theme_onPrimary"
                 app:backgroundTint="@color/md_theme_primary"
-                app:iconTint="@color/md_theme_onPrimary"
                 app:cornerRadius="15dp"
-                android:textColor="@color/md_theme_onPrimary" />
+                app:iconTint="@color/md_theme_onPrimary" />
 
-            <!-- Espacio entre botones -->
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="16dp" />

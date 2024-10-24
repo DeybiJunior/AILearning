@@ -2,9 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/md_theme_background">
+    
+
+    <TextView
+        android:id="@+id/tvNoLecciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No tienes lecciones para trabajar."
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:padding="16dp"/>
+
+    <!-- Botón para redirigir a SeleccionTemaActivity -->
+    <com.google.android.material.button.MaterialButton
+
+        android:id="@+id/btnSeleccionTema"
+        android:padding="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar Tema"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        app:cornerRadius="15dp"
+        />
 
     <!-- Contenedor para los CardView -->
     <ScrollView
@@ -18,5 +42,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+
+
 
 </LinearLayout>

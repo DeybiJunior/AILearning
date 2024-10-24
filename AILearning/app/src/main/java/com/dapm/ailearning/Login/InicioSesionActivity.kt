@@ -55,6 +55,12 @@ class InicioSesionActivity : AppCompatActivity() {
         }
 
         continueWithoutLoginButton.setOnClickListener {
+            // Cambiar isFirstTime a false en SharedPreferences
+            val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("isFirstTime", false) // Cambiar a false
+            editor.apply()
+
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -81,6 +87,12 @@ class InicioSesionActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     statusTextView.text = getString(R.string.success_login)
+
+                    // Cambiar isFirstTime a false en SharedPreferences
+                    val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("isFirstTime", false) // Cambiar a false
+                    editor.apply()
 
                     // Obtener datos del usuario desde Firestore
                     val currentUser = auth.currentUser
