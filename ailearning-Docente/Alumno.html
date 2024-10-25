@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.Dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Cargar Firebase con compatibilidad -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore-compat.js"></script>
+    
+    <!-- Cargar Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+    <header>
+        <h1>Detalles del Alumno</h1>
+    </header>
+    <div class="container">
+        <button id="backButton"><i class="fas fa-chevron-left"></i> Volver</button>
+        
+        <div id="studentInfo">
+            <!-- Información del alumno -->
+        </div>
+
+        <h2>Lecciones</h2>
+        <!-- Botones para elegir vista -->
+        <div class="button-container">
+            <button id="tableViewButton">
+                <i class="fas fa-table"></i> Ver en Tabla
+            </button>
+            <button id="chartViewButton">
+                <i class="fas fa-chart-bar"></i> Ver en Gráfico
+            </button>
+        </div>
+        
+        
+        
+        <table id="lessonsTable">
+            <thead>
+                <tr>
+                    <th>ID Lección</th>
+                    <th>Tipo</th>
+                    <th>Dificultad</th>
+                    <th>Tema</th>
+                    <th>Estado</th>
+                    <th>Puntaje Final</th>
+                    <th>JSON</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- Lienzo para el gráfico -->
+        <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
+    </div>
+
+    <script src="js/alumno.js"></script>
+
+    <script>
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back(); 
+        });
+    </script>
+</body>
+</html>

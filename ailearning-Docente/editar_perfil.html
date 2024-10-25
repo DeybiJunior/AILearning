@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="css/styles.Dashboard.css">
+    
+    <!-- Cargar Firebase con compatibilidad -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="Recursos/Logo.png" alt="Logo" class="logo">
+            <h1>Editar Perfil</h1>
+            <div class="profile-info">
+                <a href="editar_perfil.html" id="teacherName">Nombre del Docente</a>
+                <button id="logoutButton">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Datos del Docente</h2>
+        <div id="profileData">
+            <p>
+                <strong>Nombre: </strong>
+                <span id="nombreDocente">Cargando...</span>
+                <button onclick="editField('nombreDocente', 'nombreInput')">Editar</button>
+            </p>
+            <p>
+                <strong>Apellido: </strong>
+                <span id="apellidoDocente">Cargando...</span>
+                <button onclick="editField('apellidoDocente', 'apellidoInput')">Editar</button>
+            </p>
+            <p>
+                <strong>Colegio: </strong>
+                <span id="colegioDocente">Cargando...</span>
+                <button onclick="editField('colegioDocente', 'colegioInput')">Editar</button>
+            </p>
+            <p>
+                <strong>Email: </strong>
+                <span id="emailDocente">Cargando...</span>
+                <button onclick="editField('emailDocente', 'emailInput')">Editar</button>
+            </p>
+        </div>
+        
+        <div id="editFields" style="display: none;">
+            <input type="text" id="nombreInput" placeholder="Nuevo Nombre">
+            <input type="text" id="apellidoInput" placeholder="Nuevo Apellido">
+            <input type="text" id="colegioInput" placeholder="Nuevo Colegio">
+            <input type="email" id="emailInput" placeholder="Nuevo Email">
+            <button id="saveButton">Guardar Cambios</button>
+        </div>
+    </div>
+
+    <script src="js/editar_perfil.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4-pMStnoDR2vcY-HDYTM8QBfWKwQDX2U",
+            authDomain: "ailearning-8e9ab.firebaseapp.com",
+            projectId: "ailearning-8e9ab",
+            storageBucket: "ailearning-8e9ab.appspot.com",
+            messagingSenderId: "519801064675",
+            appId: "1:519801064675:web:54c94242246a57ed6f09d6",
+            measurementId: "G-H4VKHQQVKW"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Obtener los datos del docente
+        const user = auth.currentUser;
+        if (user) {
+            db.collection('users_docentes').doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    document.getElementById('nombreDocente').textContent = doc.data().nombre;
+                    document.getElementById('apellidoDocente').textContent = doc.data().apellido;
+                    document.getElementById('colegioDocente').textContent = doc.data().colegio;
+                    document.getElementById('emailDocente').textContent = doc.data().email;
+                } else {
+                    console.log("No se encontró el documento.");
+                }
+            }).catch((error) => {
+                console.error("Error obteniendo el documento:", error);
+            });
+        }
+
+        function editField(fieldId, inputId) {
+            const currentValue = document.getElementById(fieldId).textContent;
+            document.getElementById(inputId).value = currentValue;
+            document.getElementById('editFields').style.display = 'block';
+        }
+
+        document.getElementById('saveButton').addEventListener('click', () => {
+            const newNombre = document.getElementById('nombreInput').value;
+            const newApellido = document.getElementById('apellidoInput').value;
+            const newColegio = document.getElementById('colegioInput').value;
+            const newEmail = document.getElementById('emailInput').value;
+
+            // Actualizar datos en Firestore
+            if (user) {
+                db.collection('users_docentes').doc(user.uid).update({
+                    nombre: newNombre,
+                    apellido: newApellido,
+                    colegio: newColegio,
+                    email: newEmail
+                }).then(() => {
+                    alert('Datos actualizados correctamente');
+                    location.reload(); // Recargar la página para mostrar los nuevos datos
+                }).catch((error) => {
+                    console.error('Error actualizando los datos: ', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

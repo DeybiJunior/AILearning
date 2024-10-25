@@ -1,0 +1,118 @@
+body {
+    background-color: #533082; /* Fondo morado */
+    font-family: Arial, sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.card {
+    background-color: white; /* CardView blanca */
+    padding: 20px;
+    border-radius: 15px; /* Esquinas redondeadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Máxima anchura de la CardView */
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #533082; /* Título morado */
+    text-align: center; /* Centrar el título */
+}
+h2 {
+    color: #000000; /* Título morado */
+}
+
+h3 {
+    color: #000000; /* Color negro para el título */
+    text-align: center; /* Centrar el título */
+    font-weight: normal; /* Fuente normal */
+}
+p {
+    color: black; /* Color negro para el texto del párrafo */
+    text-align: center; /* Centrar el texto */
+    font-weight: normal; /* Fuente normal */
+}
+
+.divider {
+    border: none; /* Sin borde */
+    height: 2px; /* Altura de la línea */
+    background-color: #202020; /* Color de la línea */
+    margin: 5px 0; /* Margen superior e inferior */
+}
+
+label {
+    margin-top: 10px;
+    display: block;
+    color: black; 
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Asegurar que el padding no afecte el ancho total */
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #533082; /* Color morado para el botón */
+    color: white;
+    border: none;
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Esquinas redondeadas */
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2c1846; /* Color más oscuro al pasar el mouse */
+}
+
+a {
+    color: #533082;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos responsivos */
+@media (max-width: 500px) {
+    .card {
+        width: 90%; /* CardView ocupa el 90% en pantallas pequeñas */
+    }
+}
+
+.gray-button {
+    background-color: #d3d3d3; /* Color de fondo gris */
+    color: black; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Esquinas redondeadas */
+    cursor: pointer; /* Cambiar cursor al pasar el mouse */
+    font-weight: normal; /* Fuente normal */
+    width: 100%; /* Ancho completo */
+    
+    text-align: center; /* Texto centrado */
+}
+
+.gray-button:hover {
+    background-color: #b0b0b0; /* Color más oscuro al pasar el mouse */
+}

@@ -1,0 +1,167 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #533082; /* Color de fondo */
+    color: #000; /* Color del texto cambiado a negro */
+    line-height: 1.6;
+}
+
+.header-container {
+    display: flex; /* Usar flexbox para disposición */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: space-between; /* Espaciar elementos */
+    padding: 15px; /* Espaciado interno */
+    background-color: #533082; /* Fondo del header */
+}
+
+.logo {
+    height: 50px; /* Altura del logo */
+}
+
+.profile-info {
+    display: flex; /* Usar flexbox para los elementos del perfil */
+    align-items: center; /* Centrar verticalmente */
+}
+
+#teacherName {
+    margin-right: 20px; /* Espacio entre el nombre y el botón */
+    color: #ffffff; /* Color del texto del nombre */
+}
+
+#logoutButton {
+    padding: 10px 15px; /* Espaciado interno */
+    background-color: #EDDCFF; /* Color de fondo del botón */
+    color: #533082; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+#logoutButton:hover {
+    background-color: #D1B2E0; /* Color más claro al pasar el cursor */
+}
+
+.container {
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrar el contenedor */
+    padding: 20px;
+    background-color: #EDDCFF; /* Fondo claro para el contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+h1{
+    color: #ffffff; /* Color del subtítulo */
+    text-align: center; /* Alinear texto a la izquierda */
+
+
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #533082; /* Color del subtítulo */
+    border-bottom: 2px solid #645A70; /* Línea debajo del subtítulo */
+    padding-bottom: 10px; /* Espacio entre el texto y la línea */
+}
+
+table {
+    width: 100%; /* Ancho total */
+    border-collapse: collapse; /* Colapsar bordes */
+    margin-top: 20px; /* Espacio superior */
+    border-radius: 15px; /* Bordes redondeados */
+    overflow: hidden; /* Esconde el desbordamiento */
+}
+
+th, td {
+    padding: 12px; /* Espaciado interno */
+    text-align: left; /* Alinear texto a la izquierda */
+    border-bottom: 1px solid #E8E0EB; /* Línea de separación de filas */
+}
+
+th {
+    background-color: #645A70; /* Fondo gris para encabezados */
+    color: #FFFFFF; /* Texto blanco para encabezados */
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Color de fondo al pasar el mouse sobre las filas */
+}
+
+
+#backButton {
+    padding: 10px 15px; /* Espaciado interno */
+    margin-bottom: 20px; /* Margen inferior */
+    background-color: #645A70; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+#backButton:hover {
+    background-color: rgb(95, 59, 66); /* Color de fondo más oscuro al pasar el cursor */
+}
+
+/* Estilo básico para los botones */
+button {
+    padding: 10px 15px; /* Espaciado interno */
+    margin-bottom: 20px; /* Margen inferior */
+    background-color: #645A70; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor de puntero */
+    transition: background-color 0.3s ease; /* Transición suave */
+    margin: 5px; /* Margen entre botones */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    display: flex; /* Permitir alineación de iconos y texto */
+    align-items: center; /* Centrar verticalmente */
+}
+
+/* Efecto hover para los botones */
+button:hover {
+    background-color: rgb(95, 59, 66); /* Color de fondo más oscuro al pasar el cursor */
+}
+
+/* Estilo para los iconos dentro de los botones */
+button i {
+    margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+
+/* Estilo para el contenedor de botones */
+.button-container {
+    display: flex; /* Disposición horizontal */
+    justify-content: center; /* Centrar horizontalmente */
+    margin: 20px 0; /* Margen superior e inferior */
+}
+
+.button-container button {
+    flex: 1; /* Permitir que los botones ocupen espacio igual */
+    max-width: 200px; /* Establecer un ancho máximo si es necesario */
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 22px; /* Tamaño de fuente más pequeño en pantallas pequeñas */
+    }
+    
+    h2 {
+        font-size: 18px; /* Tamaño de fuente más pequeño en pantallas pequeñas */
+    }
+
+    table {
+        font-size: 14px; /* Tamaño de fuente más pequeño en pantallas pequeñas */
+    }
+}
