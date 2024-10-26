@@ -9,5 +9,8 @@ data class Usuario(
     val nombres: String,
     val apellidos: String,
     val edad: Int,
-    val nivel: Int
-) : Parcelable
+    val nivel: Int,
+    val seccion: String,
+    val grado: String
+
+    ) : Parcelable

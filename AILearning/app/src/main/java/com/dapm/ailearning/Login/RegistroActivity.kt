@@ -48,7 +48,11 @@ class RegistroActivity : AppCompatActivity() {
         val emailLayout = findViewById<TextInputLayout>(R.id.emailLayout)
         val passwordLayout = findViewById<TextInputLayout>(R.id.passwordLayout)
         val confirmPasswordLayout = findViewById<TextInputLayout>(R.id.confirmPasswordLayout)
+        val sectionLayout = findViewById<TextInputLayout>(R.id.seccionLayout)
+        val gradeLayout = findViewById<TextInputLayout>(R.id.gradoLayout)
 
+        val sectionEditText = findViewById<EditText>(R.id.seccionEditText)
+        val gradeEditText = findViewById<EditText>(R.id.gradoEditText)
         val CloseRegistro = findViewById<ImageButton>(R.id.CloseRegistroLayaut)
         val nombresEditText = findViewById<EditText>(R.id.nombresEditText)
         val apellidosEditText = findViewById<EditText>(R.id.apellidosEditText)
@@ -87,6 +91,8 @@ class RegistroActivity : AppCompatActivity() {
                     apellidosLayout, apellidosEditText.text.toString().trim(),
                     edadLayout, edadEditText.text.toString().trim(),
                     emailLayout, emailEditText.text.toString().trim(),
+                    sectionLayout, sectionEditText.text.toString().trim(),
+                    gradeLayout, gradeEditText.text.toString().trim(),
                     passwordLayout, passwordEditText.text.toString().trim(),
                     confirmPasswordLayout, confirmPasswordEditText.text.toString().trim()
                 )
@@ -102,6 +108,8 @@ class RegistroActivity : AppCompatActivity() {
         apellidosLayout: TextInputLayout, apellidos: String,
         edadLayout: TextInputLayout, edadStr: String,
         emailLayout: TextInputLayout, email: String,
+        sectionLayout: TextInputLayout, section: String,
+        gradeLayout: TextInputLayout, grade: String,
         passwordLayout: TextInputLayout, password: String,
         confirmPasswordLayout: TextInputLayout, confirmPassword: String
     ) {
@@ -111,6 +119,8 @@ class RegistroActivity : AppCompatActivity() {
         apellidosLayout.error = null
         edadLayout.error = null
         emailLayout.error = null
+        sectionLayout.error = null
+        gradeLayout.error = null
         passwordLayout.error = null
         confirmPasswordLayout.error = null
 
@@ -133,6 +143,19 @@ class RegistroActivity : AppCompatActivity() {
             emailLayout.error = getString(R.string.error_email)
             return
         }
+
+        if (section.isEmpty()) {
+            sectionLayout.error = getString(R.string.error_section) // Add this string in strings.xml
+            return
+        }
+
+        // Validate grade
+        val gradeValue = grade.toIntOrNull()
+        if (gradeValue == null || gradeValue <= 0) {
+            gradeLayout.error = getString(R.string.error_grade) // Ensure this string is defined in strings.xml
+            return
+        }
+
 
         val passwordValidationResult = validatePassword(password)
         if (passwordValidationResult != null) {
@@ -157,8 +180,11 @@ class RegistroActivity : AppCompatActivity() {
                         "nombres" to nombres,
                         "apellidos" to apellidos,
                         "edad" to edad,
-                        "nivel" to nivel
+                        "nivel" to nivel,
+                        "seccion" to section,
+                        "grado" to grade
                     )
+
 
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
@@ -166,7 +192,7 @@ class RegistroActivity : AppCompatActivity() {
                             .document(userId)
                             .set(user)
                             .addOnSuccessListener {
-                                guardarUsuarioEnSharedPreferences(Usuario(userId, nombres, apellidos, edad, nivel))
+                                guardarUsuarioEnSharedPreferences(Usuario(userId, nombres, apellidos, edad, nivel, section, grade))
 
                                 // Redirigir al usuario a MainActivity
                                 val intent = Intent(this, MainActivity::class.java)
@@ -200,7 +226,9 @@ class RegistroActivity : AppCompatActivity() {
                 "Nombres: ${usuario.nombres}, " +
                 "Apellidos: ${usuario.apellidos}, " +
                 "Edad: ${usuario.edad}, " +
-                "Nivel: ${usuario.nivel}")
+                "Nivel: ${usuario.nivel}" +
+                "Edad: ${usuario.seccion}, " +
+        "Nivel: ${usuario.grado}")
     }
 
     private fun validatePassword(password: String): String? {

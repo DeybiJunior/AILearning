@@ -165,6 +165,55 @@
                 android:layout_height="16dp" />
 
             <!-- Campo de contraseña -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+
+                <!-- TextInputLayout para Grado -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gradoLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:boxStrokeColor="@color/md_theme_secondary"
+                    app:hintTextColor="@color/md_theme_onSurface">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gradoEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Grado"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/seccionLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:boxBackgroundMode="filled"
+                    app:errorEnabled="true"
+                    app:boxStrokeColor="@color/md_theme_secondary"
+                    app:hintTextColor="@color/md_theme_onSurface">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/seccionEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Sección"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- Campo de contraseña -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
