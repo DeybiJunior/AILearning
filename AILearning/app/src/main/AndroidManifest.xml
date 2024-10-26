@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <meta-data
         android:name="com.google.firebase.MESSAGING_AUTO_INIT_ENABLED"
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Ensure you need this -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AILearning"
         android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="31" >
+        tools:targetApi="31">
 
         <!-- Splash screen activity -->
         <activity android:name=".SplashActivity"
@@ -36,20 +36,20 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades -->
+        <!-- Other activities -->
         <activity android:name=".MainActivity" />
         <activity android:name=".Login.InicioSesionActivity" />
         <activity android:name=".Login.RegistroActivity" />
+
+        <!-- Consider removing fragments/adapters from manifest -->
+        <activity android:name=".Perfil.PerfilFragment" /> <!-- Should be a fragment, remove -->
+        <activity android:name=".Perfil.SeleccionDocenteActivity" />
         <activity android:name=".Inicio.SeleccionTemaActivity" />
         <activity android:name=".Inicio.BusquedaLeccionActivity" />
         <activity android:name=".Inicio.HistorialLeccionesActivity" />
-
-
-        <!-- Interacción con la IA -->
         <activity android:name=".Aprende.Aprendeporrepeticion" />
         <activity android:name=".Aprende.DesafioComprensionActivity" />
         <activity android:name=".Aprende.EscuchaActivaActivity" />
-
 
     </application>
 

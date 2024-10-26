@@ -30,6 +30,8 @@
     <string name="error_login">Correo electrónico o contraseña no válidos</string>
     <string name="success_login">Inicio de sesión exitosa</string>
     <string name="error_login_failure">Error al iniciar sesión: %1$s</string>
+    <string name="error_section">La sección es obligatoria</string>
+    <string name="error_grade">El grado debe ser un número válido</string>
 
 
     <string name="lorem_ipsum">
@@ -84,5 +86,6 @@
     <string name="desc_tipo_4">Completa la frase eligiendo la opción que mejor encaje.</string>
     <string name="desc_tipo_5">Responde a las preguntas de las cartas; si fallas, ¡vuelve a intentarlo! Completa la lista para ganar.</string>
 
+    <string name="searchbar_hint">Buscar docentes</string>
 
 </resources>
