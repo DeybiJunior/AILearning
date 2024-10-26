@@ -23,21 +23,47 @@
         </div>
     </header>
     
-    <div class="container">
-        <h2>Alumnos del Docente</h2>
-        <table id="userTable">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Edad</th>
-                    <th>Nivel</th>
-                    <th>Lecciones Completadas</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+
+
+<div class="container">
+    <h2>Alumnos del Docente</h2>
+    <div class="filters">
+        <input type="text" id="searchName" placeholder="Buscar por nombre" />
+        <select id="filterGrado">
+            <option value="">Seleccionar Grado</option>
+            <option value="1">1er Grado</option>
+            <option value="2">2er Grado</option>
+            <option value="3">3er Grado</option>
+            <option value="4">4er Grado</option>
+            <option value="5">5er Grado</option>
+
+            <!-- Añadir más opciones según sea necesario -->
+        </select>
+        <select id="filterSeccion">
+            <option value="">Seleccionar Sección</option>
+            <option value="A">Sección A</option>
+            <option value="B">Sección B</option>
+        </select>
+        <button id="applyFilters">Aplicar Filtros</button>
+        
     </div>
+    
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Edad</th>
+                <th>Nivel</th>
+                <th>Grado</th> 
+                <th>Sección</th> 
+                <th>Lecciones Completadas</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+    
 
     <script src="js/dashboard.js"></script>
     <script src="js/logout.js"></script>

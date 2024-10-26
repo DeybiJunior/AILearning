@@ -11,6 +11,49 @@ body {
     line-height: 1.6;
 }
 
+.filter-container {
+    display: flex; /* Usar flexbox para disposición horizontal */
+    justify-content: space-between; /* Espaciar elementos */
+    align-items: center; /* Centrar verticalmente */
+    margin: 20px 0; /* Margen superior e inferior */
+    background-color: #EDDCFF; /* Fondo para el contenedor de filtros */
+    padding: 15px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.filter-group {
+    display: flex; /* Disposición horizontal para cada grupo de filtro */
+    flex-direction: column; /* Alinear etiquetas y campos de entrada verticalmente */
+    margin-right: 20px; /* Espacio entre grupos de filtro */
+}
+
+.filter-group label {
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el campo */
+    color: #533082; /* Color de las etiquetas */
+}
+
+#filterGrado, #filterSeccion, #searchName {
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #645A70; /* Borde para campos de entrada */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+#applyFilters {
+    background-color: #645A70; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    cursor: pointer; /* Cursor de puntero */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+#applyFilters:hover {
+    background-color: rgb(95, 59, 66); /* Color de fondo más oscuro al pasar el cursor */
+}
+
+
 .header-container {
     display: flex; /* Usar flexbox para disposición */
     align-items: center; /* Centrar verticalmente */
@@ -165,3 +208,5 @@ button i {
         font-size: 14px; /* Tamaño de fuente más pequeño en pantallas pequeñas */
     }
 }
+
+
