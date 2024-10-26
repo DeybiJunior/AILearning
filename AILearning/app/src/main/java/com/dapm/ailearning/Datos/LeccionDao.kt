@@ -25,4 +25,8 @@ interface LeccionDao {
     // NUEVA consulta para actualizar una lección
     @Query("UPDATE lecciones SET estado = :estado, puntaje = :puntaje WHERE lessonId = :lessonId")
     suspend fun updateLeccion(lessonId: Int, estado: Boolean, puntaje: Int)
+
+    @Query("SELECT COUNT(*) FROM lecciones WHERE userId = :userId AND estado = 1 AND puntaje > 5")
+    suspend fun getCompletedLessonCount(userId: String): Int
+
 }

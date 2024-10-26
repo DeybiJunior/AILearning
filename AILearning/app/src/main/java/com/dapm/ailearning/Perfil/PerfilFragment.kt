@@ -7,16 +7,21 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.LeccionDao
 import com.dapm.ailearning.Login.InicioSesionActivity
 import com.dapm.ailearning.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
-import kotlin.properties.Delegates
+import kotlinx.coroutines.launch
+
+
 class PerfilFragment : Fragment() {
+    private lateinit var leccionDao: LeccionDao // Asegúrate de inicializar esto adecuadamente
 
     private lateinit var auth: FirebaseAuth
     private lateinit var loginCard: CardView
@@ -31,6 +36,12 @@ class PerfilFragment : Fragment() {
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
         progressText = view.findViewById(R.id.progressText)
         textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado) // Inicializar el TextView
+
+
+        val database = AppDatabase.getDatabase(requireContext())
+        leccionDao = database.leccionDao()
+
+        updateLevelBasedOnLessons()
 
         val nivel = getUserLevel() // Obtén el nivel o 0 si no existe
         updateProgress(nivel)
@@ -93,17 +104,44 @@ class PerfilFragment : Fragment() {
             textViewDocenteSeleccionado.text = "Ninguno"
         }
     }
-
     private fun getUserLevel(): Int {
         val sharedPref = activity?.getSharedPreferences("mis_preferencias", android.content.Context.MODE_PRIVATE)
         return sharedPref?.getInt("user_nivel", 0) ?: 0 // Obtén el nivel o 0 si no existe
     }
 
+    private fun updateLevelBasedOnLessons() {
+        val userId = auth.currentUser?.uid ?: return
 
-    // Función para actualizar el progreso
-    private fun updateProgress(progress: Int) {
-        circularProgressIndicator.setProgress(progress)
-        progressText.text = "$progress%"
+        // Ejecutar la consulta en un hilo de fondo
+        lifecycleScope.launch {
+            val completedLessons = leccionDao.getCompletedLessonCount(userId)
+            val newLevel = calculateLevel(completedLessons)
+
+            // Guardar el nivel en SharedPreferences
+            saveUserLevel(newLevel)
+
+            // Actualizar la interfaz de usuario con el nuevo nivel
+            updateProgress(newLevel)
+            increaseProgress(newLevel)
+        }
+    }
+
+    // Actualiza el cálculo del nivel para permitir más niveles
+    private fun calculateLevel(completedLessonCount: Int): Int {
+        // Ejemplo: 1 nivel por cada 5 lecciones completadas, máximo 10 niveles
+        return (completedLessonCount / 5).coerceAtMost(10) // Ajustado para más niveles
+    }
+
+    private fun saveUserLevel(level: Int) {
+        val sharedPref = activity?.getSharedPreferences("mis_preferencias", android.content.Context.MODE_PRIVATE)
+        sharedPref?.edit()?.putInt("user_nivel", level)?.apply()
+    }
+
+    // Modificar updateProgress para actualizar en porcentaje
+    private fun updateProgress(nivel: Int) {
+        val progress = (nivel * 10).coerceAtMost(100) // Ajuste para reflejar el nivel de 0 a 10
+        circularProgressIndicator.setProgressCompat(progress, true)
+        progressText.text = "Nivel: $nivel"
     }
 
     // Ejemplo de cómo variar el progreso
@@ -120,8 +158,12 @@ class PerfilFragment : Fragment() {
             override fun run() {
                 if (progress < targetProgress) {
                     progress += 1
-                    updateProgress((progress.toFloat() / maxProgress * 100).toInt()) // Convertir a porcentaje
+                    // Calculamos el porcentaje de progreso
+                    updateProgress(currentProgress) // Mantener el nivel actual sin cambiar
                     handler.postDelayed(this, 30) // Actualiza cada 30ms
+                } else {
+                    // Asegúrate de mostrar el nivel final al terminar la animación
+                    updateProgress(currentProgress)
                 }
             }
         }, 500)
