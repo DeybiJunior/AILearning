@@ -81,6 +81,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn3.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
+            btn5.setBackgroundColor(colorNoSeleccionado)
+
 
         }
         prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
@@ -100,8 +102,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             val descripcion = getString(R.string.desc_tipo_1)
 
             // Crear SpannableString para cambiar el tamaño de la descripción
-            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
-            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn1.text = spannable
             btn1.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
@@ -116,8 +118,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             val descripcion = getString(R.string.desc_tipo_2)
 
             // Crear SpannableString para cambiar el tamaño de la descripción
-            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
-            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn2.text = spannable
             btn2.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
@@ -132,8 +134,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             val descripcion = getString(R.string.desc_tipo_3)
 
             // Crear SpannableString para cambiar el tamaño de la descripción
-            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
-            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn3.text = spannable
             btn3.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
@@ -148,8 +150,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             val descripcion = getString(R.string.desc_tipo_4)
 
             // Crear SpannableString para cambiar el tamaño de la descripción
-            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
-            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn4.text = spannable
             btn4.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
@@ -165,8 +167,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             val descripcion = getString(R.string.desc_tipo_5)
 
             // Crear SpannableString para cambiar el tamaño de la descripción
-            val spannable = SpannableString(textoPrincipal + "\n\n" + descripcion)
-            spannable.setSpan(RelativeSizeSpan(0.8f), textoPrincipal.length, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn5.text = spannable
             btn5.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado

@@ -104,8 +104,8 @@ class SeleccionDocenteActivity : AppCompatActivity() {
 
                     // Configura el texto de cada TextView en la CardView
                     findViewById<TextView>(R.id.textViewNombre).text = "$nombre $apellido" // Combina nombre y apellido
-                    findViewById<TextView>(R.id.textViewColegio).text = "   Colegio: $colegio"
-                    findViewById<TextView>(R.id.textViewEmail).text = "   Email: $email"
+                    findViewById<TextView>(R.id.textViewColegio).text = "     Colegio: $colegio"
+                    findViewById<TextView>(R.id.textViewEmail).text = "     Email: $email"
 
                     // Mostrar el botón de eliminar docente y la CardView
                     findViewById<Button>(R.id.btnEliminarDocente).visibility = View.VISIBLE
@@ -128,7 +128,7 @@ class SeleccionDocenteActivity : AppCompatActivity() {
     private fun mostrarCuadroAdvertencia() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Eliminar Docente")
-            .setMessage("¿Estás seguro de que deseas eliminar el ID del docente?")
+            .setMessage("¿Estás seguro de que deseas eliminar a tu docente asignado?")
             .setPositiveButton("Sí") { dialog, which ->
                 eliminarDocenteSeleccionado() // Llamar a la función de eliminación
             }
@@ -165,7 +165,9 @@ class SeleccionDocenteActivity : AppCompatActivity() {
 
         if (userId == null) {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-            return // Salir si no hay un usuario autenticado
+            finish()
+            onBackPressed()
+            return
         }
 
         firestore.collection("users_docentes").document(docenteId) // Asegúrate de que la colección es correcta
@@ -211,7 +213,9 @@ class SeleccionDocenteActivity : AppCompatActivity() {
 
         if (userId == null) {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-            return // Salir si no hay un usuario autenticado
+            finish()
+            onBackPressed()
+            return
         }
 
         firestore.collection("users").document(userId)

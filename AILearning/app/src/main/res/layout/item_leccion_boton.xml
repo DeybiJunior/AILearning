@@ -51,6 +51,7 @@
             app:icon="@drawable/aprovado"
             app:iconPadding="4dp"
             app:cornerRadius="15dp"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

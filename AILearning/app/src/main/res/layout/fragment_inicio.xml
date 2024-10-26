@@ -23,6 +23,7 @@
                 android:textColor="@color/md_theme_outline"
                 android:textSize="20sp"></TextView>
 
+
             <TextView
                 android:id="@+id/txtNombreUsuario"
                 android:layout_width="wrap_content"
@@ -59,6 +60,7 @@
                         android:layout_height="wrap_content"
                         android:padding="8dp">
 
+
                         <TextView
                             android:id="@+id/txtOpcion1"
                             android:layout_width="wrap_content"
@@ -67,8 +69,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="10dp"
                             android:text="Seleccionar Tema y Lección"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:paddingBottom="4dp"/>
+
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnOpcion1"
@@ -115,8 +119,9 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="10dp"
                             android:text="Ver historial de lecciones"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:paddingBottom="4dp"/>
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnOpcion2"

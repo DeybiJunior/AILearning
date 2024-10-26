@@ -48,9 +48,10 @@
             android:text="Agregar"
             android:textColor="@color/blancosiempre"
             android:textStyle="bold"
-            app:icon="@drawable/icon_docente"
+            app:icon="@drawable/icon_add"
             app:iconPadding="12dp"
             app:cornerRadius="15dp"
-            app:iconGravity="textStart" />
+            app:iconGravity="textStart"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
