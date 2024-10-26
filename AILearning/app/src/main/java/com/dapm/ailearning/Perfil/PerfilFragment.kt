@@ -16,31 +16,30 @@ import com.dapm.ailearning.R
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import kotlin.properties.Delegates
-
 class PerfilFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var loginCard: CardView
     private lateinit var logoutCard: CardView
-
     private lateinit var circularProgressIndicator: CircularProgressIndicator
     private lateinit var progressText: TextView
+    private lateinit var textViewDocenteSeleccionado: TextView // Añadir la variable para el TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
         progressText = view.findViewById(R.id.progressText)
+        textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado) // Inicializar el TextView
 
-        // Recuperar el nivel del usuario desde SharedPreferences
-        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
-        val nivel = sharedPref?.getInt("user_nivel", 0) ?: 0 // Obtén el nivel o 0 si no existe
-
-        // Actualiza el progreso con el nivel recuperado
+        val nivel = getUserLevel() // Obtén el nivel o 0 si no existe
         updateProgress(nivel)
-
-        // Llama a increaseProgress() para iniciar el progreso automáticamente, pasando el nivel recuperado
         increaseProgress(nivel) // Pasa el nivel recuperado
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cargarNombreDocente()
     }
 
     override fun onCreateView(
@@ -58,7 +57,6 @@ class PerfilFragment : Fragment() {
         if (currentUser == null) {
             loginCard.visibility = View.VISIBLE
             loginCard.setOnClickListener {
-                // Redirigir al usuario a la pantalla de inicio de sesión
                 handleLogin()
             }
         } else {
@@ -69,14 +67,38 @@ class PerfilFragment : Fragment() {
             }
         }
 
+        val cardViewSeleccionDocente: CardView = view.findViewById(R.id.cardViewSeleccionDocente)
+        cardViewSeleccionDocente.setOnClickListener {
+            val intent = Intent(requireContext(), SeleccionDocenteActivity::class.java)
+            startActivity(intent)
+        }
+
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
         progressText = view.findViewById(R.id.progressText)
 
-        // Establece el progreso inicial
         updateProgress(0)
 
         return view
     }
+
+    private fun cargarNombreDocente() {
+        val sharedPref = activity?.getSharedPreferences("mis_preferencias", android.content.Context.MODE_PRIVATE)
+        val nombreDocente = sharedPref?.getString("nombre_docente", null) // Obtener el nombre del docente
+        val apellidoDocente = sharedPref?.getString("apellido_docente", null) // Obtener el apellido del docente
+
+        // Mostrar el nombre completo o "Ninguno" si no hay datos
+        if (!nombreDocente.isNullOrEmpty() && !apellidoDocente.isNullOrEmpty()) {
+            textViewDocenteSeleccionado.text = "$nombreDocente $apellidoDocente"
+        } else {
+            textViewDocenteSeleccionado.text = "Ninguno"
+        }
+    }
+
+    private fun getUserLevel(): Int {
+        val sharedPref = activity?.getSharedPreferences("mis_preferencias", android.content.Context.MODE_PRIVATE)
+        return sharedPref?.getInt("user_nivel", 0) ?: 0 // Obtén el nivel o 0 si no existe
+    }
+
 
     // Función para actualizar el progreso
     private fun updateProgress(progress: Int) {

@@ -104,10 +104,13 @@ class InicioSesionActivity : AppCompatActivity() {
                                     val nombres = document.getString("nombres") ?: "Nombre"
                                     val apellidos = document.getString("apellidos") ?: "Apellido"
                                     val edad = document.getLong("edad")?.toInt() ?: 0
-                                    val nivel = document.getLong("nivel")?.toInt() ?: 0 // Obtener nivel
+                                    val nivel = document.getLong("nivel")?.toInt() ?: 0
+                                    val section = document.getString("seccion") ?: "Sección" // Obtener sección
+                                    val grade = document.getString("grado") ?: "Grado" // Obtener grado
+
 
                                     // Crear el objeto Usuario con nivel
-                                    val usuario = Usuario(currentUser.uid, nombres, apellidos, edad, nivel)
+                                    val usuario = Usuario(currentUser.uid, nombres, apellidos, edad, nivel, section, grade)
 
                                     // Guardar el objeto Usuario en SharedPreferences
                                     guardarUsuarioEnSharedPreferences(usuario)

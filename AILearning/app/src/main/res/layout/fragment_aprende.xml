@@ -17,18 +17,22 @@
         android:layout_gravity="center"
         android:padding="16dp"/>
 
-    <!-- Botón para redirigir a SeleccionTemaActivity -->
     <com.google.android.material.button.MaterialButton
-
         android:id="@+id/btnSeleccionTema"
         android:padding="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/holo_green_ligth"
         android:text="Seleccionar Tema"
-        android:visibility="gone"
-        android:layout_gravity="center"
+        android:textColor="@color/blancosiempre"
+        android:textStyle="bold"
+        app:icon="@drawable/icon_add"
+        app:iconPadding="12dp"
         app:cornerRadius="15dp"
-        />
+        app:iconGravity="textStart"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
 
     <!-- Contenedor para los CardView -->
     <ScrollView

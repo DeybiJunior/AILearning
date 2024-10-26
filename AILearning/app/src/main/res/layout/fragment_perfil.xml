@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Tu nivel de ingles es:"
+                    android:text="Nivel de Lecciones:"
                     android:textColor="@color/md_theme_outline"
                     android:textSize="20sp"></TextView>
 
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Ingreso diario:"
+                    android:text="Tiempo de Uso:"
                     android:textColor="@color/md_theme_outline"
                     android:textSize="20sp"></TextView>
 
@@ -123,6 +123,45 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/icon_diario"
+                            android:layout_gravity="center_vertical" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Docente:"
+                    android:textColor="@color/md_theme_outline"
+                    android:textSize="20sp"></TextView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewSeleccionDocente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="4dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardBackgroundColor="@color/md_theme_inverseOnSurface">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+
+                        <TextView
+                            android:id="@+id/textViewDocenteSeleccionado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Ninguno"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_docente"
                             android:layout_gravity="center_vertical" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
