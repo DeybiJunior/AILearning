@@ -1,0 +1,8 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp" /> <!-- Radio de los bordes -->
+            <solid android:color="@android:color/darker_gray" /> <!-- Color de fondo del SeekBar -->
+        </shape>
+    </item>
+</layer-list>

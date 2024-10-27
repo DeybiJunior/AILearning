@@ -25,6 +25,7 @@
         android:layout_margin="16dp"
         app:cardElevation="6dp"
         app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
         android:padding="16dp"
         android:visibility="gone">
 
@@ -39,7 +40,6 @@
                 android:text="Docente Asignado"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:textColor="@color/md_theme_outline"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
                 android:gravity="center"/>
@@ -52,9 +52,11 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
+                android:layout_width="128dp"
                 android:layout_height="128dp"
-                app:srcCompat="@drawable/perfil_docente" />
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/perfil_docente_h"
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/textViewNombre"
@@ -97,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:backgroundTint="@color/md_theme_error"
+                    android:backgroundTint="@color/md_theme_errorContainer_mediumContrast"
                     android:text="Eliminar Docente"
                     android:textColor="@color/blancosiempre"
                     android:textStyle="bold"
@@ -105,7 +107,7 @@
                     app:iconPadding="12dp"
                     app:cornerRadius="15dp"
                     app:iconGravity="textStart"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="14dp" />

@@ -28,15 +28,16 @@ class PerfilFragment : Fragment() {
     private lateinit var logoutCard: CardView
     private lateinit var circularProgressIndicator: CircularProgressIndicator
     private lateinit var progressText: TextView
-    private lateinit var textViewDocenteSeleccionado: TextView // Añadir la variable para el TextView
+    private lateinit var textViewDocenteSeleccionado: TextView
+    private lateinit var textViewdificultad: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
         progressText = view.findViewById(R.id.progressText)
-        textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado) // Inicializar el TextView
-
+        textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado)
+        textViewdificultad = view.findViewById(R.id.textViewdificultad)
 
         val database = AppDatabase.getDatabase(requireContext())
         leccionDao = database.leccionDao()
@@ -51,6 +52,7 @@ class PerfilFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         cargarNombreDocente()
+        cargarDificultad()
     }
 
     override fun onCreateView(
@@ -78,6 +80,18 @@ class PerfilFragment : Fragment() {
             }
         }
 
+        val cardViewDificultad: CardView = view.findViewById(R.id.cardViewDificultad)
+        cardViewDificultad.setOnClickListener {
+            val intent = Intent(requireContext(), SeleccionDificultadActivity::class.java)
+            startActivity(intent)
+        }
+
+        val cardViewTiempodeuso: CardView = view.findViewById(R.id.cardViewTiempodeuso)
+        cardViewTiempodeuso.setOnClickListener {
+            val intent = Intent(requireContext(), TiempodeUsoActivity::class.java)
+            startActivity(intent)
+        }
+
         val cardViewSeleccionDocente: CardView = view.findViewById(R.id.cardViewSeleccionDocente)
         cardViewSeleccionDocente.setOnClickListener {
             val intent = Intent(requireContext(), SeleccionDocenteActivity::class.java)
@@ -91,6 +105,18 @@ class PerfilFragment : Fragment() {
 
         return view
     }
+    private fun cargarDificultad() {
+        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE) // Usar el mismo archivo de preferencias
+        val dificultad = sharedPref?.getString("dificultad", null) // Obtener la dificultad guardada
+
+        // Mostrar la dificultad o un mensaje por defecto si no hay datos
+        if (!dificultad.isNullOrEmpty()) {
+            textViewdificultad.text = "$dificultad" // Asegúrate de que textViewDificultad esté inicializado correctamente
+        } else {
+            textViewdificultad.text = "No asignada" // Mensaje por defecto si no hay dificultad
+        }
+    }
+
 
     private fun cargarNombreDocente() {
         val sharedPref = activity?.getSharedPreferences("mis_preferencias", android.content.Context.MODE_PRIVATE)

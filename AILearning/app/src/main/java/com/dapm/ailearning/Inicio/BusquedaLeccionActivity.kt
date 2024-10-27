@@ -45,15 +45,8 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         // Obtener el userId desde SharedPreferences
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", null)
-        val nivel = sharedPreferences.getInt("user_nivel", 0)
+        val dificultad = sharedPreferences.getString("dificultad", "Básico") ?: "Básico" // Valor por defecto: "Básico"
 
-        // Determinar la dificultad según el nivel
-        val dificultad = when (nivel) {
-            0 -> "Básico"
-            1 -> "Intermedio"
-            2 -> "Avanzado"
-            else -> "Básico" // En caso de que el nivel sea diferente de 0, 1 o 2
-        }
 
         // Obtener el tema desde SharedPreferences
         val sharedPreferences2 = getSharedPreferences("tema", MODE_PRIVATE)

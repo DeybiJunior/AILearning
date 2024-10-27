@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Layout superior para el botón de regreso -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Regresar"
+            android:src="@drawable/icon_close"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Layout centrado para el contenido -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <!-- TextView para mostrar el nombre del usuario -->
+        <TextView
+            android:id="@+id/txtNombreUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hola, Usuario"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:gravity="center" />
+
+        <!-- TextView para la descripción del Activity -->
+        <TextView
+            android:id="@+id/txtDescripcion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En esta pantalla, puedes seleccionar el nivel de dificultad que prefieres para tu experiencia de aprendizaje."
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center" />
+
+        <!-- Grupo de botones de dificultad -->
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/buttonBasico"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Básico" />
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/buttonIntermedio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intermedio" />
+
+            <Button
+                style="?attr/materialButtonOutlinedStyle"
+                android:id="@+id/buttonAvanzado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Avanzado" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- Imagen de fondo -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="315dp"
+            android:layout_height="313dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/seleccionando"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+
+</LinearLayout>

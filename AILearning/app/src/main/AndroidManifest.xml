@@ -50,6 +50,9 @@
         <activity android:name=".Aprende.Aprendeporrepeticion" />
         <activity android:name=".Aprende.DesafioComprensionActivity" />
         <activity android:name=".Aprende.EscuchaActivaActivity" />
+        <activity android:name=".Login.RecuperarPasswordActivity" />
+        <activity android:name=".Perfil.SeleccionDificultadActivity" />
+
 
     </application>
 

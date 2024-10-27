@@ -77,6 +77,14 @@
             </LinearLayout>
 
 
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/md_theme_onSurface_highContrast"
+                android:layout_height="1dp"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
             <!-- Campo de nombres -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/nombresLayout"

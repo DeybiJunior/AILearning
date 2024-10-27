@@ -1,13 +1,17 @@
 package com.dapm.ailearning.Login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.Datos.Usuario
 import com.dapm.ailearning.MainActivity
@@ -21,6 +25,9 @@ class InicioSesionActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
     private lateinit var statusTextView: TextView
+
+    private val maxAttempts = 3
+    private val lockoutDuration = 3600000L // 1 hour in milliseconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +44,22 @@ class InicioSesionActivity : AppCompatActivity() {
         val registarseButton = findViewById<Button>(R.id.registarseButton)
         val continueWithoutLoginButton = findViewById<ImageButton>(R.id.continueWithoutLoginButton)
 
+        val prefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        var attemptCount = prefs.getInt("attemptCount", 0)
+        val lockoutTime = prefs.getLong("lockoutTime", 0)
+
+        // Revisar si el tiempo de bloqueo ha terminado
+        if (SystemClock.elapsedRealtime() < lockoutTime) {
+            disableButton(loginButton)
+        } else {
+            resetAttempts(prefs)
+        }
+
         loginButton.setOnClickListener {
             handleLogin(
                 emailLayout, emailEditText.text.toString().trim(),
-                passwordLayout, passwordEditText.text.toString().trim()
+                passwordLayout, passwordEditText.text.toString().trim(),
+                prefs, loginButton
             )
         }
 
@@ -55,7 +74,6 @@ class InicioSesionActivity : AppCompatActivity() {
         }
 
         continueWithoutLoginButton.setOnClickListener {
-            // Cambiar isFirstTime a false en SharedPreferences
             val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
             val editor = sharedPreferences.edit()
             editor.putBoolean("isFirstTime", false) // Cambiar a false
@@ -68,7 +86,8 @@ class InicioSesionActivity : AppCompatActivity() {
 
     private fun handleLogin(
         emailLayout: TextInputLayout, email: String,
-        passwordLayout: TextInputLayout, password: String
+        passwordLayout: TextInputLayout, password: String,
+        prefs: SharedPreferences, loginButton: Button
     ) {
         emailLayout.error = null
         passwordLayout.error = null
@@ -83,63 +102,89 @@ class InicioSesionActivity : AppCompatActivity() {
             return
         }
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    statusTextView.text = getString(R.string.success_login)
+        val attemptCount = prefs.getInt("attemptCount", 0)
+        if (attemptCount < maxAttempts) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
 
-                    // Cambiar isFirstTime a false en SharedPreferences
-                    val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    editor.putBoolean("isFirstTime", false) // Cambiar a false
-                    editor.apply()
+                        showToast(getString(R.string.success_login))
 
-                    // Obtener datos del usuario desde Firestore
-                    val currentUser = auth.currentUser
-                    if (currentUser != null) {
-                        firestore.collection("users").document(currentUser.uid).get()
-                            .addOnSuccessListener { document ->
-                                if (document != null && document.exists()) {
-                                    // Obtener los datos del documento
-                                    val nombres = document.getString("nombres") ?: "Nombre"
-                                    val apellidos = document.getString("apellidos") ?: "Apellido"
-                                    val edad = document.getLong("edad")?.toInt() ?: 0
-                                    val nivel = document.getLong("nivel")?.toInt() ?: 0
-                                    val section = document.getString("seccion") ?: "Sección" // Obtener sección
-                                    val grade = document.getString("grado") ?: "Grado" // Obtener grado
+                        val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("isFirstTime", false)
+                        editor.apply()
 
+                        val currentUser = auth.currentUser
+                        if (currentUser != null) {
+                            firestore.collection("users").document(currentUser.uid).get()
+                                .addOnSuccessListener { document ->
+                                    if (document != null && document.exists()) {
+                                        val nombres = document.getString("nombres") ?: "Nombre"
+                                        val apellidos = document.getString("apellidos") ?: "Apellido"
+                                        val edad = document.getLong("edad")?.toInt() ?: 0
+                                        val nivel = document.getLong("nivel")?.toInt() ?: 0
+                                        val section = document.getString("seccion") ?: "Sección"
+                                        val grade = document.getString("grado") ?: "Grado"
 
-                                    // Crear el objeto Usuario con nivel
-                                    val usuario = Usuario(currentUser.uid, nombres, apellidos, edad, nivel, section, grade)
+                                        val usuario = Usuario(currentUser.uid, nombres, apellidos, edad, nivel, section, grade)
+                                        guardarUsuarioEnSharedPreferences(usuario)
 
-                                    // Guardar el objeto Usuario en SharedPreferences
-                                    guardarUsuarioEnSharedPreferences(usuario)
-
-                                    // Navegar a MainActivity
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                } else {
-                                    statusTextView.text = "Error: Usuario no encontrado"
+                                        val intent = Intent(this, MainActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    } else {
+                                        showToast("Error: Usuario no encontrado")
+                                    }
                                 }
-                            }
-                            .addOnFailureListener { e ->
-                                statusTextView.text = "Error al cargar datos: ${e.message}"
-                            }
+                                .addOnFailureListener { e ->
+                                    showToast("Error al cargar datos: ${e.message}")
+                                }
+                        }
+                    } else {
+                        handleFailedLogin(task.exception, prefs, loginButton)
                     }
-                } else {
-                    val exception = task.exception
-                    val errorMessage = when {
-                        exception?.message?.contains("There is no user record") == true -> getString(R.string.error_no_user)
-                        exception?.message?.contains("The password is invalid") == true -> getString(R.string.error_wrong_password)
-                        else -> getString(R.string.error_login_failure, exception?.message)
-                    }
-                    statusTextView.text = errorMessage
                 }
-            }
+        } else {
+            showToast("Límite de intentos alcanzado. Intenta nuevamente en una hora.")
+        }
     }
 
-    // Modificar para incluir nivel
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleFailedLogin(exception: Exception?, prefs: SharedPreferences, loginButton: Button) {
+        val attemptCount = prefs.getInt("attemptCount", 0) + 1
+        prefs.edit().putInt("attemptCount", attemptCount).apply()
+
+        val errorMessage = when {
+            exception?.message?.contains("There is no user record") == true -> getString(R.string.error_no_user)
+            exception?.message?.contains("The password is invalid") == true -> getString(R.string.error_wrong_password)
+            else -> getString(R.string.error_login_failure, exception?.message)
+        }
+        showToast(errorMessage)
+
+
+        // Bloquear si se alcanzaron los 3 intentos
+        if (attemptCount >= maxAttempts) {
+            val newLockoutTime = SystemClock.elapsedRealtime() + lockoutDuration
+            prefs.edit().putLong("lockoutTime", newLockoutTime).apply()
+            disableButton(loginButton)
+        }
+    }
+
+    private fun disableButton(button: Button) {
+        button.isEnabled = false
+        Toast.makeText(this, "Has alcanzado el límite de intentos. Intenta nuevamente en una hora.", Toast.LENGTH_LONG).show()
+    }
+
+    private fun resetAttempts(prefs: SharedPreferences) {
+        prefs.edit().putInt("attemptCount", 0).apply()
+        prefs.edit().putLong("lockoutTime", 0).apply()
+    }
+
+// Modificar para incluir nivel
     private fun guardarUsuarioEnSharedPreferences(usuario: Usuario) {
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE) // Cambia el nombre aquí
         val editor = sharedPreferences.edit()

@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="20dp" /> <!-- Radio de los bordes -->
+    <solid android:color="@android:color/holo_blue_light" /> <!-- Color inicial del thumb -->
+    <size android:width="30dp" android:height="30dp" /> <!-- Tamaño del thumb -->
+</shape>
