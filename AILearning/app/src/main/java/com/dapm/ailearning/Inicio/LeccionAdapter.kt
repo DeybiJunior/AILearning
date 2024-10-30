@@ -3,6 +3,7 @@ package com.dapm.ailearning.Inicio
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.R
 
-class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(LeccionDiffCallback()) {
+class LeccionAdapter(
+    private val onButtonClick: (Leccion) -> Unit // Agregar un parámetro de función para manejar clics en el botón
+) : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(LeccionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeccionViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_leccion, parent, false)
@@ -19,7 +22,7 @@ class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(Le
 
     override fun onBindViewHolder(holder: LeccionViewHolder, position: Int) {
         val currentLeccion = getItem(position)
-        holder.bind(currentLeccion)
+        holder.bind(currentLeccion, onButtonClick) // Pasa la función de clic solo para el botón
     }
 
     class LeccionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,12 +30,18 @@ class LeccionAdapter : ListAdapter<Leccion, LeccionAdapter.LeccionViewHolder>(Le
         private val textViewDificultad: TextView = itemView.findViewById(R.id.textViewDificultad)
         private val textViewEstado: TextView = itemView.findViewById(R.id.textViewEstado)
         private val textViewPuntaje: TextView = itemView.findViewById(R.id.textViewPuntaje)
+        private val buttonVolverHacer: Button = itemView.findViewById(R.id.buttonVolverHacer)
 
-        fun bind(leccion: Leccion) {
+        fun bind(leccion: Leccion, onButtonClick: (Leccion) -> Unit) {
             textViewTema.text = leccion.tema
             textViewDificultad.text = "Dificultad: ${leccion.dificultad}"
             textViewEstado.text = "Estado: ${if (leccion.estado) "Completada" else "Pendiente"}"
             textViewPuntaje.text = "Puntaje: ${leccion.puntaje}"
+
+            // Configura el clic solo en el botón
+            buttonVolverHacer.setOnClickListener {
+                onButtonClick(leccion) // Llama a la función de clic solo para el botón
+            }
         }
     }
 

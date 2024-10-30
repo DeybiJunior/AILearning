@@ -39,4 +39,11 @@
         android:layout_weight="1"
         android:layout_marginTop="16dp"
         android:scrollbars="vertical" />
+    <Button
+        android:id="@+id/btnEnviarFirebase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="Enviar Lecciones a Docente" />
 </LinearLayout>
