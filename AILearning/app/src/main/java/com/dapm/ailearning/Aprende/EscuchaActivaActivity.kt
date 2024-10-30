@@ -53,6 +53,8 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentQuestionIndex = 0
     private var totalPreguntas = 0
 
+    private var idLeccion: Int = -1
+
     private var puntaje = 0 // Inicializar el puntaje en cero
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,10 +82,10 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         actualizarPuntaje()
 
         // Obtener el idLeccion desde el intent
-        val lessonId = intent.getIntExtra("idLeccion", -1)
+        idLeccion = intent.getIntExtra("idLeccion", -1)
 
-        if (lessonId != -1) {
-            cargarLeccion(lessonId)
+        if (idLeccion != -1) {
+            cargarLeccion(idLeccion)
         } else {
             Toast.makeText(this, "No se encontró el ID de la lección", Toast.LENGTH_SHORT).show()
         }
@@ -262,7 +264,30 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             .setDuration(1000) // Duración de la animación de desvanecimiento
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
+        actualizarLeccion(puntaje)
     }
+    private fun actualizarLeccion(puntajeFinal: Int) {
+        // Crear una corrutina para verificar el estado de la lección en la base de datos
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Verificar el estado de la lección
+            val leccionActual = leccionDao.getLeccionById(idLeccion) // Supone que tienes un método para obtener la lección por ID
+
+            if (leccionActual != null && leccionActual.estado) {
+                // La lección ya está completada, no se actualiza el puntaje
+                Log.d("ActualizarLeccion", "La lección ya está completada: ID = $idLeccion, no se actualizará el puntaje.")
+            } else {
+                val estadoFinal = true // Estado de la lección completada
+                // Actualiza la lección usando la propiedad de clase
+                leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
+
+                // Log para confirmar la actualización
+                Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
+            }
+        }
+    }
+
 
     private fun mostrarEstrellas(estrellas: Int) {
         // Cambiar la imagen según el puntaje
