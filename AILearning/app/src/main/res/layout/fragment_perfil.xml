@@ -76,7 +76,7 @@
                                 android:id="@+id/tvLeccionNombre"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Nivel de Lecciones:"
+                                android:text="Dificultad de la Lecciones:"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 android:paddingBottom="4dp" />

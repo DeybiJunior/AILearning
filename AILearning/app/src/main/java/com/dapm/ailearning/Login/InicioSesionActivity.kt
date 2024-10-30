@@ -43,6 +43,7 @@ class InicioSesionActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.loginButton)
         val registarseButton = findViewById<Button>(R.id.registarseButton)
         val continueWithoutLoginButton = findViewById<ImageButton>(R.id.continueWithoutLoginButton)
+        val recuperarPasswordButton = findViewById<TextView>(R.id.recuperarPasswordButton)
 
         val prefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         var attemptCount = prefs.getInt("attemptCount", 0)
@@ -80,6 +81,11 @@ class InicioSesionActivity : AppCompatActivity() {
             editor.apply()
 
             val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        recuperarPasswordButton.setOnClickListener {
+            val intent = Intent(this, RecuperarPasswordActivity::class.java)
             startActivity(intent)
         }
     }

@@ -201,8 +201,8 @@
                 android:text="¿Olvidaste tu contraseña?"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp" />
-
+                android:layout_marginTop="16dp"
+                android:clickable="true" />
 
         </LinearLayout>
         </ScrollView>

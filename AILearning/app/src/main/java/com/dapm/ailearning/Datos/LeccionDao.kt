@@ -29,4 +29,6 @@ interface LeccionDao {
     @Query("SELECT COUNT(*) FROM lecciones WHERE userId = :userId AND estado = 1 AND puntaje > 5")
     suspend fun getCompletedLessonCount(userId: String): Int
 
+    @Query("SELECT COUNT(*) FROM lecciones WHERE userId = :userId AND estado = 1 AND puntaje > 5 AND dificultad = :dificultad")
+    suspend fun getCompletedLessonCount(userId: String, dificultad: String): Int
 }

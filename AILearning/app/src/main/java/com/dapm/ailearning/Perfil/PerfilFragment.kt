@@ -88,7 +88,7 @@ class PerfilFragment : Fragment() {
 
         val cardViewTiempodeuso: CardView = view.findViewById(R.id.cardViewTiempodeuso)
         cardViewTiempodeuso.setOnClickListener {
-            val intent = Intent(requireContext(), TiempodeUsoActivity::class.java)
+            val intent = Intent(requireContext(), TiempoDeUsoActivity::class.java)
             startActivity(intent)
         }
 
@@ -109,7 +109,6 @@ class PerfilFragment : Fragment() {
         val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE) // Usar el mismo archivo de preferencias
         val dificultad = sharedPref?.getString("dificultad", null) // Obtener la dificultad guardada
 
-        // Mostrar la dificultad o un mensaje por defecto si no hay datos
         if (!dificultad.isNullOrEmpty()) {
             textViewdificultad.text = "$dificultad" // Asegúrate de que textViewDificultad esté inicializado correctamente
         } else {
@@ -152,10 +151,9 @@ class PerfilFragment : Fragment() {
         }
     }
 
-    // Actualiza el cálculo del nivel para permitir más niveles
     private fun calculateLevel(completedLessonCount: Int): Int {
-        // Ejemplo: 1 nivel por cada 5 lecciones completadas, máximo 10 niveles
-        return (completedLessonCount / 5).coerceAtMost(10) // Ajustado para más niveles
+        //  1 nivel por cada 5 lecciones completadas, máximo 10 niveles
+        return (completedLessonCount / 5).coerceAtMost(10)
     }
 
     private fun saveUserLevel(level: Int) {

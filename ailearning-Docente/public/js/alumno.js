@@ -76,8 +76,8 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                 <td>${lessonData.tipo}</td>
                 <td>${lessonData.dificultad}</td>
                 <td>${lessonData.tema}</td>
-                <td>${lessonData.estadoFinal ? 'Completado' : 'En Proceso'}</td>
-                <td>${lessonData.puntajeFinal}</td>
+                <td>${lessonData.estado? 'Completado' : 'En Proceso'}</td>
+                <td>${lessonData.puntaje}</td>
                 <td>${lessonData.json}</td>
             `;
             lessonsTableBody.appendChild(lessonRow);
@@ -92,9 +92,17 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
 // Función para renderizar el gráfico
 function renderLessonsChart(lessons) {
     const labels = lessons.map(lesson => lesson.tema); // Extrae los temas de las lecciones
-    const data = lessons.map(lesson => lesson.puntajeFinal); // Extrae los puntajes finales
+    const data = lessons.map(lesson => lesson.puntaje); // Cambiado a puntaje
+
+    console.log(lessons); // Para verificar qué datos se están pasando
 
     const ctx = lessonsChartCanvas.getContext('2d');
+
+    if (labels.length === 0 || data.length === 0) {
+        console.error("No hay datos para renderizar el gráfico");
+        return; // Evitar renderizar si no hay datos
+    }
+
     const lessonsChart = new Chart(ctx, {
         type: 'bar', // Tipo de gráfico (puedes cambiar a 'line' para un gráfico de líneas)
         data: {

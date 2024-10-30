@@ -65,7 +65,7 @@ function cargarUsuarios(docenteId) {
 
             // Añadir evento de click para redirigir a detalles del alumno
             userRow.addEventListener('click', () => {
-                window.location.href = `alumno.html?userId=${doc.id}`;
+                window.location.href = `Alumno.html?userId=${doc.id}`;
             });
         });
 

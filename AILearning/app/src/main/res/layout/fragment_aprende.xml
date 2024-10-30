@@ -6,16 +6,17 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/md_theme_background">
-    
+
 
     <TextView
         android:id="@+id/tvNoLecciones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No tienes lecciones para trabajar."
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="center"
-        android:padding="16dp"/>
+        android:padding="16dp"
+        android:layout_marginTop="160dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSeleccionTema"
@@ -30,7 +31,7 @@
         app:iconPadding="12dp"
         app:cornerRadius="15dp"
         app:iconGravity="textStart"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="center" />
 
 

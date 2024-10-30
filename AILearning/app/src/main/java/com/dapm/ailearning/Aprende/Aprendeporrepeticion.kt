@@ -46,16 +46,16 @@ class Aprendeporrepeticion : AppCompatActivity() {
 
     private lateinit var frases: List<Frase>
     private var Indexprogres = 0
-    private var idLeccion: Int = -1 // Inicializa con un valor por defecto
+    private var idLeccion: Int = -1
 
     private var fraseIndex = 0
     private var puntajeUsuarioPorLeccion = 0
     private var totalFrases = 0
     private var textoFormateado: String = ""
-    private var esPrimerClick = true // Variable para determinar si es el primer clic
+    private var esPrimerClick = true
     private lateinit var progressBar: ProgressBar
 
-    private lateinit var btnEscucha: Button // Declarar btnEscucha
+    private lateinit var btnEscucha: Button
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var tvFrase: TextView
     private lateinit var tvFraseFinal: TextView

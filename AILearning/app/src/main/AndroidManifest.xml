@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- Ensure you need this -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -52,7 +53,7 @@
         <activity android:name=".Aprende.EscuchaActivaActivity" />
         <activity android:name=".Login.RecuperarPasswordActivity" />
         <activity android:name=".Perfil.SeleccionDificultadActivity" />
-
+        <activity android:name=".Perfil.TiempoDeUsoActivity" />
 
     </application>
 
