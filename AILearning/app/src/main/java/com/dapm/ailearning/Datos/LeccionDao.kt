@@ -31,4 +31,9 @@ interface LeccionDao {
 
     @Query("SELECT COUNT(*) FROM lecciones WHERE userId = :userId AND estado = 1 AND puntaje > 5 AND dificultad = :dificultad")
     suspend fun getCompletedLessonCount(userId: String, dificultad: String): Int
+
+    @Query("UPDATE lecciones SET duration = :duration, completionDate = :completionDate, startTime = :startTime WHERE lessonId = :lessonId")
+    suspend fun updateLessonDurationAndCompletionDate(lessonId: Int, duration: Long, completionDate: Long, startTime: Long)
 }
+
+

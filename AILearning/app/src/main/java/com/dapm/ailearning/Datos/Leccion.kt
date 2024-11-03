@@ -12,5 +12,8 @@ data class Leccion(
     val tema: String,
     val json: String,
     val estado: Boolean,
-    val puntaje:Int
+    val puntaje: Int,
+    val startTime: Long = 0,
+    val duration: Long = 0,
+    val completionDate: Long = 0
 )

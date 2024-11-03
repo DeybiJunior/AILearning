@@ -57,9 +57,15 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var puntaje = 0 // Inicializar el puntaje en cero
 
+    private var startTime: Long = 0
+    private var endTime: Long = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_escucha_activa)
+
+        startTime = System.currentTimeMillis()
 
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas) // Inicializa aquí
         tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal) // Inicializa el TextView para el puntaje final
@@ -265,7 +271,24 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
         actualizarLeccion(puntaje)
+        guardarDuracionLeccion()
     }
+
+    private fun guardarDuracionLeccion() {
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Actualiza los datos de la lección en la base de datos, incluyendo startTime
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+
+            // Log para verificar los valores de duración y tiempo de finalización
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+        }
+    }
+
     private fun actualizarLeccion(puntajeFinal: Int) {
         // Crear una corrutina para verificar el estado de la lección en la base de datos
         CoroutineScope(Dispatchers.IO).launch {

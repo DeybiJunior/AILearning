@@ -58,12 +58,14 @@ class DesafioCartasActivity : AppCompatActivity() {
     private lateinit var front: TextView
     private lateinit var back: TextView
 
+    private var startTime: Long = 0
+    private var endTime: Long = 0
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_desafio_cartas)
-
+        startTime = System.currentTimeMillis()
         // Now Create Animator Object
         // For this we add animator folder inside res
         // Now we will add the animator to our card
@@ -260,12 +262,27 @@ class DesafioCartasActivity : AppCompatActivity() {
         mostrarEstrellas(estrellas)
 
         actualizarLeccion(endValue) // Cambié aquí
-
+        guardarDuracionLeccion()
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
         }, 5000)
     }
 
+
+    private fun guardarDuracionLeccion() {
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Actualiza los datos de la lección en la base de datos, incluyendo startTime
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+
+            // Log para verificar los valores de duración y tiempo de finalización
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+        }
+    }
 
 
     private fun actualizarLeccion(puntajeFinal: Int) {

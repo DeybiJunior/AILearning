@@ -1,40 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_marginTop="16dp"
+    app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
-    <TextView
-        android:id="@+id/textViewTema"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewDificultad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
+        <!-- Contenido de texto alineado a la izquierda -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewEstado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
+            <TextView
+                android:id="@+id/textViewTema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tema de la Lección"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="4dp" />
 
-    <TextView
-        android:id="@+id/textViewPuntaje"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp" />
-    <Button
-        android:id="@+id/buttonVolverHacer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Volver a hacer"
-        android:padding="8dp"
-        android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/textViewDificultad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dificultad: Fácil"
+                android:textColor="@color/md_theme_outline"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/textViewEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estado: Completo"
+                android:textColor="@color/md_theme_outline"
+                android:textSize="16sp"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/textViewPuntaje"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Puntaje: 95/100"
+                android:textColor="@color/md_theme_outline"
+                android:textSize="16sp"
+                android:paddingBottom="8dp" />
+        </LinearLayout>
+
+        <!-- Botón de icono alineado a la derecha -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonVolverHacer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="#3DC2DF"
+            android:padding="0dp"
+            android:text="Volver"
+            android:textColor="@color/blancosiempre"
+            app:cornerRadius="15dp"
+            app:icon="@drawable/icon_loop"
+            app:iconTint="@color/blancosiempre"
+            app:iconGravity="textTop"
+            app:iconPadding="8dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

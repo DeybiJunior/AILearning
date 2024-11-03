@@ -54,9 +54,15 @@ class DesafioComprensionActivity : AppCompatActivity() {
     private lateinit var container: LinearLayout
     private var idLeccion: Int = -1
 
+    private var startTime: Long = 0
+    private var endTime: Long = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_desafio_comprension)
+
+        startTime = System.currentTimeMillis()
 
         // Inicializa los componentes
         scoreTextView = findViewById(R.id.tvPuntaje)
@@ -196,15 +202,30 @@ class DesafioComprensionActivity : AppCompatActivity() {
         mostrarEstrellas(estrellas)
 
         actualizarLeccion(endValue) // Cambié aquí
-
+        guardarDuracionLeccion()
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
         }, 5000)
     }
 
 
+    private fun guardarDuracionLeccion() {
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
 
-private fun actualizarLeccion(puntajeFinal: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Actualiza los datos de la lección en la base de datos, incluyendo startTime
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+
+            // Log para verificar los valores de duración y tiempo de finalización
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+        }
+    }
+
+
+    private fun actualizarLeccion(puntajeFinal: Int) {
     val estadoFinal = true // Estado de la lección completada
 
     // Crear una corrutina para actualizar la lección en la base de datos

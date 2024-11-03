@@ -104,6 +104,7 @@
                     android:textColor="@color/blancosiempre"
                     android:textStyle="bold"
                     app:icon="@drawable/icon_delete"
+                    app:iconTint="@color/blancosiempre"
                     app:iconPadding="12dp"
                     app:cornerRadius="15dp"
                     app:iconGravity="textStart"

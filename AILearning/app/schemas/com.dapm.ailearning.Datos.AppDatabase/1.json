@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "64f1205a0869c3087fdd2041102658db",
+    "identityHash": "a8ed4adbd48832a7b698893c63c12324",
     "entities": [
       {
         "tableName": "lecciones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `tipo` TEXT NOT NULL, `dificultad` TEXT NOT NULL, `tema` TEXT NOT NULL, `json` TEXT NOT NULL, `estado` INTEGER NOT NULL, `puntaje` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `tipo` TEXT NOT NULL, `dificultad` TEXT NOT NULL, `tema` TEXT NOT NULL, `json` TEXT NOT NULL, `estado` INTEGER NOT NULL, `puntaje` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `completionDate` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "lessonId",
@@ -55,6 +55,24 @@
             "columnName": "puntaje",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "startTime",
+            "columnName": "startTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completionDate",
+            "columnName": "completionDate",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -70,7 +88,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64f1205a0869c3087fdd2041102658db')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8ed4adbd48832a7b698893c63c12324')"
     ]
   }
 }

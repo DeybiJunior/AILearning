@@ -18,6 +18,7 @@ import com.dapm.ailearning.Aprende.EscuchaActivaActivity
 import com.dapm.ailearning.Aprende.FrasesEnAccionActivity
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HistorialLeccionesActivity : AppCompatActivity() {
@@ -74,12 +75,15 @@ class HistorialLeccionesActivity : AppCompatActivity() {
         // Configurar el botón para enviar a Firebase
         val btnEnviarFirebase = findViewById<Button>(R.id.btnEnviarFirebase)
         btnEnviarFirebase.setOnClickListener {
-            if (userId != null) {
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                val userId = currentUser.uid
                 enviarLeccionesAFirebase(userId)
             } else {
-                Toast.makeText(this, "Error: ID de usuario no encontrado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error: No has iniciado sesión", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun enviarLeccionesAFirebase(userId: String) {
@@ -100,7 +104,10 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                     "tema" to leccion.tema,
                     "json" to leccion.json,
                     "estado" to leccion.estado,
-                    "puntaje" to leccion.puntaje
+                    "puntaje" to leccion.puntaje,
+                    "startTime" to leccion.startTime,
+                    "duration" to leccion.duration,
+                    "completionDate" to leccion.completionDate
                 )
 
                 db.collection("users")

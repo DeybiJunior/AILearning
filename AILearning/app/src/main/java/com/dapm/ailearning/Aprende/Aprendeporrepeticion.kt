@@ -30,6 +30,7 @@ import android.text.Spanned
 import android.text.style.StyleSpan
 import android.graphics.Typeface
 import android.media.MediaPlayer
+import android.provider.Settings
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -79,12 +80,17 @@ class Aprendeporrepeticion : AppCompatActivity() {
     private lateinit var tvProgreso: TextView
     private lateinit var resultadoTextViewcompleto: TextView
 
+    private var startTime: Long = 0
+    private var endTime: Long = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aprendeporrepeticion)
-        idLeccion = intent.getIntExtra("idLeccion", -1)
 
+        startTime = System.currentTimeMillis()
+
+        idLeccion = intent.getIntExtra("idLeccion", -1)
         if (idLeccion != -1) {
             // Cargar las frases en un hilo separado
             cargarFrases(idLeccion)
@@ -394,19 +400,35 @@ class Aprendeporrepeticion : AppCompatActivity() {
         val estrellas = calcularEstrellas()
         mostrarEstrellas(estrellas)
         actualizarLeccion(puntajeUsuarioPorLeccion)
+        guardarDuracionLeccion()
     }
+
+    private fun guardarDuracionLeccion() {
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+
+            // Actualiza los datos de la lección en la base de datos, incluyendo startTime
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+
+            // Log para verificar los valores de duración y tiempo de finalización
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+        }
+    }
+
+
+
 
     private fun actualizarLeccion(puntajeFinal: Int) {
         val estadoFinal = true // Estado de la lección completada
 
-        // Crear una corrutina para actualizar la lección en la base de datos
         CoroutineScope(Dispatchers.IO).launch {
             val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
 
-            // Actualiza la lección usando la propiedad de clase
             leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
 
-            // Log para confirmar la actualización
             Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
         }
     }
@@ -556,11 +578,8 @@ class Aprendeporrepeticion : AppCompatActivity() {
                     SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE -> {
                         showToast("Idioma no disponible. Intente descargar el idioma.")
 
-                        // Crear un Intent para abrir la configuración de reconocimiento de voz
-                        val intent = Intent(Intent.ACTION_MAIN).apply {
-                            action = "com.android.settings.TTS_SETTINGS"
-                            addCategory(Intent.CATEGORY_DEFAULT)
-                        }
+                        // Crear un Intent para abrir la configuración de idioma y voz
+                        val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
 
                         // Verificar si hay una actividad que pueda manejar este Intent
                         if (intent.resolveActivity(packageManager) != null) {
@@ -575,6 +594,8 @@ class Aprendeporrepeticion : AppCompatActivity() {
                     }
                 }
             }
+
+
 
 
             override fun onResults(results: Bundle?) {
