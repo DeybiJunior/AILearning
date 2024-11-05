@@ -55,6 +55,8 @@
         <activity android:name=".Login.RecuperarPasswordActivity" />
         <activity android:name=".Perfil.SeleccionDificultadActivity" />
         <activity android:name=".Perfil.TiempoDeUsoActivity" />
+        <activity android:name=".Aprende.AdivinaPalabraActivity" />" />
+
 
     </application>
 

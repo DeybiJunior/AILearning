@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dapm.ailearning.Aprende.AdivinaPalabraActivity
 import com.dapm.ailearning.Aprende.Aprendeporrepeticion
 import com.dapm.ailearning.Aprende.DesafioCartasActivity
 import com.dapm.ailearning.Aprende.DesafioComprensionActivity
@@ -38,7 +39,8 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                 "Desafío de Comprensión" to DesafioComprensionActivity::class.java,
                 "Escucha Activa" to EscuchaActivaActivity::class.java,
                 "Frases en Acción" to FrasesEnAccionActivity::class.java,
-                "Desafío de Cartas" to DesafioCartasActivity::class.java
+                "Desafío de Cartas" to DesafioCartasActivity::class.java,
+                "Adivina la Palabra" to AdivinaPalabraActivity::class.java
             )
 
             val activityClass = activityMap[leccion.tipo]

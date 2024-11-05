@@ -56,7 +56,7 @@ function cargarUsuarios(docenteId) {
             userTableBody.appendChild(userRow);
             
             // Contar lecciones completadas (estadoFinal: true)
-            db.collection(`users/${doc.id}/lecciones`).where("estadoFinal", "==", true)
+            db.collection(`users/${doc.id}/lecciones`).where("estado", "==", true)
                 .get()
                 .then(lessonSnapshot => {
                     const completedLessons = lessonSnapshot.size;

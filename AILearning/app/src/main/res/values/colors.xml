@@ -146,9 +146,9 @@
     <color name="holo_green_ligth">#63DF3D</color>
     <color name="tipo_seleccionado">#3DC2DF</color>
 
-    <color name="basicoColor">#A5D6A7</color>
-    <color name="intermedioColor">#FFEB3B</color>
-    <color name="avanzadoColor">#EF5350</color>
+    <color name="basicoColor">#439F47</color>
+    <color name="intermedioColor">#E3A71D</color>
+    <color name="avanzadoColor">#B63331</color>
 
 
 </resources>

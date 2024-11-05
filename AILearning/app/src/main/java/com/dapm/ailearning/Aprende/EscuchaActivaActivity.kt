@@ -290,26 +290,29 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun actualizarLeccion(puntajeFinal: Int) {
-        // Crear una corrutina para verificar el estado de la lección en la base de datos
+        // Determinar el puntaje a enviar según el valor de score
+        val puntajeEnvio = when (puntajeFinal) {
+            3 -> 10
+            2 -> 8
+            1 -> 5
+            0 -> 0
+            else -> 0 // En caso de que puntajeFinal no sea válido
+        }
+
+        val estadoFinal = true // Estado de la lección completada
+
+        // Crear una corrutina para actualizar la lección en la base de datos
         CoroutineScope(Dispatchers.IO).launch {
             val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
 
-            // Verificar el estado de la lección
-            val leccionActual = leccionDao.getLeccionById(idLeccion) // Supone que tienes un método para obtener la lección por ID
+            // Actualiza la lección usando la propiedad de clase
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
 
-            if (leccionActual != null && leccionActual.estado) {
-                // La lección ya está completada, no se actualiza el puntaje
-                Log.d("ActualizarLeccion", "La lección ya está completada: ID = $idLeccion, no se actualizará el puntaje.")
-            } else {
-                val estadoFinal = true // Estado de la lección completada
-                // Actualiza la lección usando la propiedad de clase
-                leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
-
-                // Log para confirmar la actualización
-                Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
-            }
+            // Log para confirmar la actualización
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
         }
     }
+
 
 
     private fun mostrarEstrellas(estrellas: Int) {

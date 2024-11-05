@@ -79,12 +79,14 @@
     <string name="tipo_3">Escucha Activa</string>
     <string name="tipo_4">Frases en Acción</string>
     <string name="tipo_5">Desafío de Cartas</string>
+    <string name="tipo_6">Adivina la Palabra</string>
 
     <string name="desc_tipo_1">Lee la frase y repítela para mejorar tu pronunciación.</string>
     <string name="desc_tipo_2">Lee un texto breve y responde las preguntas que vienen.</string>
     <string name="desc_tipo_3">Escucha con atención y selecciona la respuesta correcta.</string>
     <string name="desc_tipo_4">Completa la frase eligiendo la opción que mejor encaje.</string>
     <string name="desc_tipo_5">Responde a las preguntas de las cartas; si fallas, ¡vuelve a intentarlo! Completa la lista para ganar.</string>
+    <string name="desc_tipo_6">Adivina la palabra oculta, tendras 5 intentos para adivinar la palabra.</string>
 
     <string name="searchbar_hint">Buscar docentes</string>
 

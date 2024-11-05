@@ -59,6 +59,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         val btn3 = findViewById<Button>(R.id.btn3)
         val btn4 = findViewById<Button>(R.id.btn4)
         val btn5 = findViewById<Button>(R.id.btn5)
+        val btn6 = findViewById<Button>(R.id.btn6)
 
 
         // Función para restablecer textos y colores de los botones
@@ -68,6 +69,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn3.text = getString(R.string.tipo_3)
             btn4.text = getString(R.string.tipo_4)
             btn5.text = getString(R.string.tipo_5)
+            btn6.text = getString(R.string.tipo_6)
 
             btn1.setBackgroundColor(colorNoSeleccionado)
             btn2.setBackgroundColor(colorNoSeleccionado)
@@ -75,6 +77,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn4.setBackgroundColor(colorNoSeleccionado)
             btn4.setBackgroundColor(colorNoSeleccionado)
             btn5.setBackgroundColor(colorNoSeleccionado)
+            btn6.setBackgroundColor(colorNoSeleccionado)
 
 
         }
@@ -83,6 +86,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         prompts[getString(R.string.tipo_3)] = """Genera un JSON con 1 lectura corta (max 50 palabras) en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_4)] = " $tema  $dificultad."
         prompts[getString(R.string.tipo_5)] = """Genera un JSON con 1 lectura corta (max 50 palabras) en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario sobre lectura que conste de 10 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
+        prompts[getString(R.string.tipo_6)] = "Genera un JSON con 3 palabra en Ingles sobre $tema de nivel básico - $dificultad. con una pista sobre cual podria ser la palabra [{ \"ID\": <número>, \"clue\": \"<String en español>\", \"oneword\": \"<String palabra en ingles>\" }]"
 
 
         // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
@@ -100,7 +104,6 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn1.text = spannable
             btn1.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
         btn2.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -116,7 +119,6 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn2.text = spannable
             btn2.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
         btn3.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -132,7 +134,6 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn3.text = spannable
             btn3.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
         btn4.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -148,7 +149,6 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn4.text = spannable
             btn4.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
 
         btn5.setOnClickListener {
@@ -165,8 +165,24 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn5.text = spannable
             btn5.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
-            Toast.makeText(this, "Seleccionaste: $textoPrincipal", Toast.LENGTH_SHORT).show()
         }
+
+        btn6.setOnClickListener {
+            resetButtons() // Restablece los textos y colores antes de cambiar
+            tipo = getString(R.string.tipo_6) // Asigna el valor correspondiente
+
+            // Texto principal y descripción
+            val textoPrincipal = getString(R.string.tipo_6)
+            val descripcion = getString(R.string.desc_tipo_6)
+
+            // Crear SpannableString para cambiar el tamaño de la descripción
+            val spannable = SpannableString(descripcion)
+            spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+            btn6.text = spannable
+            btn6.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+        }
+
 
         // Botón para agregar una nueva lección
         val btnAgregarLeccion = findViewById<Button>(R.id.btnAgregarLeccion)

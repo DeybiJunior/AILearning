@@ -49,6 +49,7 @@
             android:textColor="@color/blancosiempre"
             android:textStyle="bold"
             app:icon="@drawable/aprovado"
+            app:iconTint="@color/blancosiempre"
             app:iconPadding="4dp"
             app:cornerRadius="15dp"
             app:iconGravity="textStart"

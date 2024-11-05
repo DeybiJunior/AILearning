@@ -108,7 +108,9 @@ class AprendeFragment : Fragment() {
             "Desafío de Comprensión" to DesafioComprensionActivity::class.java,
             "Escucha Activa" to EscuchaActivaActivity::class.java,
             "Frases en Acción" to FrasesEnAccionActivity::class.java,
-            "Desafío de Cartas" to DesafioCartasActivity::class.java
+            "Desafío de Cartas" to DesafioCartasActivity::class.java,
+            "Adivina la Palabra" to AdivinaPalabraActivity::class.java
+
         )
 
         // Configurar el botón

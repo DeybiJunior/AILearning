@@ -112,6 +112,17 @@
                 android:text="Desafío de Cartas"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:padding="12dp"
+                android:id="@+id/btn6"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="Adivina la Palabra"
+                android:gravity="center"
+                app:cornerRadius="15dp"/>
         </GridLayout>
     </LinearLayout>
 

@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             app:cornerRadius="15dp"
             android:backgroundTint="@color/holo_green_ligth"
-            android:text="  Continuar  "
+            android:text="  SIguiente  "
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
     </RelativeLayout>

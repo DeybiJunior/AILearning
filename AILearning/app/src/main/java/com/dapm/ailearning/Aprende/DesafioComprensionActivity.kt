@@ -226,19 +226,29 @@ class DesafioComprensionActivity : AppCompatActivity() {
 
 
     private fun actualizarLeccion(puntajeFinal: Int) {
-    val estadoFinal = true // Estado de la lección completada
+        // Determinar el puntaje a enviar según el valor de score
+        val puntajeEnvio = when (puntajeFinal) {
+            3 -> 10
+            2 -> 8
+            1 -> 5
+            0 -> 0
+            else -> 0 // En caso de que puntajeFinal no sea válido
+        }
 
-    // Crear una corrutina para actualizar la lección en la base de datos
-    CoroutineScope(Dispatchers.IO).launch {
-        val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+        val estadoFinal = true // Estado de la lección completada
 
-        // Actualiza la lección usando la propiedad de clase
-        leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
+        // Crear una corrutina para actualizar la lección en la base de datos
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
 
-        // Log para confirmar la actualización
-        Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
+            // Actualiza la lección usando la propiedad de clase
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
+
+            // Log para confirmar la actualización
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
+        }
     }
-}
+
     private fun mostrarEstrellas(estrellas: Int) {
         // Cambiar la imagen según el puntaje
         when (estrellas) {
