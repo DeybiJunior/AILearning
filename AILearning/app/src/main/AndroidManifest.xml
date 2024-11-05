@@ -52,10 +52,11 @@
         <activity android:name=".Aprende.DesafioComprensionActivity" />
         <activity android:name=".Aprende.EscuchaActivaActivity" />
         <activity android:name=".Aprende.DesafioCartasActivity"/>
+        <activity android:name=".Aprende.FrasesEnAccionActivity"/>
         <activity android:name=".Login.RecuperarPasswordActivity" />
         <activity android:name=".Perfil.SeleccionDificultadActivity" />
         <activity android:name=".Perfil.TiempoDeUsoActivity" />
-        <activity android:name=".Aprende.AdivinaPalabraActivity" />" />
+        <activity android:name=".Aprende.AdivinaPalabraActivity" />
 
 
     </application>

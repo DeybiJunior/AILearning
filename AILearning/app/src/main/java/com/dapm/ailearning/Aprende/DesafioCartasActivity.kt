@@ -196,8 +196,8 @@ class DesafioCartasActivity : AppCompatActivity() {
                 // Independientemente de si la respuesta fue correcta o no, avanzamos a la siguiente pregunta
                 if (acerto) {
                     currentQuestionIndex++// Incrementa el índice para la siguiente pregunta
+                    actualizarProgreso(10) // Actualiza el progreso
                 }
-                actualizarProgreso(quizList.size) // Actualiza el progreso
                 optionsGroup.visibility = View.VISIBLE
                 if (!isFront) {
                     front_anim.setTarget(back)
