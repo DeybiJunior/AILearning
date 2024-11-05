@@ -22,8 +22,13 @@
     <div class="container">
         <button id="backButton"><i class="fas fa-chevron-left"></i> Volver</button>
         
-        <div id="studentInfo">
-            <!-- Información del alumno -->
+        <div style="display: flex; justify-content: space-between;">
+            <div id="studentInfo">
+                <!-- Información del alumno -->
+            </div>
+            <div id="lessonsCompleted">
+                <!-- Información de lecciones completadas -->
+            </div>
         </div>
 
         <h2>Lecciones</h2>
@@ -48,7 +53,9 @@
                     <th>Tema</th>
                     <th>Estado</th>
                     <th>Puntaje</th>
-                    <th>JSON</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Duración</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -56,6 +63,10 @@
 
         <!-- Lienzo para el gráfico -->
         <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
+        <canvas id="pieChart"></canvas>
+
+
     </div>
 
     <script src="js/alumno.js"></script>
