@@ -46,7 +46,6 @@ class DesafioCartasActivity : AppCompatActivity() {
     private lateinit var tvPuntajeFinal: TextView // Asegúrate de tener esta variable para el puntaje final
     private lateinit var imageViewEstrellas: ImageView
     private lateinit var imagenResultado: ImageView
-    private lateinit var cardimag: CardView
     private lateinit var cardflip: CardView
     private lateinit var container: LinearLayout
     private var idLeccion: Int = -1
@@ -66,7 +65,10 @@ class DesafioCartasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_desafio_cartas)
         startTime = System.currentTimeMillis()
-
+        // Now Create Animator Object
+        // For this we add animator folder inside res
+        // Now we will add the animator to our card
+        // we now need to modify the camera scale
         var scale = applicationContext.resources.displayMetrics.density
 
         front = findViewById(R.id.card_front)
@@ -85,7 +87,6 @@ class DesafioCartasActivity : AppCompatActivity() {
         tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal) // Inicializa el TextView para el puntaje final
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
         imagenResultado = findViewById(R.id.imagenResultado) // Asegúrate de que el ID sea correcto
-        cardimag = findViewById(R.id.cardimag)
         cardflip = findViewById(R.id.card_flip)
         container = findViewById(R.id.container)
 
@@ -111,31 +112,17 @@ class DesafioCartasActivity : AppCompatActivity() {
     private fun loadLesson(lessonId: Int) {
         lifecycleScope.launch {
             val json = leccionDao.getJsonByLessonId(lessonId)
-            val lessonContentList: List<LeccionJson> = Gson().fromJson(json,
-                object : TypeToken<List<LeccionJson>>() {}.type)
+            val lessonContentList: List<LeccionJson> = Gson().fromJson(json, object : TypeToken<List<LeccionJson>>() {}.type)
 
-            // Supongamos que solo tomamos el primer contenido de la lista
+            // Get the first lesson from the list
             lessonContent = lessonContentList.first()
 
-            // Muestra el contenido de lectura
-            showReading(lessonContent.reading)
-        }
-    }
-
-    private fun showReading(reading: String) {
-        val readingTextView: TextView = findViewById(R.id.reading_text_view)
-        val continueButton: Button = findViewById(R.id.continue_button)
-        readingTextView.text = reading
-
-        continueButton.setOnClickListener {
-            // Una vez que el usuario presione continuar, mostramos el quiz
+            // Now show the quiz
             showQuiz(lessonContent.quiz.toMutableList())
-            readingTextView.visibility = View.GONE
-            cardimag.visibility=View.GONE
-            cardflip.visibility=View.VISIBLE
-            continueButton.visibility = View.GONE
         }
     }
+
+
 
     private fun showQuiz(quizList: MutableList<Quiz>) {
         val questionView: TextView = findViewById(R.id.question_text_view)
@@ -224,7 +211,6 @@ class DesafioCartasActivity : AppCompatActivity() {
         questionView.visibility = View.GONE
         optionsGroup.visibility = View.GONE
         submitButton.visibility = View.GONE
-        cardimag.visibility = View.GONE
         cardflip.visibility = View.GONE
         container.visibility = View.GONE
     }
