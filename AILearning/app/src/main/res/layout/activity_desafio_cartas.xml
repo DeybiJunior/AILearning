@@ -117,7 +117,7 @@
         <TextView
             android:id="@+id/card_back"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="230dp"
             android:text="Back Card"
             android:textAlignment="center"
             android:gravity="center"
@@ -131,8 +131,8 @@
         <TextView
             android:id="@+id/card_front"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/fido"
+            android:layout_height="230dp"
+            android:background="@drawable/card"
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="@color/blancosiempre"

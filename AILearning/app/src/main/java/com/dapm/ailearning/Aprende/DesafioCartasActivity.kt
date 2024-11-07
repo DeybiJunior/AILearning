@@ -66,10 +66,7 @@ class DesafioCartasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_desafio_cartas)
         startTime = System.currentTimeMillis()
-        // Now Create Animator Object
-        // For this we add animator folder inside res
-        // Now we will add the animator to our card
-        // we now need to modify the camera scale
+
         var scale = applicationContext.resources.displayMetrics.density
 
         front = findViewById(R.id.card_front)

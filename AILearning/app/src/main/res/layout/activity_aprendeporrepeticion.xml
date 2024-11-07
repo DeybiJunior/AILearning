@@ -107,7 +107,7 @@
                 android:layout_toEndOf="@id/imageContacto"
                 android:background="@drawable/bubble_background"
                 android:padding="16dp"
-                android:text="Lee y repite: No tengas miedo a equivocarte. Practicar es lo más importante \n"
+                android:text="Lee y repite:\n"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </RelativeLayout>

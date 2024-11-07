@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +20,7 @@ import com.dapm.ailearning.Datos.AppDatabase
 import com.dapm.ailearning.Datos.Usuario
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +34,8 @@ class RegistroActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var checkBoxTerminos: CheckBox
     private lateinit var database: AppDatabase
+    private lateinit var sectionAutoCompleteTextView: MaterialAutoCompleteTextView
+    private lateinit var gradeAutoCompleteTextView: MaterialAutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +57,6 @@ class RegistroActivity : AppCompatActivity() {
         val sectionLayout = findViewById<TextInputLayout>(R.id.seccionLayout)
         val gradeLayout = findViewById<TextInputLayout>(R.id.gradoLayout)
 
-        val sectionEditText = findViewById<EditText>(R.id.seccionEditText)
-        val gradeEditText = findViewById<EditText>(R.id.gradoEditText)
         val CloseRegistro = findViewById<ImageButton>(R.id.CloseRegistroLayaut)
         val nombresEditText = findViewById<EditText>(R.id.nombresEditText)
         val apellidosEditText = findViewById<EditText>(R.id.apellidosEditText)
@@ -60,6 +64,10 @@ class RegistroActivity : AppCompatActivity() {
         val emailEditText = findViewById<EditText>(R.id.emailEditText)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
         val confirmPasswordEditText = findViewById<EditText>(R.id.confirmPasswordEditText)
+
+        sectionAutoCompleteTextView = findViewById(R.id.seccionAutoCompleteTextView)
+        gradeAutoCompleteTextView = findViewById(R.id.gradoAutoCompleteTextView)
+
 
         val registerButton = findViewById<Button>(R.id.registerButton)
 
@@ -79,6 +87,17 @@ class RegistroActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "TerminosDialogFragment")
         }
 
+        val sections = resources.getStringArray(R.array.sections)  // Obtiene las secciones desde strings.xml
+        val grades = resources.getStringArray(R.array.grades)      // Obtiene los grados desde strings.xml
+
+
+        val sectionAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, sections)
+        sectionAutoCompleteTextView.setAdapter(sectionAdapter)
+
+        val gradeAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, grades)
+        gradeAutoCompleteTextView.setAdapter(gradeAdapter)
+
+
         //REGISTRO
         CloseRegistro.setOnClickListener {
             val intent = Intent(this, InicioSesionActivity::class.java)
@@ -91,17 +110,18 @@ class RegistroActivity : AppCompatActivity() {
                     apellidosLayout, apellidosEditText.text.toString().trim(),
                     edadLayout, edadEditText.text.toString().trim(),
                     emailLayout, emailEditText.text.toString().trim(),
-                    sectionLayout, sectionEditText.text.toString().trim(),
-                    gradeLayout, gradeEditText.text.toString().trim(),
+                    sectionLayout, sectionAutoCompleteTextView.text.toString().trim(), // <-- Aquí
+                    gradeLayout, gradeAutoCompleteTextView.text.toString().trim(), // <-- Y aquí
                     passwordLayout, passwordEditText.text.toString().trim(),
                     confirmPasswordLayout, confirmPasswordEditText.text.toString().trim()
                 )
             } else{
                 Toast.makeText(this, "Debes aceptar los términos y condiciones", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
+
+
 
     private fun handleRegister(
         nombresLayout: TextInputLayout, nombres: String,
@@ -124,13 +144,26 @@ class RegistroActivity : AppCompatActivity() {
         passwordLayout.error = null
         confirmPasswordLayout.error = null
 
+// Validación de nombres
         if (nombres.isEmpty()) {
             nombresLayout.error = getString(R.string.error_nombres)
+            return
+        } else if (nombres.length < 3 || nombres.length > 50) {
+            nombresLayout.error = getString(R.string.error_min_length) // Mensaje de error para longitud mínima
+            return
+        } else if (!nombres.matches(Regex("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$"))) {
+            nombresLayout.error = getString(R.string.error_invalid_characters) // Mensaje de error para caracteres inválidos
             return
         }
 
         if (apellidos.isEmpty()) {
             apellidosLayout.error = getString(R.string.error_apellidos)
+            return
+        } else if (apellidos.length < 3 || apellidos.length > 50) {
+            apellidosLayout.error = getString(R.string.error_min_length) // Mensaje de error para longitud mínima
+            return
+        } else if (!apellidos.matches(Regex("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$"))) {
+            apellidosLayout.error = getString(R.string.error_invalid_characters) // Mensaje de error para caracteres inválidos
             return
         }
 
@@ -139,22 +172,36 @@ class RegistroActivity : AppCompatActivity() {
             return
         }
 
+// Validación de correo electrónico
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailLayout.error = getString(R.string.error_email)
+            return
+        } else if (!email.matches(Regex("^[a-zA-Z0-9._%+-]{2,}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"))) {
             emailLayout.error = getString(R.string.error_email)
             return
         }
 
-        if (section.isEmpty()) {
-            sectionLayout.error = getString(R.string.error_section) // Add this string in strings.xml
+
+// Validación para la sección
+        val sectionValue = sectionAutoCompleteTextView.text.toString().trim()
+        if (sectionValue.isEmpty()) {
+            sectionLayout.error = getString(R.string.error_section)  // Asegúrate de tener este mensaje en strings.xml
             return
+        } else {
+            sectionLayout.error = null  // Limpiar el error si la validación es exitosa
         }
 
-        // Validate grade
-        val gradeValue = grade.toIntOrNull()
-        if (gradeValue == null || gradeValue <= 0) {
-            gradeLayout.error = getString(R.string.error_grade) // Ensure this string is defined in strings.xml
+// Validación para el grado
+        val gradeValue = gradeAutoCompleteTextView.text.toString().trim()
+        if (gradeValue.isEmpty()) {
+            gradeLayout.error = getString(R.string.error_grade)  // Asegúrate de tener este mensaje en strings.xml
             return
+        } else {
+            gradeLayout.error = null  // Limpiar el error si la validación es exitosa
         }
+
+// Aquí puedes seguir con el resto de las validaciones de los otros campos
+
 
 
         val passwordValidationResult = validatePassword(password)

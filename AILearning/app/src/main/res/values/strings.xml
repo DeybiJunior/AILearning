@@ -11,8 +11,10 @@
     <string name="error_password_too_short">La contraseña debe tener al menos 8 caracteres</string>
     <string name="error_password_no_uppercase">La contraseña debe contener al menos una letra mayúscula</string>
     <string name="error_password_no_lowercase">La contraseña debe contener al menos una letra minúscula</string>
-    <string name="error_nombres">Por favor ingrese los nombres</string>
-    <string name="error_apellidos">Por favor ingrese los apellidos</string>
+    <string name="error_nombres">El campo de nombres no puede estar vacío</string>
+    <string name="error_apellidos">El campo de apellidos no puede estar vacío</string>
+    <string name="error_invalid_characters">Solo se permiten letras y espacios</string>
+    <string name="error_min_length">Debe tener al menos 3 caracteres</string>
     <string name="error_edad">Edad no válida.</string>
     <string name="error_email">Correo electrónico no válido</string>
     <string name="error_password_mismatch">Las contraseñas no coinciden</string>
@@ -25,6 +27,7 @@
     <string name="error_no_user">No se encuentra ningún usuario con este correo electrónico.</string>
     <string name="error_wrong_password">La contraseña es incorrecta.</string>
 
+    <!-- res/values/strings.xml -->
 
     <!-- Otros mensajes -->
     <string name="error_login">Correo electrónico o contraseña no válidos</string>
@@ -89,5 +92,21 @@
     <string name="desc_tipo_6">Adivina la palabra oculta, tendras 5 intentos para adivinar la palabra.</string>
 
     <string name="searchbar_hint">Buscar docentes</string>
+
+
+    <string-array name="grades">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="sections">
+        <item>A</item>
+        <item>B</item>
+        <item>Sección Única</item>
+    </string-array>
+
 
 </resources>

@@ -39,7 +39,7 @@ class AdivinaPalabraActivity : AppCompatActivity() {
     private lateinit var btSiguiente: Button
     private var totalPreguntas = 0
     private lateinit var letterButtonsLayout: LinearLayout
-    private var failedAttempts = 0
+    private var failedAttempts = 10
 
     private lateinit var progressBar: ProgressBar // Variable para el ProgressBar
     private var indexProgres = 0 // Cambié el nombre de Indexprogres a indexProgres
@@ -58,6 +58,9 @@ class AdivinaPalabraActivity : AppCompatActivity() {
     private lateinit var tvProgreso: TextView
     private lateinit var clouse: ImageView
     private lateinit var  pista: TextView
+    private var startTime: Long = 0
+    private var endTime: Long = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +84,8 @@ class AdivinaPalabraActivity : AppCompatActivity() {
 
 
         idLeccion = intent.getIntExtra("idLeccion", -1)
+        startTime = System.currentTimeMillis()
+        Log.d("AdivinaPalabraActivity", "startTime initialized: $startTime")
 
         if (idLeccion != -1) {
             cargarLeccion(idLeccion)
@@ -168,10 +173,10 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             }
             return
         } else {
-            failedAttempts++
-            feedbackTextView.text = "Intenta de nuevo."
+            failedAttempts--
+            feedbackTextView.text = "Intenta de nuevo, la palabra no es la correcta, te quedan $failedAttempts intentos ."
 
-            if (failedAttempts >= 6) {
+            if (failedAttempts <= 0) {
                 guessEditText.isEnabled = false
                 feedbackTextView.text = "Has agotado tus intentos. La palabra era \"$correctAnswer\""
                 return
@@ -220,7 +225,7 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             clueTextView.text = frases[currentQuestionIndex].clue
             guessEditText.text.clear() // Limpia el campo de entrada
             guessEditText.isEnabled = true
-            failedAttempts = 0
+            failedAttempts = 10
             feedbackTextView.text = "" // Limpia el mensaje de retroalimentación
             actualizarProgreso(totalPreguntas)
             initializeLetterButtons(frases[currentQuestionIndex].oneword.length)
@@ -244,6 +249,33 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         }
     }
 
+    private fun actualizarLeccion(puntajeFinal: Int) {
+        // Log to confirm startTime
+        Log.d("ActualizarLeccion", "startTime at call: $startTime")
+
+        // Determine the score to send based on the final score value
+        val puntajeEnvio = when {
+            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
+            puntajeFinal == 2 -> 8
+            puntajeFinal == 1 -> 5
+            puntajeFinal == 0 -> 0
+            else -> 0
+        }
+
+        val estadoFinal = true
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao()
+
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
+
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
+        }
+    }
 
 
     private fun actualizarProgreso(totalPreguntas: Int) {
@@ -334,30 +366,9 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         }
     }
 
-    private fun actualizarLeccion(puntajeFinal: Int) {
-        // Determinar el puntaje a enviar según el valor de score
-        val puntajeEnvio = when (puntajeFinal) {
-            3 -> 10
-            2 -> 8
-            1 -> 5
-            0 -> 0
-            else -> 0 // En caso de que puntajeFinal no sea válido
-        }
-
-        val estadoFinal = true // Estado de la lección completada
-
-        // Crear una corrutina para actualizar la lección en la base de datos
-        CoroutineScope(Dispatchers.IO).launch {
-            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
-
-            // Actualiza la lección usando la propiedad de clase
-            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
-
-            // Log para confirmar la actualización
-            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
-        }
-    }
 
 
 
 }
+
+

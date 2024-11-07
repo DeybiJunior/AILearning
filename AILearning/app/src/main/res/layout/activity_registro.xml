@@ -179,47 +179,56 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-
-                <!-- TextInputLayout para Grado -->
+                <!-- TextInputLayout para Grado con ExposedDropdownMenu -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/gradoLayout"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:boxBackgroundMode="filled"
                     app:errorEnabled="true"
+                    app:helperTextEnabled="false"
                     app:boxStrokeColor="@color/md_theme_secondary"
-                    app:hintTextColor="@color/md_theme_onSurface">
+                    app:hintTextColor="@color/md_theme_onSurface"
+                    android:hint="Grado">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/gradoEditText"
+                    <AutoCompleteTextView
+                        android:id="@+id/gradoAutoCompleteTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Grado"/>
+                        android:inputType="none"
+                        android:backgroundTint="@color/md_theme_background"
+                        app:simpleItems="@array/grades" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Space
                     android:layout_width="16dp"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
 
+                <!-- TextInputLayout para Sección con ExposedDropdownMenu -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/seccionLayout"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:boxBackgroundMode="filled"
                     app:errorEnabled="true"
+                    app:helperTextEnabled="false"
                     app:boxStrokeColor="@color/md_theme_secondary"
-                    app:hintTextColor="@color/md_theme_onSurface">
+                    app:hintTextColor="@color/md_theme_onSurface"
+                    android:hint="Sección">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/seccionEditText"
+                    <AutoCompleteTextView
+                        android:id="@+id/seccionAutoCompleteTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Sección"/>
+                        android:inputType="none"
+                        android:backgroundTint="@color/md_theme_background"
+                        app:simpleItems="@array/sections" /> <!-- Array con las opciones de secciones -->
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
 
             <!-- Campo de contraseña -->
             <com.google.android.material.textfield.TextInputLayout

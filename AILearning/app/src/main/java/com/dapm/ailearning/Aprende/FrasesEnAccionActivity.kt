@@ -219,19 +219,33 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
 
 
     private fun actualizarLeccion(puntajeFinal: Int) {
-        val estadoFinal = true // Estado de la lección completada
+        // Log to confirm startTime
+        Log.d("ActualizarLeccion", "startTime at call: $startTime")
 
-        // Crear una corrutina para actualizar la lección en la base de datos
+        // Determine the score to send based on the final score value
+        val puntajeEnvio = when {
+            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
+            puntajeFinal == 2 -> 8
+            puntajeFinal == 1 -> 5
+            puntajeFinal == 0 -> 0
+            else -> 0
+        }
+
+        val estadoFinal = true
+        val endTime = System.currentTimeMillis()
+        val duration = endTime - startTime
+
         CoroutineScope(Dispatchers.IO).launch {
-            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao()
 
-            // Actualiza la lección usando la propiedad de clase
-            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
+            leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
 
-            // Log para confirmar la actualización
-            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
         }
     }
+
     private fun mostrarEstrellas(estrellas: Int) {
         // Cambiar la imagen según el puntaje
         when (estrellas) {

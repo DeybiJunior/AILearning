@@ -202,49 +202,36 @@ class DesafioComprensionActivity : AppCompatActivity() {
         mostrarEstrellas(estrellas)
 
         actualizarLeccion(endValue) // Cambié aquí
-        guardarDuracionLeccion()
         Handler(Looper.getMainLooper()).postDelayed({
             finish()
         }, 5000)
     }
 
 
-    private fun guardarDuracionLeccion() {
+    private fun actualizarLeccion(puntajeFinal: Int) {
+        // Log to confirm startTime
+        Log.d("ActualizarLeccion", "startTime at call: $startTime")
+
+        // Determine the score to send based on the final score value
+        val puntajeEnvio = when {
+            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
+            puntajeFinal == 2 -> 8
+            puntajeFinal == 1 -> 5
+            puntajeFinal == 0 -> 0
+            else -> 0
+        }
+
+        val estadoFinal = true
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
 
         CoroutineScope(Dispatchers.IO).launch {
-            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
+            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao()
 
-            // Actualiza los datos de la lección en la base de datos, incluyendo startTime
             leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
-
-            // Log para verificar los valores de duración y tiempo de finalización
-            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
-        }
-    }
-
-
-    private fun actualizarLeccion(puntajeFinal: Int) {
-        // Determinar el puntaje a enviar según el valor de score
-        val puntajeEnvio = when (puntajeFinal) {
-            3 -> 10
-            2 -> 8
-            1 -> 5
-            0 -> 0
-            else -> 0 // En caso de que puntajeFinal no sea válido
-        }
-
-        val estadoFinal = true // Estado de la lección completada
-
-        // Crear una corrutina para actualizar la lección en la base de datos
-        CoroutineScope(Dispatchers.IO).launch {
-            val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
-
-            // Actualiza la lección usando la propiedad de clase
             leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
 
-            // Log para confirmar la actualización
+            Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
             Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
         }
     }

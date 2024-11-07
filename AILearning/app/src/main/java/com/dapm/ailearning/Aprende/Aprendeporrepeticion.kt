@@ -357,7 +357,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
     }
 
     private fun actualizarTextoFrase() {
-        val textoConstante = "Lee y repite:\nNo tengas miedo a equivocarte, practicar es lo más importante.\n"
+        val textoConstante = "Lee y repite:\n"
         val textoFrase = frases[fraseIndex].frase
         textoFormateado = "\n\" $textoFrase \""
         val spannableString = SpannableString(textoConstante + textoFormateado)
