@@ -2,9 +2,16 @@ package com.dapm.ailearning.Aprende
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -19,6 +26,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.dapm.ailearning.Aprende.CompletaFrases.LeccionCompletarJson
 import com.dapm.ailearning.Aprende.CompletaFrases.QuizCompletar
@@ -43,17 +52,20 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
     private lateinit var tvPuntajeFinal: TextView // Asegúrate de tener esta variable para el puntaje final
     private lateinit var imageViewEstrellas: ImageView
     private lateinit var imagenResultado: ImageView
-    private lateinit var cardimag: CardView
     private lateinit var container: LinearLayout
     private var idLeccion: Int = -1
+    private lateinit var cardimag2: CardView
 
+    private lateinit var constraint: ConstraintLayout
     private var startTime: Long = 0
     private var endTime: Long = 0
+    private lateinit var constraintLayout: ConstraintLayout
+    private lateinit var completo1: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_desafio_comprension)
+        setContentView(R.layout.activity_frases_en_accion)
 
         startTime = System.currentTimeMillis()
 
@@ -63,8 +75,15 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal) // Inicializa el TextView para el puntaje final
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
         imagenResultado = findViewById(R.id.imagenResultado) // Asegúrate de que el ID sea correcto
-        cardimag = findViewById(R.id.cardimag)
+        cardimag2 = findViewById(R.id.cardimag2)
         container = findViewById(R.id.container)
+        container.visibility = View.VISIBLE
+        constraint = findViewById(R.id.constraint)
+        constraint.visibility = View.VISIBLE
+        constraintLayout = findViewById(R.id.constraintLayout)
+        constraintLayout.visibility = View.GONE
+        completo1 = findViewById(R.id.completo1)
+        completo1.visibility = View.VISIBLE
 
         initializeDatabase() // Llama a la función de inicialización
 
@@ -76,6 +95,8 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         if (idLeccion != -1) {
             loadLesson(idLeccion)
         }
+
+
     }
 
 
@@ -95,20 +116,8 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             lessonContent = lessonContentList.first()
 
             // Muestra el contenido de lectura
-            showReading("Completa las frases con la palabra correcta")
-        }
-    }
-
-    private fun showReading(reading: String) {
-        val readingTextView: TextView = findViewById(R.id.reading_text_view)
-        val continueButton: Button = findViewById(R.id.continue_button)
-        readingTextView.text = reading
-
-        continueButton.setOnClickListener {
-            // Una vez que el usuario presione continuar, mostramos el quiz
             showQuiz(lessonContent.quiz)
-            readingTextView.visibility = View.GONE
-            continueButton.visibility = View.GONE
+            cardimag2.visibility = View.VISIBLE
         }
     }
 
@@ -126,19 +135,77 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             optionsGroup.visibility = View.VISIBLE
             submitButton.visibility = View.VISIBLE
 
+            // Listener for changes in the selected option in the RadioGroup
+            optionsGroup.setOnCheckedChangeListener { _, checkedId ->
+                val selectedOption = findViewById<RadioButton>(checkedId)
+                if (selectedOption != null) {
+                    // Original phrase with underscore
+                    val originalFrase = quizList[currentQuestionIndex].frase
+
+                    // Find the position of the underscore in the phrase
+                    val underscoreIndex = originalFrase.indexOf("___")
+                    if (underscoreIndex != -1) {
+                        // Replace the underscore with the selected option's text
+                        val updatedText = originalFrase.replace("___", selectedOption.text.toString())
+
+                        // Create a SpannableString to apply styles
+                        val spannable = SpannableString(updatedText)
+
+                        // Calculate the end position of the selected option text
+                        val endOfBoldText = underscoreIndex + selectedOption.text.length
+
+                        // Apply bold style to the selected text
+                        spannable.setSpan(
+                            StyleSpan(Typeface.BOLD), // Set the style to bold
+                            underscoreIndex, // Start position of the text to be bold
+                            endOfBoldText, // End position of the bold text
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        // Apply text size (16sp) to the selected text
+                        spannable.setSpan(
+                            AbsoluteSizeSpan(20, true), // Set size to 16sp
+                            underscoreIndex,
+                            endOfBoldText,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val highlightColor = ContextCompat.getColor(this, R.color.holo_green_ligth)
+
+                        // Apply color to the selected text
+                        spannable.setSpan(
+                            ForegroundColorSpan(highlightColor),
+                            underscoreIndex,
+                            endOfBoldText,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        // Update the question TextView with the styled text
+                        questionView.text = spannable
+                    }
+                }
+            }
+
+
             submitButton.setOnClickListener {
                 val selectedId = optionsGroup.checkedRadioButtonId
                 val selectedOption = findViewById<RadioButton>(selectedId)
+
                 if (selectedOption != null) {
-                    // Verifica la respuesta
-                    if (selectedOption.text == quizList[currentQuestionIndex].correct_answer) {
-                        score=score+2 // Incrementa el puntaje por respuesta correcta
-                        scoreTextView.text = "Puntaje: $score" // Actualiza el TextView del puntaje
+                    val correctAnswer = quizList[currentQuestionIndex].correct_answer
+                    if (selectedOption.text == correctAnswer) {
+                        // If the answer is correct
+                        score += 2 // Increment the score for a correct answer
+                        scoreTextView.text = "Puntaje: $score" // Update the score TextView
+                        Toast.makeText(this, "Correcto!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // If the answer is incorrect
+                        Toast.makeText(this, "Incorrecto! La respuesta era: $correctAnswer", Toast.LENGTH_SHORT).show()
                     }
 
-                    // Independientemente de si la respuesta fue correcta o no, avanzamos a la siguiente pregunta
-                    currentQuestionIndex++ // Incrementa el índice para la siguiente pregunta
-                    actualizarProgreso(quizList.size) // Actualiza el progreso
+                    // Move to the next question
+                    currentQuestionIndex++ // Increment the index for the next question
+                    actualizarProgreso(quizList.size) // Update the progress
 
                     if (currentQuestionIndex < quizList.size) {
                         loadQuestion(quizList, currentQuestionIndex, questionView, optionsGroup)
@@ -150,6 +217,25 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
                     Toast.makeText(this, "Por favor selecciona una opción.", Toast.LENGTH_SHORT).show()
                 }
             }
+
+        }
+    }
+
+    private fun loadQuestion(
+        quizList: List<QuizCompletar>,
+        index: Int,
+        questionView: TextView,
+        optionsGroup: RadioGroup
+    ) {
+        val currentQuiz = quizList[index]
+        questionView.text = currentQuiz.frase
+
+        // Limpia las opciones anteriores
+        optionsGroup.removeAllViews()
+        currentQuiz.options.forEach { option ->
+            val radioButton = RadioButton(this)
+            radioButton.text = option
+            optionsGroup.addView(radioButton)
         }
     }
 
@@ -161,11 +247,14 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         questionView.visibility = View.GONE
         optionsGroup.visibility = View.GONE
         submitButton.visibility = View.GONE
-        cardimag.visibility = View.GONE
         container.visibility = View.GONE
     }
 
     private fun mostrarPuntajeFinal() {
+        completo1.visibility = View.GONE
+        constraint.visibility = View.GONE
+        constraintLayout.visibility = View.VISIBLE
+        cardimag2.visibility = View.GONE
         tvPuntajeFinal.visibility = View.VISIBLE
         imagenResultado.visibility = View.VISIBLE
         tvPuntajeFinal.alpha = 0f // Comienza invisible
@@ -293,23 +382,7 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
 
 
     // Función para cargar la pregunta en la UI
-    private fun loadQuestion(
-        quizList: List<QuizCompletar>,
-        index: Int,
-        questionView: TextView,
-        optionsGroup: RadioGroup
-    ) {
-        val currentQuiz = quizList[index]
-        questionView.text = currentQuiz.frase
 
-        // Limpia las opciones anteriores
-        optionsGroup.removeAllViews()
-        currentQuiz.options.forEach { option ->
-            val radioButton = RadioButton(this)
-            radioButton.text = option
-            optionsGroup.addView(radioButton)
-        }
-    }
 
     // Función para actualizar el progreso
     private fun actualizarProgreso(totalPreguntas: Int) {

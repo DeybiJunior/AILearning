@@ -93,12 +93,20 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             Toast.makeText(this, "No se encontró el ID de la lección", Toast.LENGTH_SHORT).show()
         }
 
+
         submitGuessButton.setOnClickListener {
             checkGuess()
         }
         btSiguiente.setOnClickListener {
             nextQuestion()
         }
+
+        // Dentro de onCreate en tu actividad
+        val clouseImageView: ImageView = findViewById(R.id.clouse)
+        clouseImageView.setOnClickListener {
+            finish() // Cierra la actividad actual
+        }
+
     }
 
     private fun cargarLeccion(lessonId: Int) {
@@ -185,6 +193,7 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             // Cambia colores de botones según el guess
             val buttonsCount = letterButtonsLayout.childCount
             val colorMap = mutableMapOf<Char, Int>()
+
 
             // Contar letras correctas
             for (i in correctAnswer.indices) {

@@ -1,0 +1,32 @@
+<!-- res/drawable/circular_progress_duolingo.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo del ProgressBar circular -->
+    <item android:id="@android:id/background">
+        <shape android:shape="ring"
+            android:thicknessRatio="16"
+            android:useLevel="false">
+            <size android:width="48dp" android:height="48dp" />
+            <solid android:color="@color/md_theme_background" />
+        </shape>
+    </item>
+
+    <!-- Progreso del ProgressBar circular -->
+    <item android:id="@android:id/progress">
+        <rotate
+            android:fromDegrees="0"
+            android:toDegrees="360">
+            <shape android:shape="ring"
+                android:thicknessRatio="16"
+                android:useLevel="true">
+                <size android:width="48dp" android:height="48dp" />
+                <!-- Gradiente vibrante al estilo Duolingo -->
+                <gradient
+                    android:angle="45"
+                    android:startColor="@color/holo_green_ligth"
+                    android:centerColor="@color/holo_green_ligth"
+                    android:endColor="@color/holo_green_ligth"
+                    android:type="sweep" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

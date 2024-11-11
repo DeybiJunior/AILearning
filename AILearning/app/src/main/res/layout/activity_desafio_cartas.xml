@@ -76,7 +76,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayoutcard"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -84,6 +84,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/constraint">
 
             <TextView
@@ -145,6 +146,7 @@
             android:layout_height="wrap_content"
             android:background="@color/md_theme_inverseOnSurface"
             android:padding="16dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -160,7 +162,7 @@
                 android:padding="12dp"
                 app:cornerRadius="15dp"
                 android:visibility="visible"
-                app:backgroundTint="#3DC2DF"
+                app:backgroundTint="@color/buttonBackground5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/submit_button"/>
@@ -176,82 +178,81 @@
                 android:textColor="@android:color/white"
                 app:cornerRadius="15dp"
                 android:visibility="visible"
-                app:backgroundTint="@color/holo_green_ligth"
+                app:backgroundTint="@color/buttonBackground5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="160dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvFraseFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="¡Has llegado al final!"
+                android:textAlignment="center"
+                android:textSize="36dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Imagen de estrellas -->
+            <ImageView
+                android:id="@+id/imageViewEstrellas"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFraseFinal"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <!-- Imagen de Resultado -->
+            <ImageView
+                android:id="@+id/imagenResultado"
+                android:layout_width="wrap_content"
+                android:layout_height="524dp"
+                android:layout_marginTop="-30dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewEstrellas" />
+
+            <!-- Puntaje Final -->
+            <TextView
+                android:id="@+id/tvPuntajeFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/background_round"
+                android:text="Puntaje Final: 0"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-16dp"
-        app:layout_constraintTop_toBottomOf="@id/etSpeechResult"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <!-- Texto de Frase Final -->
-        <TextView
-            android:id="@+id/tvFraseFinal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:text="¡Has llegado al final!"
-            android:textSize="36dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAlignment="center"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Imagen de estrellas -->
-        <ImageView
-            android:id="@+id/imageViewEstrellas"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:visibility="gone"
-            android:scaleType="fitCenter"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFraseFinal"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Imagen de Resultado -->
-        <ImageView
-            android:id="@+id/imagenResultado"
-            android:layout_width="wrap_content"
-            android:layout_height="524dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/imageViewEstrellas"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="-30dp"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Puntaje Final -->
-        <TextView
-            android:id="@+id/tvPuntajeFinal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Puntaje Final: 0"
-            android:textSize="24sp"
-            android:visibility="gone"
-            android:background="@drawable/background_round"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginBottom="16dp"
-            android:textAlignment="center" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

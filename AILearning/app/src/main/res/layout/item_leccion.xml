@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewLeccion"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
@@ -14,63 +15,103 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Contenido de texto alineado a la izquierda -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewTema"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tema de la Lección"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="4dp" />
+                android:orientation="horizontal"
+                android:gravity="start|center_vertical"
+                android:padding="8dp">
+
+                <!-- ImageView para mostrar la imagen al lado de los textos -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/otros"
+                    android:layout_marginEnd="8dp"
+                    android:scaleType="centerCrop" />
+
+                <!-- LinearLayout vertical con los textos -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textViewTema"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:text="Tema de la Lección"
+                        android:textColor="@color/md_theme_outline"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textViewTipo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:text="Tipo: Palabra Activa"
+                        android:textColor="@color/md_theme_outline"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
 
             <TextView
                 android:id="@+id/textViewDificultad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
                 android:text="Dificultad: Fácil"
                 android:textColor="@color/md_theme_outline"
-                android:textSize="16sp"
-                android:paddingBottom="4dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
                 android:text="Estado: Completo"
                 android:textColor="@color/md_theme_outline"
-                android:textSize="16sp"
-                android:paddingBottom="4dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewPuntaje"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 android:text="Puntaje: 95/100"
                 android:textColor="@color/md_theme_outline"
-                android:textSize="16sp"
-                android:paddingBottom="8dp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
-        <!-- Botón de icono alineado a la derecha -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonVolverHacer"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:backgroundTint="#3DC2DF"
-            android:padding="0dp"
-            android:text="Volver"
-            android:textColor="@color/blancosiempre"
-            app:cornerRadius="15dp"
-            app:icon="@drawable/icon_loop"
-            app:iconTint="@color/blancosiempre"
-            app:iconGravity="textTop"
-            app:iconPadding="8dp" />
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButtonEliminar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_eliminar"
+                android:background="@android:color/transparent"
+                android:contentDescription="Eliminar Lección"
+                app:tint="@color/md_theme_outline"
+                android:padding="12dp" />
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

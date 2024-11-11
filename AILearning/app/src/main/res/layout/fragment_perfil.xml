@@ -21,10 +21,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:padding="20dp"
                     android:text="PROGRESO"
-                    android:textSize="24dp"
+                    android:textSize="32dp"
                     android:textStyle="bold" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="16dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -40,249 +43,367 @@
                         app:trackColor="@color/md_theme_inverseOnSurface"
                         app:trackThickness="15dp" />
 
-                    <TextView
-                        android:id="@+id/progressText"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="0"
-                        android:textSize="32sp" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_centerInParent="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nivel"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/progressText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="40dp" />
+
+                        <TextView
+                            android:id="@+id/leccionesCompletasText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="leccione"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
                 </RelativeLayout>
 
-                <!-- Primer CardView -->
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="16dp" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewDificultad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="5dp">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tvLeccionNombre"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Dificultad de la Lecciones:"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:paddingBottom="4dp" />
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp">
 
-                            <TextView
-                                android:id="@+id/textViewdificultad"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Intermedio"
-                                android:textColor="@color/md_theme_outline"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Dificultad de la Lecciones:"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:paddingBottom="4dp"/>
+
+                                <TextView
+                                    android:id="@+id/textViewdificultad"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ninguno"
+                                    android:textColor="@color/md_theme_outline"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:backgroundTint="@color/buttonBackground2"
+                                android:insetLeft="0dp"
+                                android:insetTop="0dp"
+                                android:insetRight="0dp"
+                                android:insetBottom="0dp"
+                                android:padding="0dp"
+                                app:cornerRadius="140dp"
+                                app:icon="@drawable/icon_nivel"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconSize="20dp"
+                                app:iconTint="@color/blancosiempre"
+                                android:enabled="false" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/icon_nivel"
-                            android:layout_gravity="center_vertical" />
-                    </LinearLayout>
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
-
 
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewTiempodeuso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="5dp">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Tiempo de Uso:"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:paddingBottom="4dp" />
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="3 días Seguidos"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Tiempo de Uso:"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:paddingBottom="4dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="No disponible"
+                                    android:textColor="@color/md_theme_outline"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:backgroundTint="@color/buttonBackground"
+                                android:insetLeft="0dp"
+                                android:insetTop="0dp"
+                                android:insetRight="0dp"
+                                android:insetBottom="0dp"
+                                android:padding="0dp"
+                                app:cornerRadius="140dp"
+                                app:icon="@drawable/icon_diario"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconSize="20dp"
+                                app:iconTint="@color/blancosiempre"
+                                android:enabled="false" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/icon_diario"
-                            android:layout_gravity="center_vertical" />
-                    </LinearLayout>
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
+
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardViewSeleccionDocente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="5dp">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Docente:"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:paddingBottom="4dp" />
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp">
 
-                            <TextView
-                                android:id="@+id/textViewDocenteSeleccionado"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Ninguno"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Docente:"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:paddingBottom="4dp"/>
+
+                                <TextView
+                                    android:id="@+id/textViewDocenteSeleccionado"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ninguno"
+                                    android:textColor="@color/md_theme_outline"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnOpcion2"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:backgroundTint="@color/buttonBackground3"
+                                android:insetLeft="0dp"
+                                android:insetTop="0dp"
+                                android:insetRight="0dp"
+                                android:insetBottom="0dp"
+                                android:padding="0dp"
+                                app:cornerRadius="140dp"
+                                app:icon="@drawable/icon_docente"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconSize="20dp"
+                                app:iconTint="@color/blancosiempre"
+                                android:enabled="false" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/icon_docente"
-                            android:layout_gravity="center_vertical" />
-                    </LinearLayout>
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
-
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/loginCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:layout_margin="4dp"
                     android:layout_marginTop="16dp"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="5dp">
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Sesión"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:paddingBottom="4dp" />
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Iniciar sesión"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sesión"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:paddingBottom="4dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Iniciar sesión"
+                                    android:textColor="@color/md_theme_outline"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:backgroundTint="@color/buttonBackground5"
+                                android:insetLeft="0dp"
+                                android:insetTop="0dp"
+                                android:insetRight="0dp"
+                                android:insetBottom="0dp"
+                                android:padding="0dp"
+                                app:cornerRadius="140dp"
+                                app:icon="@drawable/icon_login"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconSize="20dp"
+                                app:iconTint="@color/blancosiempre"
+                                android:enabled="false" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/icon_login" />
-                    </LinearLayout>
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
-
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/logoutCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:layout_margin="4dp"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="5dp">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:padding="8dp">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="Sesión"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:paddingBottom="4dp" />
+                                android:layout_weight="0.8"
+                                android:orientation="vertical"
+                                android:paddingEnd="10dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Cerrar sesión"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sesión"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:paddingBottom="4dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cerrar sesión"
+                                    android:textColor="@color/md_theme_outline"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center_vertical|end"
+                                android:backgroundTint="@color/buttonBackground5"
+                                android:insetLeft="0dp"
+                                android:insetTop="0dp"
+                                android:insetRight="0dp"
+                                android:insetBottom="0dp"
+                                android:padding="0dp"
+                                app:cornerRadius="140dp"
+                                app:icon="@drawable/icon_logout"
+                                app:iconGravity="textStart"
+                                app:iconPadding="0dp"
+                                app:iconSize="20dp"
+                                app:iconTint="@color/blancosiempre"
+                                android:enabled="false" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/icon_logout" />
-                    </LinearLayout>
+                    </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
 

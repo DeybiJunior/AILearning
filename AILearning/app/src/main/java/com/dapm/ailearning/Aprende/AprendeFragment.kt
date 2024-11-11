@@ -14,11 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.Inicio.SeleccionTemaActivity
 import com.dapm.ailearning.R
+import com.google.android.material.button.MaterialButton
 
 class AprendeFragment : Fragment() {
 
     private lateinit var leccionViewModel: LeccionViewModel
     private lateinit var linearLayout: LinearLayout
+    private lateinit var LinearNoLecciones: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +31,7 @@ class AprendeFragment : Fragment() {
 
         // Encuentra el LinearLayout donde se agregarán las cards
         linearLayout = view.findViewById(R.id.linearLayoutContainer)
+        LinearNoLecciones = view.findViewById(R.id.LinearNoLecciones)
 
         return view
     }
@@ -67,10 +70,12 @@ class AprendeFragment : Fragment() {
                         // Mostrar mensaje y botón si no hay lecciones
                         tvNoLecciones.visibility = View.VISIBLE
                         btnSeleccionTema.visibility = View.VISIBLE
+                        LinearNoLecciones.visibility = View.VISIBLE
                     } else {
                         // Ocultar mensaje y botón si hay lecciones
                         tvNoLecciones.visibility = View.GONE
                         btnSeleccionTema.visibility = View.GONE
+                        LinearNoLecciones.visibility = View.GONE
 
                         // Crear una card para cada lección en el orden descendente
                         for (leccion in leccionesOrdenadas) {
@@ -86,6 +91,7 @@ class AprendeFragment : Fragment() {
                 startActivity(intent)
             }
         }
+
     }
 
 
@@ -97,7 +103,7 @@ class AprendeFragment : Fragment() {
         // Encontrar los elementos del card inflado
         val nombreTextView: TextView = cardView.findViewById(R.id.tvLeccionNombre)
         val nivelTextView: TextView = cardView.findViewById(R.id.tvLeccionNivel)
-        val button: Button = cardView.findViewById(R.id.btnContinuar)
+        val button: MaterialButton = cardView.findViewById(R.id.btnContinuar)
 
         // Asignar los valores a los elementos
         nombreTextView.text = nombre
@@ -110,13 +116,25 @@ class AprendeFragment : Fragment() {
             "Frases en Acción" to FrasesEnAccionActivity::class.java,
             "Desafío de Cartas" to DesafioCartasActivity::class.java,
             "Adivina la Palabra" to AdivinaPalabraActivity::class.java
-
         )
+
+        // Map de íconos por nombre de lección
+        val iconMap = mapOf(
+            "Pronunciación Perfecta" to R.drawable.pronunciacion,
+            "Desafío de Comprensión" to R.drawable.comprension,
+            "Escucha Activa" to R.drawable.escucha,
+            "Frases en Acción" to R.drawable.frase,
+            "Desafío de Cartas" to R.drawable.carta,
+            "Adivina la Palabra" to R.drawable.palabra
+        )
+
+        // Configurar el icono del botón según el nombre de la lección
+        val iconResId = iconMap[nombre] ?: R.drawable.aprovado // Icono por defecto
+        button.setIconResource(iconResId)
 
         // Configurar el botón
         button.setOnClickListener {
             val activityClass = activityMap[nombre]
-
             activityClass?.let {
                 val intent = Intent(requireContext(), it)
                 intent.putExtra("idLeccion", lessonId)
@@ -124,10 +142,10 @@ class AprendeFragment : Fragment() {
             }
         }
 
-
         // Añadir el CardView al LinearLayout
         linearLayout.addView(cardView)
     }
+
 
 }
 

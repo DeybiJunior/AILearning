@@ -13,12 +13,17 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.Usuario
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class InicioSesionActivity : AppCompatActivity() {
 
@@ -136,6 +141,8 @@ class InicioSesionActivity : AppCompatActivity() {
                                         val usuario = Usuario(currentUser.uid, nombres, apellidos, edad, nivel, section, grade)
                                         guardarUsuarioEnSharedPreferences(usuario)
 
+                                        obtenerYGuardarLecciones(currentUser.uid)
+
                                         val intent = Intent(this, MainActivity::class.java)
                                         startActivity(intent)
                                         finish()
@@ -153,6 +160,41 @@ class InicioSesionActivity : AppCompatActivity() {
                 }
         } else {
             showToast("Límite de intentos alcanzado. Intenta nuevamente en una hora.")
+        }
+    }
+
+    private fun obtenerYGuardarLecciones(userId: String) {
+        firestore.collection("users").document(userId).collection("lecciones")
+            .get()
+            .addOnSuccessListener { result ->
+                val leccionesList = mutableListOf<Leccion>()
+                for (document in result) {
+                    val leccion = Leccion(
+                        userId = userId,
+                        tipo = document.getString("tipo") ?: "",
+                        dificultad = document.getString("dificultad") ?: "",
+                        tema = document.getString("tema") ?: "",
+                        json = document.getString("json") ?: "",
+                        estado = document.getBoolean("estado") ?: false,
+                        puntaje = document.getLong("puntaje")?.toInt() ?: 0,
+                        startTime = document.getLong("startTime") ?: 0,
+                        duration = document.getLong("duration") ?: 0,
+                        completionDate = document.getLong("completionDate") ?: 0
+                    )
+                    leccionesList.add(leccion)
+                }
+                guardarLeccionesEnRoom(leccionesList)
+            }
+            .addOnFailureListener { e ->
+                showToast("Error al cargar lecciones: ${e.message}")
+            }
+    }
+
+    private fun guardarLeccionesEnRoom(lecciones: List<Leccion>) {
+        val db = AppDatabase.getDatabase(applicationContext)
+        val leccionDao = db.leccionDao()
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.insertAll(*lecciones.toTypedArray())
         }
     }
 

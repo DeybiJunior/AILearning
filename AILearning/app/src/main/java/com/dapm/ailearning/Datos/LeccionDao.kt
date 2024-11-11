@@ -10,6 +10,11 @@ interface LeccionDao {
     @Insert
     suspend fun insert(lesson: Leccion)
 
+
+    @Insert
+    suspend fun insertAll(vararg lessons: Leccion)
+
+
     @Query("SELECT * FROM lecciones WHERE userId = :userId")
     suspend fun getLessonsByUserId(userId: String): List<Leccion>
 
@@ -22,7 +27,6 @@ interface LeccionDao {
     @Query("SELECT * FROM lecciones WHERE lessonId = :lessonId LIMIT 1")
     suspend fun getLeccionById(lessonId: Int): Leccion?
 
-    // NUEVA consulta para actualizar una lección
     @Query("UPDATE lecciones SET estado = :estado, puntaje = :puntaje WHERE lessonId = :lessonId")
     suspend fun updateLeccion(lessonId: Int, estado: Boolean, puntaje: Int)
 

@@ -7,7 +7,9 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +32,7 @@ class PerfilFragment : Fragment() {
     private lateinit var progressText: TextView
     private lateinit var textViewDocenteSeleccionado: TextView
     private lateinit var textViewdificultad: TextView
+    private lateinit var leccionesCompletasText: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,6 +41,7 @@ class PerfilFragment : Fragment() {
         progressText = view.findViewById(R.id.progressText)
         textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado)
         textViewdificultad = view.findViewById(R.id.textViewdificultad)
+        leccionesCompletasText = view.findViewById(R.id.leccionesCompletasText)
 
         val database = AppDatabase.getDatabase(requireContext())
         leccionDao = database.leccionDao()
@@ -105,6 +109,33 @@ class PerfilFragment : Fragment() {
 
         return view
     }
+
+    private fun handleLogin() {
+        val intent = Intent(requireContext(), InicioSesionActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun handleLogout() {
+        val customView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_alert_dialog, null)
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setView(customView)
+            .create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        customView.findViewById<Button>(R.id.cancelButton).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        customView.findViewById<Button>(R.id.confirmButton).setOnClickListener {
+            auth.signOut()
+            val intent = Intent(requireContext(), InicioSesionActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+            alertDialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
+
+
     private fun cargarDificultad() {
         val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE) // Usar el mismo archivo de preferencias
         val dificultad = sharedPref?.getString("dificultad", null) // Obtener la dificultad guardada
@@ -148,6 +179,9 @@ class PerfilFragment : Fragment() {
             // Actualizar la interfaz de usuario con el nuevo nivel
             updateProgress(newLevel)
             increaseProgress(newLevel)
+
+            leccionesCompletasText.text = "$completedLessons lecciones"
+
         }
     }
 
@@ -165,7 +199,7 @@ class PerfilFragment : Fragment() {
     private fun updateProgress(nivel: Int) {
         val progress = (nivel * 10).coerceAtMost(100) // Ajuste para reflejar el nivel de 0 a 10
         circularProgressIndicator.setProgressCompat(progress, true)
-        progressText.text = "Nivel: $nivel"
+        progressText.text = "$nivel"
     }
 
     // Ejemplo de cómo variar el progreso
@@ -191,17 +225,5 @@ class PerfilFragment : Fragment() {
                 }
             }
         }, 500)
-    }
-
-    private fun handleLogin() {
-        val intent = Intent(requireContext(), InicioSesionActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun handleLogout() {
-        auth.signOut()
-        val intent = Intent(requireContext(), InicioSesionActivity::class.java)
-        startActivity(intent)
-        activity?.finish()
     }
 }

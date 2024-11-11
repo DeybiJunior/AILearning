@@ -1,5 +1,6 @@
 package com.dapm.ailearning.Inicio
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -26,7 +27,6 @@ class BusquedaLeccionActivity : AppCompatActivity() {
     private lateinit var leccionViewModel: LeccionViewModel
 
     // Colores
-    private var colorSeleccionado by Delegates.notNull<Int>()
     private var colorNoSeleccionado by Delegates.notNull<Int>()
     val prompts = mutableMapOf<String, String>()
 
@@ -35,8 +35,15 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_busqueda_leccion)
 
         // Obtener colores desde resources
-        colorSeleccionado = ContextCompat.getColor(this, R.color.tipo_seleccionado)
-        colorNoSeleccionado = ContextCompat.getColor(this, R.color.md_theme_primary)
+        var colorSeleccionado1 = ContextCompat.getColor(this, R.color.buttonBackground)
+        var colorSeleccionado2 = ContextCompat.getColor(this, R.color.buttonBackground2)
+        var colorSeleccionado3 = ContextCompat.getColor(this, R.color.buttonBackground3)
+        var colorSeleccionado4 = ContextCompat.getColor(this, R.color.buttonBackground4)
+        var colorSeleccionado5 = ContextCompat.getColor(this, R.color.buttonBackground5)
+        var colorSeleccionado6 = ContextCompat.getColor(this, R.color.buttonBackground6)
+
+
+        colorNoSeleccionado = ContextCompat.getColor(this, R.color.md_theme_inverseOnSurface)
 
 
         // Inicializar el ViewModel
@@ -79,14 +86,16 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             btn5.setBackgroundColor(colorNoSeleccionado)
             btn6.setBackgroundColor(colorNoSeleccionado)
 
-
         }
+
+        resetButtons()
+
         prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
         prompts[getString(R.string.tipo_2)] = """Generar un JSON con 1 lectura corta (máximo 50 palabras, en inglés) sobre $tema para una dificultad básica de $dificultad, todo el textto en idioma inglés. Realizar un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta.  La estructura debe ser: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_3)] = """Genera un JSON con 1 lectura corta (max 50 palabras) en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_4)] = """Genera un JSON con 5 frases cortas en inglés basico-$dificultad faciles sobre $tema, cada frase con una palabra faltante en el medio _____ . 4 opciones multiples 3 opciones incorrectas y una respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "quiz": [{"frase": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
+        prompts[getString(R.string.tipo_4)] = """Genera un JSON con 5 frases cortas en inglés basico-$dificultad faciles sobre $tema, cada frase con una palabra faltante en el medio (___), que sea una palabra de gramática general, como un artículo, pronombre, verbo o adjetivo, y no un nombre propio ni algo similar.. 4 opciones multiples 3 opciones incorrectas y una respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "quiz": [{"frase": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_5)] = """Genera un JSON en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario que conste de 10 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_6)] = "Genera un JSON con 3 palabra en Ingles sobre $tema de nivel básico - $dificultad. con una pista sobre cual podria ser la palabra [{ \"ID\": <número>, \"clue\": \"<String en español>\", \"oneword\": \"<String palabra en ingles>\" }]"
+        prompts[getString(R.string.tipo_6)] = "Genera un JSON con 3 palabra en Ingles sobre $tema de nivel básico - $dificultad. con una pista la pista debe ser significado de esta en el diccionario en español. La estructura debe ser: [{ \"ID\": <número>, \"clue\": \"<String en español>\", \"oneword\": \"<String palabra en ingles>\" }]"
 
 
         // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
@@ -103,7 +112,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn1.text = spannable
-            btn1.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn1.setBackgroundColor(colorSeleccionado1) // Cambia el color del botón seleccionado
         }
         btn2.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -118,7 +127,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn2.text = spannable
-            btn2.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn2.setBackgroundColor(colorSeleccionado2) // Cambia el color del botón seleccionado
         }
         btn3.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -133,7 +142,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn3.text = spannable
-            btn3.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn3.setBackgroundColor(colorSeleccionado3) // Cambia el color del botón seleccionado
         }
         btn4.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -148,7 +157,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn4.text = spannable
-            btn4.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn4.setBackgroundColor(colorSeleccionado4) // Cambia el color del botón seleccionado
         }
 
         btn5.setOnClickListener {
@@ -164,7 +173,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn5.text = spannable
-            btn5.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn5.setBackgroundColor(colorSeleccionado5) // Cambia el color del botón seleccionado
         }
 
         btn6.setOnClickListener {
@@ -180,11 +189,10 @@ class BusquedaLeccionActivity : AppCompatActivity() {
             spannable.setSpan(RelativeSizeSpan(0.8f), 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             btn6.text = spannable
-            btn6.setBackgroundColor(colorSeleccionado) // Cambia el color del botón seleccionado
+            btn6.setBackgroundColor(colorSeleccionado6) // Cambia el color del botón seleccionado
         }
 
 
-        // Botón para agregar una nueva lección
         val btnAgregarLeccion = findViewById<Button>(R.id.btnAgregarLeccion)
         btnAgregarLeccion.setOnClickListener {
             if (userId != null) {
@@ -195,9 +203,12 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                 }
 
                 // Mostrar un indicador de carga (opcional)
-                val progressDialog = ProgressDialog(this)
-                progressDialog.setMessage("Generando lección...")
-                progressDialog.setCancelable(false)
+                val progressDialogView = layoutInflater.inflate(R.layout.custom_progress_dialog, null)
+                val progressDialog = Dialog(this).apply {
+                    setContentView(progressDialogView)
+                    setCancelable(false)
+                    window?.setBackgroundDrawableResource(android.R.color.transparent)
+                }
                 progressDialog.show()
 
 

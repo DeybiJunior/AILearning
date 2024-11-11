@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,25 +34,51 @@ class HistorialLeccionesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_historial_lecciones)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewLecciones)
-        leccionAdapter = LeccionAdapter { leccion ->
-            val activityMap = mapOf(
-                "Pronunciación Perfecta" to Aprendeporrepeticion::class.java,
-                "Desafío de Comprensión" to DesafioComprensionActivity::class.java,
-                "Escucha Activa" to EscuchaActivaActivity::class.java,
-                "Frases en Acción" to FrasesEnAccionActivity::class.java,
-                "Desafío de Cartas" to DesafioCartasActivity::class.java,
-                "Adivina la Palabra" to AdivinaPalabraActivity::class.java
-            )
+        leccionAdapter = LeccionAdapter(
+            onCardClick = { leccion ->
+                val activityMap = mapOf(
+                    "Pronunciación Perfecta" to Aprendeporrepeticion::class.java,
+                    "Desafío de Comprensión" to DesafioComprensionActivity::class.java,
+                    "Escucha Activa" to EscuchaActivaActivity::class.java,
+                    "Frases en Acción" to FrasesEnAccionActivity::class.java,
+                    "Desafío de Cartas" to DesafioCartasActivity::class.java,
+                    "Adivina la Palabra" to AdivinaPalabraActivity::class.java
+                )
 
-            val activityClass = activityMap[leccion.tipo]
-            activityClass?.let {
-                val intent = Intent(this, it)
-                intent.putExtra("idLeccion", leccion.lessonId)
-                startActivity(intent)
-            } ?: run {
-                Toast.makeText(this, "No se encontró actividad para esta lección", Toast.LENGTH_SHORT).show()
+                val activityClass = activityMap[leccion.tipo]
+                activityClass?.let {
+                    val intent = Intent(this, it)
+                    intent.putExtra("idLeccion", leccion.lessonId)
+                    startActivity(intent)
+                } ?: run {
+                    Toast.makeText(this, "No se encontró actividad para esta lección", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onDelete = { leccion ->
+                // Mostrar el AlertDialog con diseño personalizado
+                val dialogView = layoutInflater.inflate(R.layout.dialog_confirm_delete, null)
+
+                val alertDialog = AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .create()
+                alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+                val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancel)
+                val buttonConfirm = dialogView.findViewById<Button>(R.id.buttonConfirm)
+
+                buttonCancel.setOnClickListener {
+                    alertDialog.dismiss()  // Cierra el cuadro de diálogo
+                }
+
+                buttonConfirm.setOnClickListener {
+                    // Eliminar la lección si el usuario confirma
+                    leccionViewModel.deleteLeccion(leccion)
+                    Toast.makeText(this, "Lección eliminada", Toast.LENGTH_SHORT).show()
+                    alertDialog.dismiss()  // Cierra el cuadro de diálogo
+                }
+
+                alertDialog.show()
             }
-        }
+            )
         recyclerView.adapter = leccionAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -62,8 +89,12 @@ class HistorialLeccionesActivity : AppCompatActivity() {
         if (userId != null) {
             leccionViewModel.getLeccionesByUserId(userId)
             leccionViewModel.leccionesPorUsuario.observe(this) { lecciones ->
-                lecciones?.let { leccionAdapter.submitList(it) }
+                lecciones?.let {
+                    val leccionesInvertidas = it.reversed()
+                    leccionAdapter.submitList(leccionesInvertidas)
+                }
             }
+
         } else {
             Log.e("HistorialLeccionesActivity", "El userId es nulo, no se pueden cargar lecciones.")
         }

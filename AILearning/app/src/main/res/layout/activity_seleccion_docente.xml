@@ -15,7 +15,27 @@
         android:contentDescription="Volver"
         android:src="@drawable/icon_close"
         android:padding="16dp"/>
+    <TextView
+        android:id="@+id/TvDocente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selección Docente"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:gravity="center"/>
 
+    <TextView
+        android:id="@+id/tvMensaje"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text=""
+        android:gravity="center"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp" />
 
 
     <androidx.cardview.widget.CardView
@@ -55,7 +75,7 @@
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/perfil_docente_h"
+                app:srcCompat="@drawable/perfil_docente_m"
                 android:scaleType="centerCrop" />
 
             <TextView
@@ -126,8 +146,4 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="16dp" />
-
-
-
-
 </LinearLayout>

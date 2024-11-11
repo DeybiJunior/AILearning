@@ -28,7 +28,7 @@
             android:layout_marginBottom="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Volver"
-            android:src="@drawable/icon_close" />
+            android:src="@drawable/icon_retroceso" />
 
         <TextView
             android:id="@+id/txtBienvenida"
@@ -63,6 +63,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Pronunciación Perfecta"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
 
@@ -75,6 +76,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Desafío de Comprensión"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
 
@@ -87,6 +89,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Escucha Activa"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
 
@@ -99,6 +102,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Frases en Acción"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
 
@@ -110,6 +114,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Desafío de Cartas"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
 
@@ -121,6 +126,7 @@
                 android:layout_columnWeight="1"
                 android:layout_margin="8dp"
                 android:text="Adivina la Palabra"
+                android:textColor="@color/md_theme_onSurface_highContrast"
                 android:gravity="center"
                 app:cornerRadius="15dp"/>
         </GridLayout>
@@ -141,8 +147,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Agregar Lección"
-            android:backgroundTint="#3DC2DF"
+            android:text="  Generar  "
+            android:backgroundTint="@color/buttonBackground2"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:cornerRadius="15dp"

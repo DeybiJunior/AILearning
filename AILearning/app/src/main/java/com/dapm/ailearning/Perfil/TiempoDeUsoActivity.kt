@@ -11,6 +11,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -54,6 +55,14 @@ class TiempoDeUsoActivity : AppCompatActivity() {
         circularProgressIndicator = findViewById(R.id.circularProgressIndicator)
         listView = findViewById(R.id.list_usage)
 
+
+        // Dentro de onCreate en tu actividad
+        val clouseImageView: ImageView = findViewById(R.id.btnBack)
+        clouseImageView.setOnClickListener {
+            finish() // Cierra la actividad actual
+        }
+
+
         if (hasUsageStatsPermission()) {
             iniciarTiempoUsoDesdeEstadisticas()
             val usageSummary = getWeeklyUsageStats()
@@ -68,6 +77,7 @@ class TiempoDeUsoActivity : AppCompatActivity() {
             val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
             startActivity(intent)
         }
+
     }
 
     private fun hasUsageStatsPermission(): Boolean {

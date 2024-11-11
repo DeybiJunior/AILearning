@@ -11,136 +11,205 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
+        android:visibility="visible"
         android:layout_above="@id/btnContinuar"
         tools:ignore="NotSibling">
 
-        <TextView
-            android:id="@+id/tvPuntaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Puntaje: 0"
-            android:textColor="@color/md_theme_onSecondaryContainer"
-            android:textSize="18sp"
-            android:layout_gravity="end" />
-
-        <Button
-            android:id="@+id/btnEscuchar"
-            android:padding="12dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Escuchar texto"
-            app:icon="@android:drawable/ic_lock_silent_mode_off"
-            android:enabled="false"
-            app:cornerRadius="15dp"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/tvPregunta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pregunta"
-            android:textSize="16sp"
-            android:layout_marginBottom="20dp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radioOpcion1"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Opción 1"/>
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center_vertical">
 
-            <RadioButton
-                android:id="@+id/radioOpcion2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opción 2"/>
+                <ImageView
+                    android:id="@+id/clouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_close"
+                    android:contentDescription="Icono de X"
+                    android:layout_marginEnd="8dp" />
 
-            <RadioButton
-                android:id="@+id/radioOpcion3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opción 3"/>
+                <!-- TextView y ProgressBar centrados -->
+                <LinearLayout
+                    android:id="@+id/superior"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-            <RadioButton
-                android:id="@+id/radioOpcion4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opción 4"/>
-        </RadioGroup>
+                    <TextView
+                        android:id="@+id/tvProgreso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Progreso..."
+                        android:textSize="16sp"
+                        android:textColor="#4FC936"
+                        android:gravity="center" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+                    <ProgressBar
+                        android:id="@+id/progressBarbarra"
+                        android:layout_width="200dp"
+                        android:layout_height="30dp"
+                        android:max="100"
+                        android:progress="0"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:progressDrawable="@drawable/rounded_progress"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center" />
+                </LinearLayout>
+
+                <!-- Puntaje a la derecha -->
+                <TextView
+                    android:id="@+id/tvPuntaje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Puntaje: 0"
+                    android:textColor="@color/md_theme_onSecondaryContainer"
+                    android:textSize="18sp"
+                    android:gravity="end"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardimag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-16dp">
+            android:layout_margin="16dp"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/md_theme_inverseOnSurface"
+            android:layout_gravity="center">
 
-            <!-- Texto de Frase Final -->
-            <TextView
-                android:id="@+id/tvFraseFinal"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="¡Has llegado al final!"
-                android:textSize="36sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textAlignment="center"
-                android:layout_marginBottom="8dp" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <!-- Imagen de estrellas -->
-            <ImageView
-                android:id="@+id/imageViewEstrellas"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:visibility="gone"
-                android:scaleType="fitCenter"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvFraseFinal"
-                app:layout_constraintWidth_percent="0.8"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Escucha con atención"
+                    android:textSize="20dp"
+                    android:textColor="@color/md_theme_onSurface"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="16dp" />
 
-            <!-- Imagen de Resultado -->
-            <ImageView
-                android:id="@+id/imagenResultado"
-                android:layout_width="wrap_content"
-                android:layout_height="524dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/imageViewEstrellas"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="-30dp"
-                app:layout_constraintHorizontal_bias="0.5"
-                android:layout_marginBottom="8dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_centerInParent="true">
 
-            <!-- Puntaje Final -->
-            <TextView
-                android:id="@+id/tvPuntajeFinal"
-                android:layout_width="wrap_content"
+                    <ImageButton
+                        android:id="@+id/btnEscuchar"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/icon_play"
+                        android:background="@drawable/circular_button_background"
+                        android:contentDescription="Escuchar"
+                        android:layout_marginEnd="16dp"
+                        android:scaleType="centerInside"
+                        android:layout_gravity="center" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="200dp"
+                            android:layout_height="33dp"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/rounded_progressaudio" />
+
+                        <TextView
+                            android:id="@+id/sgundosaudio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00 | 00:00"
+                            android:textSize="12dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="end"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardimag2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/md_theme_inverseOnSurface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Puntaje Final: 0"
-                android:textSize="24sp"
-                android:visibility="gone"
-                android:background="@drawable/background_round"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                android:layout_marginBottom="16dp"
-                android:textAlignment="center" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvPregunta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pregunta"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/radioOpcion1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opción 1" />
+
+                    <RadioButton
+                        android:id="@+id/radioOpcion2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opción 2" />
+
+                    <RadioButton
+                        android:id="@+id/radioOpcion3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opción 3" />
+
+                    <RadioButton
+                        android:id="@+id/radioOpcion4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opción 4" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-    <!-- Contenedor del botón de continuar -->
     <RelativeLayout
         android:id="@+id/containerBtnContinuar"
         android:layout_width="match_parent"
@@ -160,4 +229,71 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"/>
     </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="16dp">
+
+        <!-- Texto de Frase Final -->
+        <TextView
+            android:id="@+id/tvFraseFinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="¡Has llegado al final!"
+            android:textSize="36sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAlignment="center"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Imagen de estrellas -->
+        <ImageView
+            android:id="@+id/imageViewEstrellas"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvFraseFinal"
+            app:layout_constraintWidth_percent="0.8"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Imagen de Resultado -->
+        <ImageView
+            android:id="@+id/imagenResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="524dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/imageViewEstrellas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="-30dp"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Puntaje Final -->
+        <TextView
+            android:id="@+id/tvPuntajeFinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Puntaje Final: 0"
+            android:textSize="24sp"
+            android:visibility="gone"
+            android:background="@drawable/background_round"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="16dp"
+            android:textAlignment="center" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </RelativeLayout>

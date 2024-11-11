@@ -49,6 +49,7 @@ class DesafioCartasActivity : AppCompatActivity() {
     private lateinit var cardflip: CardView
     private lateinit var container: LinearLayout
     private var idLeccion: Int = -1
+    private lateinit var linearLayoutcard: LinearLayout
 
     //Voltear cartas
     private lateinit var front_anim: AnimatorSet
@@ -80,7 +81,8 @@ class DesafioCartasActivity : AppCompatActivity() {
         // Now we will set the front animation
         front_anim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animator) as AnimatorSet
         back_anim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animator) as AnimatorSet
-        
+        linearLayoutcard = findViewById(R.id.linearLayoutcard)
+
         // Inicializa los componentes
         scoreTextView = findViewById(R.id.tvPuntaje)
         progressBar = findViewById(R.id.progressBar) // Inicializa el ProgressBar
@@ -141,6 +143,8 @@ class DesafioCartasActivity : AppCompatActivity() {
             optionsGroup.visibility = View.VISIBLE
             submitButton.visibility = View.VISIBLE
             cardButton.visibility = View.GONE
+            linearLayoutcard.visibility = View.VISIBLE
+
             cardFront.text="?"
             submitButton.setOnClickListener {
                 val selectedId = optionsGroup.checkedRadioButtonId
@@ -195,6 +199,7 @@ class DesafioCartasActivity : AppCompatActivity() {
                 if (currentQuestionIndex < quizList.size) {
                     loadQuestion(quizList, currentQuestionIndex, questionView, optionsGroup)
                 } else {
+                    linearLayoutcard.visibility = View.GONE
                     hideQuizViews()
                     mostrarPuntajeFinal()
                 }

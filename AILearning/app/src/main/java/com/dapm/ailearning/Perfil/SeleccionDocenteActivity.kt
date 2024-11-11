@@ -3,6 +3,7 @@ package com.dapm.ailearning.Perfil
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.R
@@ -25,7 +27,8 @@ class SeleccionDocenteActivity : AppCompatActivity() {
     private val firestore = FirebaseFirestore.getInstance()
     private lateinit var btnEliminarDocente: Button
     private lateinit var Docentecard: CardView
-
+    private lateinit var tvMensaje: TextView
+    private lateinit var tvDocente: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,8 @@ class SeleccionDocenteActivity : AppCompatActivity() {
             guardarDocenteSeleccionado(docenteId)
         }
         recyclerViewDocentes.adapter = docentesAdapter
+        tvMensaje = findViewById(R.id.tvMensaje)
+        tvDocente = findViewById(R.id.TvDocente)
 
         btnEliminarDocente = findViewById(R.id.btnEliminarDocente)
         btnEliminarDocente.setOnClickListener {
@@ -57,8 +62,10 @@ class SeleccionDocenteActivity : AppCompatActivity() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId == null) {
-            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-            return // Exit if the user is not authenticated
+            tvMensaje.text = "Usuario no autenticado"
+            tvMensaje.visibility = View.VISIBLE
+            tvDocente.visibility = View.GONE
+            return
         }
 
         firestore.collection("users").document(userId)
@@ -67,16 +74,17 @@ class SeleccionDocenteActivity : AppCompatActivity() {
                 if (document.exists() && document.contains("docente_id")) {
                     val docenteId = document.getString("docente_id")
                     if (docenteId.isNullOrEmpty()) {
-                        // No teacher assigned
-                        Toast.makeText(this, "No tiene docente asignado", Toast.LENGTH_SHORT).show()
                         cargarDocentes() // Load teachers
                         btnEliminarDocente.visibility = Button.GONE // Hide the button
                     } else {
-                        // Teacher assigned
+                        tvMensaje.visibility = View.GONE
+                        tvDocente.visibility = View.GONE
                         mostrarDatosDocente(docenteId)
                         btnEliminarDocente.visibility = Button.VISIBLE // Show delete button
                     }
                 } else {
+                    tvDocente.text = "Selección Docente"
+                    tvDocente.visibility = View.VISIBLE
                     Toast.makeText(this, "No tiene docente asignado", Toast.LENGTH_SHORT).show()
                     cargarDocentes() // Load teachers
                     btnEliminarDocente.visibility = Button.GONE // Hide the button
@@ -121,23 +129,22 @@ class SeleccionDocenteActivity : AppCompatActivity() {
             }
     }
 
-
-
-
-
     private fun mostrarCuadroAdvertencia() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Eliminar Docente")
-            .setMessage("¿Estás seguro de que deseas eliminar a tu docente asignado?")
-            .setPositiveButton("Sí") { dialog, which ->
-                eliminarDocenteSeleccionado() // Llamar a la función de eliminación
-            }
-            .setNegativeButton("No") { dialog, which ->
-                dialog.dismiss() // Cerrar el cuadro de diálogo
-            }
-            .show()
+        val customView = LayoutInflater.from(this).inflate(R.layout.dialog_custom_layout, null)
+        val alertDialog = builder
+            .setView(customView)
+            .create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        customView.findViewById<Button>(R.id.confirmButton).setOnClickListener {
+            eliminarDocenteSeleccionado()
+            alertDialog.dismiss()
+        }
+        customView.findViewById<Button>(R.id.cancelButton).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        alertDialog.show()
     }
-
 
     private fun cargarDocentes() {
         val docenteCard = findViewById<CardView>(R.id.Docentecard)

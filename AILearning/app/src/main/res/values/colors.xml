@@ -150,5 +150,17 @@
     <color name="intermedioColor">#E3A71D</color>
     <color name="avanzadoColor">#B63331</color>
 
+    <color name="color_tipo_1">#F2D7F5</color> <!-- Lavender Pastel -->
+    <color name="color_tipo_2">#F9D1C2</color> <!-- Peach Pastel -->
+    <color name="color_tipo_3">#C6F1D4</color> <!-- Mint Green Pastel -->
+    <color name="color_tipo_4">#C2E4F1</color> <!-- Sky Blue Pastel -->
+    <color name="color_tipo_5">#F9F2C8</color> <!-- Butter Yellow Pastel -->
+    <color name="color_tipo_6">#E2B8E6</color>
+    <color name="buttonBackground">#54F0A5</color>
+    <color name="buttonBackground2">#3DC2DF</color>
+    <color name="buttonBackground3">#FF8C42</color> <!-- Naranja suave -->
+    <color name="buttonBackground4">#F1C40F</color> <!-- Amarillo cálido -->
+    <color name="buttonBackground5">#9B59B6</color> <!-- Púrpura medio -->
+    <color name="buttonBackground6">#FF6F61</color> <!-- Rojo coral claro -->
 
 </resources>

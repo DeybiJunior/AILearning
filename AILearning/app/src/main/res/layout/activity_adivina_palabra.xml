@@ -84,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="Pista:"
+                android:textStyle="bold"
                 android:textSize="20dp" />
 
             <TextView
@@ -126,7 +127,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Enter your guess">
+                    android:hint="Ingresa tu predicción">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/guessEditText"
@@ -139,7 +140,7 @@
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/holo_green_ligth"
+                    android:backgroundTint="@color/buttonBackground6"
                     android:contentDescription="Enviar respuesta"
                     android:padding="12dp"
                     android:textColor="@android:color/white"
@@ -237,7 +238,7 @@
             android:id="@+id/btnSiguiente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/holo_green_ligth"
+            android:backgroundTint="@color/buttonBackground6"
             android:text="  SIguiente  "
             android:textColor="@android:color/white"
             android:textStyle="bold"

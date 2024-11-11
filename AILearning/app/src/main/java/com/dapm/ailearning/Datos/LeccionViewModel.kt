@@ -31,7 +31,7 @@ class LeccionViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // Función para eliminar una lección
-    fun delete(leccion: Leccion) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteLeccion(leccion: Leccion) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(leccion)
     }
 }

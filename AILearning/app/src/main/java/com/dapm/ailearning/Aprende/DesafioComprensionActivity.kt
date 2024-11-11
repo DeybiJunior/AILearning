@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,21 +43,26 @@ class DesafioComprensionActivity : AppCompatActivity() {
     private lateinit var leccionDao: LeccionDao
     private lateinit var lessonContent: LeccionJson
     private var currentQuestionIndex = 0
-    private var score = 0 // Variable para almacenar el puntaje
+    private var score = 0
     private lateinit var scoreTextView: TextView
-    private lateinit var progressBar: ProgressBar // Variable para el ProgressBar
-    private var indexProgres = 0 // Cambié el nombre de Indexprogres a indexProgres
+    private lateinit var progressBar: ProgressBar
+    private var indexProgres = 0
     private lateinit var closeImageView: ImageView
-    private lateinit var tvPuntajeFinal: TextView // Asegúrate de tener esta variable para el puntaje final
+    private lateinit var tvPuntajeFinal: TextView
     private lateinit var imageViewEstrellas: ImageView
     private lateinit var imagenResultado: ImageView
     private lateinit var cardimag: CardView
     private lateinit var container: LinearLayout
+    private lateinit var constraint: ConstraintLayout
+    private lateinit var completo1: LinearLayout
+    private lateinit var cardimag2: CardView
+    private lateinit var readingTextView: TextView
+    private lateinit var constraintLayout: ConstraintLayout
+
     private var idLeccion: Int = -1
 
     private var startTime: Long = 0
     private var endTime: Long = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,29 +70,39 @@ class DesafioComprensionActivity : AppCompatActivity() {
 
         startTime = System.currentTimeMillis()
 
-        // Inicializa los componentes
+        // Initialize all views here
         scoreTextView = findViewById(R.id.tvPuntaje)
-        progressBar = findViewById(R.id.progressBar) // Inicializa el ProgressBar
-        tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal) // Inicializa el TextView para el puntaje final
+        progressBar = findViewById(R.id.progressBar)
+        tvPuntajeFinal = findViewById(R.id.tvPuntajeFinal)
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
-        imagenResultado = findViewById(R.id.imagenResultado) // Asegúrate de que el ID sea correcto
+        imagenResultado = findViewById(R.id.imagenResultado)
         cardimag = findViewById(R.id.cardimag)
+        cardimag2 = findViewById(R.id.cardimag2)
         container = findViewById(R.id.container)
+        constraint = findViewById(R.id.constraint)
+        completo1 = findViewById(R.id.completo1)
+        readingTextView = findViewById(R.id.reading_text_view)
+        constraintLayout = findViewById(R.id.constraintLayout)
 
-        initializeDatabase() // Llama a la función de inicialización
+        constraintLayout.visibility = View.GONE
+        readingTextView.visibility = View.VISIBLE
+        cardimag2.visibility = View.GONE
+
+        initializeDatabase()
+
+
 
         closeImageView = findViewById(R.id.clouse)
         closeImageView.setOnClickListener {
             finish()
         }
+
         idLeccion = intent.getIntExtra("idLeccion", -1)
         if (idLeccion != -1) {
             loadLesson(idLeccion)
         }
     }
 
-
-    // Función para inicializar leccionDao
     private fun initializeDatabase() {
         val db = AppDatabase.getDatabase(applicationContext) // Usa el método getDatabase
         leccionDao = db.leccionDao() // Inicializa leccionDao
@@ -114,8 +130,23 @@ class DesafioComprensionActivity : AppCompatActivity() {
         continueButton.setOnClickListener {
             // Una vez que el usuario presione continuar, mostramos el quiz
             showQuiz(lessonContent.quiz)
+            cardimag2.visibility = View.VISIBLE
             readingTextView.visibility = View.GONE
             continueButton.visibility = View.GONE
+
+            cardimag.setOnClickListener {
+                activartexto()
+            }
+        }
+
+
+    }
+
+    private fun activartexto() {
+        readingTextView.visibility = if (readingTextView.visibility == View.VISIBLE) {
+            View.GONE
+        } else {
+            View.VISIBLE
         }
     }
 
@@ -165,6 +196,9 @@ class DesafioComprensionActivity : AppCompatActivity() {
         val optionsGroup: RadioGroup = findViewById(R.id.options_radio_group)
         val submitButton: Button = findViewById(R.id.submit_button)
 
+        cardimag2.visibility = View.GONE
+        completo1.visibility = View.GONE
+        constraint.visibility = View.GONE
         questionView.visibility = View.GONE
         optionsGroup.visibility = View.GONE
         submitButton.visibility = View.GONE
@@ -173,6 +207,7 @@ class DesafioComprensionActivity : AppCompatActivity() {
     }
 
     private fun mostrarPuntajeFinal() {
+        constraintLayout.visibility = View.VISIBLE
         tvPuntajeFinal.visibility = View.VISIBLE
         imagenResultado.visibility = View.VISIBLE
         tvPuntajeFinal.alpha = 0f // Comienza invisible

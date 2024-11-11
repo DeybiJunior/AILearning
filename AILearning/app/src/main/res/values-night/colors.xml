@@ -146,4 +146,13 @@
     <color name="holo_green_ligth">#63DF3D</color>
     <color name="tipo_seleccionado">#3DC2DF</color>
 
+
+    <color name="buttonBackground">#1D8E62</color>
+    <color name="buttonBackground2">#006B7F</color>
+    <color name="buttonBackground3">#D57F27</color> <!-- Naranja oscuro -->
+    <color name="buttonBackground4">#D49B17</color> <!-- Amarillo oscuro -->
+    <color name="buttonBackground5">#7E4A9F</color> <!-- Púrpura oscuro -->
+    <color name="buttonBackground6">#D55C50</color> <!-- Rojo coral oscuro -->
+
+
 </resources>

@@ -7,7 +7,6 @@
     android:padding="0dp"
     android:visibility="visible">
 
-    <!-- LinearLayout contenido principal -->
     <LinearLayout
         android:id="@+id/linearLayoutContent"
         android:layout_width="0dp"
@@ -19,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Botón de regreso -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
@@ -66,13 +64,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEnviarFirebase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:backgroundTint="#3DC2DF"
-                android:text="  Subir Avance  "
+            android:backgroundTint="@color/buttonBackground"
+            android:text="  Subir Avance  "
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:visibility="visible"

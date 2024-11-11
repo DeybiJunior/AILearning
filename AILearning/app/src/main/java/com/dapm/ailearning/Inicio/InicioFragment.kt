@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.dapm.ailearning.R
 
@@ -28,7 +29,8 @@ class InicioFragment : Fragment() {
         // Inicializar los botones
         val btnOpcion1 = view.findViewById<Button>(R.id.btnOpcion1)
         val btnOpcion2 = view.findViewById<Button>(R.id.btnOpcion2)
-
+        val cardOpcion1: CardView = view.findViewById(R.id.cardOpcion1)
+        val cardOpcion2: CardView = view.findViewById(R.id.cardOpcion2)
         // Navegación a SeleccionTemaActivity
         btnOpcion1.setOnClickListener {
             activity?.let { context ->
@@ -43,6 +45,17 @@ class InicioFragment : Fragment() {
             startActivity(intent)
         }
 
+        cardOpcion1.setOnClickListener {
+            activity?.let { context ->
+                val intent = Intent(context, SeleccionTemaActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        cardOpcion2.setOnClickListener {
+            val intent = Intent(activity, HistorialLeccionesActivity::class.java)
+            startActivity(intent)
+        }
         txtNombreUsuario = view.findViewById(R.id.txtNombreUsuario)
 
         // Recuperar o crear usuario
