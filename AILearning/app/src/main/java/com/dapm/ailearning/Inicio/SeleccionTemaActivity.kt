@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -41,12 +42,20 @@ class SeleccionTemaActivity : AppCompatActivity() {
             if (temaSeleccionado.isEmpty() && temaEspecifico.isEmpty()) {
                 showToast("Por favor selecciona un tema")
             } else {
-                saveTema(temaSeleccionado, temaEspecifico)
-                // Crear un Intent para redirigir a BusquedaLeccionActivity
-                val intent = Intent(this, BusquedaLeccionActivity::class.java)
+                val temaEspecificoLayout = findViewById<TextInputLayout>(R.id.temaEspecifico)
 
-                // Iniciar la nueva actividad
-                startActivity(intent)
+                if (temaEspecifico.length < 50) {
+                    temaEspecificoLayout.error = getString(R.string.error_temaespecifico_longitud)
+                }
+                else if (!temaEspecifico.matches("^[a-zA-Z0-9]*$".toRegex())) {
+                    temaEspecificoLayout.error = getString(R.string.error_temaespecifico_formato)
+                } else {
+                    temaEspecificoLayout.error = null
+                    saveTema(temaSeleccionado, temaEspecifico)
+                    val intent = Intent(this, BusquedaLeccionActivity::class.java)
+
+                    startActivity(intent)
+                }
             }
         }
 

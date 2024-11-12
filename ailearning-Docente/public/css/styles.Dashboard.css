@@ -177,6 +177,10 @@ button:hover {
 button i {
     margin-right: 5px; /* Espacio entre el icono y el texto */
 }
+.ver-leccion i
+{
+    margin-right: 1px;
+}
 
 /* Estilo para el contenedor de botones */
 .button-container {
@@ -189,6 +193,49 @@ button i {
     flex: 1; /* Permitir que los botones ocupen espacio igual */
     max-width: 200px; /* Establecer un ancho máximo si es necesario */
 }
+
+dialog::backdrop { 
+    background: rgba(0, 0, 0, 0.5); 
+}
+dialog {
+    max-width: 50vw;
+    min-width: 50vw;
+    padding: 30px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.container-ver-leccion {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.columna-izquierda, .columna-derecha {
+    width: 48%;
+}
+
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.tabla-datos td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-datos tr:last-child td {
+    border-bottom: none; /* Quitar el borde en la última fila */
+}
+
 
 
 
@@ -206,6 +253,18 @@ button i {
 
     table {
         font-size: 14px; /* Tamaño de fuente más pequeño en pantallas pequeñas */
+    }
+    dialog {
+        max-width: 50vw;
+        min-width: 0vw;
+        padding: 30px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 

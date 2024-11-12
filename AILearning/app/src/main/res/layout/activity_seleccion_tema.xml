@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Tema a Estudiar"
                     android:inputType="text"
-                    android:maxLength="80"
+                    android:maxLength="50"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp" />
             </com.google.android.material.textfield.TextInputLayout>

@@ -56,15 +56,25 @@
                     <th>Fecha de Inicio</th>
                     <th>Fecha de Fin</th>
                     <th>Duración</th>
+                    <th>Ver Lección</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
+        <!-- Botones para seleccionar los gráficos -->
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button id="btnLessonsChart" onclick="showChart('lessons')">Ver Gráfico de Puntaje</button>
+            <button id="btnDurationChart" onclick="showChart('duration')">Ver Gráfico de Duración</button>
+            <button id="btnPieChart" onclick="showChart('pie')">Ver Gráfico de Estado de Lecciones</button>
+        </div>
 
         <!-- Lienzo para el gráfico -->
         <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
         <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
-        <canvas id="pieChart"></canvas>
+        <div style="padding:50px">
+            <canvas id="pieChart"></canvas>
+        </div>
+
 
 
     </div>
