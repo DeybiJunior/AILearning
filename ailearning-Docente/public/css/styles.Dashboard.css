@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #533082; /* Color de fondo */
+    background-color: #5d2c85; /* Color de fondo */
     color: #000; /* Color del texto cambiado a negro */
     line-height: 1.6;
 }
@@ -30,7 +30,7 @@ body {
 
 .filter-group label {
     margin-bottom: 5px; /* Espacio entre la etiqueta y el campo */
-    color: #533082; /* Color de las etiquetas */
+    color: #5d2c85; /* Color de las etiquetas */
 }
 
 #filterGrado, #filterSeccion, #searchName {
@@ -59,7 +59,7 @@ body {
     align-items: center; /* Centrar verticalmente */
     justify-content: space-between; /* Espaciar elementos */
     padding: 15px; /* Espaciado interno */
-    background-color: #533082; /* Fondo del header */
+    background-color: #5d2c85; /* Fondo del header */
 }
 
 .logo {
@@ -79,7 +79,7 @@ body {
 #logoutButton {
     padding: 10px 15px; /* Espaciado interno */
     background-color: #EDDCFF; /* Color de fondo del botón */
-    color: #533082; /* Color del texto */
+    color: #5d2c85; /* Color del texto */
     border: none; /* Sin borde */
     border-radius: 5px; /* Bordes redondeados */
     cursor: pointer; /* Cursor de puntero */
@@ -108,7 +108,7 @@ h1{
 h2 {
     margin-top: 20px;
     font-size: 20px;
-    color: #533082; /* Color del subtítulo */
+    color: #5d2c85; /* Color del subtítulo */
     border-bottom: 2px solid #645A70; /* Línea debajo del subtítulo */
     padding-bottom: 10px; /* Espacio entre el texto y la línea */
 }

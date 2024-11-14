@@ -143,10 +143,10 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
                     val originalFrase = quizList[currentQuestionIndex].frase
 
                     // Find the position of the underscore in the phrase
-                    val underscoreIndex = originalFrase.indexOf("___")
+                    val underscoreIndex = originalFrase.indexOf("_")
                     if (underscoreIndex != -1) {
                         // Replace the underscore with the selected option's text
-                        val updatedText = originalFrase.replace("___", selectedOption.text.toString())
+                        val updatedText = originalFrase.replace("_", selectedOption.text.toString())
 
                         // Create a SpannableString to apply styles
                         val spannable = SpannableString(updatedText)

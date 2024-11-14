@@ -1,16 +1,60 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Índice</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #5d2c85; /* Color morado */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #fff;
+            border-top: 6px solid #5d2c85;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <script>
         window.onload = function() {
-            window.location.href = "logindocente.html"; // Cambia "login.html" por la ruta de tu página de inicio de sesión
+            setTimeout(function() {
+                window.location.href = "logindocente.html"; // Cambia a la ruta de tu página de inicio de sesión
+            }, 3000); // 3 segundos de retraso
         };
     </script>
 </head>
 <body>
-    <h1>Redirigiendo a la página de inicio de sesión...</h1>
+    <div class="container">
+        <img src="Recursos/Logo.png" alt="Imagen centrada" style="width:130px; height:130px;"> <!-- Ajusta el tamaño de la imagen según sea necesario -->
+        <h1>Ai Learning</h1>
+
+  
+        <div class="loader"></div>
+
+    </div>
 </body>
 </html>

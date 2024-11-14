@@ -46,12 +46,24 @@ class RecuperarPasswordActivity : AppCompatActivity() {
             if (email.isNotEmpty()) {
                 // Verificar si se alcanzó el límite de intentos
                 if (attemptCount < maxAttempts) {
-                    auth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(this, "Correo de recuperación enviado, verifica tu correo electrónico", Toast.LENGTH_SHORT).show()
+                    auth.fetchSignInMethodsForEmail(email)
+                        .addOnCompleteListener { fetchTask ->
+                            if (fetchTask.isSuccessful) {
+                                val signInMethods = fetchTask.result?.signInMethods
+                                if (signInMethods.isNullOrEmpty()) {
+                                    Toast.makeText(this, "El correo ingresado no está registrado", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    auth.sendPasswordResetEmail(email)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                Toast.makeText(this, "Correo de recuperación enviado, verifica tu correo electrónico", Toast.LENGTH_SHORT).show()
+                                            } else {
+                                                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                }
                             } else {
-                                Toast.makeText(this, "Error: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "Error al verificar el correo", Toast.LENGTH_SHORT).show()
                             }
                         }
 
@@ -72,6 +84,7 @@ class RecuperarPasswordActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, ingresa un correo electrónico", Toast.LENGTH_SHORT).show()
             }
         }
+
 
         // Acción para retroceder al inicio de sesión
         regresarLogin.setOnClickListener {

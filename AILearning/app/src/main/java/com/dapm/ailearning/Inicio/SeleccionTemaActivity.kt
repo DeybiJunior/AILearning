@@ -44,10 +44,10 @@ class SeleccionTemaActivity : AppCompatActivity() {
             } else {
                 val temaEspecificoLayout = findViewById<TextInputLayout>(R.id.temaEspecifico)
 
-                if (temaEspecifico.length < 50) {
+                if (temaEspecifico.length > 50) {
                     temaEspecificoLayout.error = getString(R.string.error_temaespecifico_longitud)
                 }
-                else if (!temaEspecifico.matches("^[a-zA-Z0-9]*$".toRegex())) {
+                else if (!temaEspecifico.matches("^[a-zA-Z0-9 ]*$".toRegex())) {
                     temaEspecificoLayout.error = getString(R.string.error_temaespecifico_formato)
                 } else {
                     temaEspecificoLayout.error = null

@@ -19,6 +19,10 @@ const loginForm = document.getElementById('loginForm');
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    
+    // Mostrar el cargador
+    document.getElementById('loader').style.display = 'flex';
+
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
@@ -28,19 +32,23 @@ loginForm.addEventListener('submit', (e) => {
             const user = userCredential.user;
 
             // Verificar si el usuario está en la colección users_docentes
-            return db.collection('users_docentes').doc(user.uid).get(); // Cambia esto si usas un método diferente para acceder a los documentos
+            return db.collection('users_docentes').doc(user.uid).get();
         })
         .then(doc => {
+            // Ocultar el cargador
+            document.getElementById('loader').style.display = 'none';
+            
             if (doc.exists) {
                 alert('Inicio de sesión exitoso');
-                window.location.href = 'Dashboard.html'; // Redirigir a index.html
+                window.location.href = 'Dashboard.html';
             } else {
-                // El usuario no es un docente
-                auth.signOut(); // Cierra la sesión
-                alert('No tienes permiso para acceder.'); // Mensaje de error
+                auth.signOut();
+                alert('No tienes permiso para acceder.');
             }
         })
         .catch(error => {
+            // Ocultar el cargador en caso de error
+            document.getElementById('loader').style.display = 'none';
             alert('Error en el inicio de sesión: ' + error.message);
         });
 });

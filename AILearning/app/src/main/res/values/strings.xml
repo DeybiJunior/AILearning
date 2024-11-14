@@ -35,7 +35,7 @@
     <string name="error_login_failure">Error al iniciar sesión: %1$s</string>
     <string name="error_section">La sección es obligatoria</string>
     <string name="error_grade">El grado debe ser un número válido</string>
-    <string name="error_temaespecifico_longitud">El tema específico debe tener al menos 50 caracteres.</string>
+    <string name="error_temaespecifico_longitud">El tema específico debe tener menos de 50 caracteres.</string>
     <string name="error_temaespecifico_formato">El tema específico solo puede contener letras y números.</string>
 
 

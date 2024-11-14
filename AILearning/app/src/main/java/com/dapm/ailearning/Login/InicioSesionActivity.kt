@@ -237,7 +237,7 @@ class InicioSesionActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE) // Cambia el nombre aquí
         val editor = sharedPreferences.edit()
         editor.putString("user_id", usuario.id)
-        editor.putString("user_nombres", usuario.nombres) // Manten la clave coherente
+        editor.putString("user_nombres", usuario.nombres)
         editor.putString("user_apellidos", usuario.apellidos)
         editor.putInt("user_edad", usuario.edad)
         editor.putInt("user_nivel", usuario.nivel)
