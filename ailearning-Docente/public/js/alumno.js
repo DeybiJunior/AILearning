@@ -69,46 +69,72 @@ lessonsTable.style.display = 'table';
 lessonsChartCanvas.style.display = 'none';
 durationChartCanvas.style.display = 'none'; // Asegúrate de ocultar el gráfico de duración al inicio
 pieChartCanvas.style.display = 'none';
-document.getElementById("btnLessonsChart").style.display = 'none';
-document.getElementById("btnDurationChart").style.display = 'none';
-document.getElementById("btnPieChart").style.display = 'none';
+
+
 
 // Función para mostrar la tabla
 function showTable() {
     lessonsTable.style.display = 'table';
     lessonsChartCanvas.style.display = 'none';
-    durationChartCanvas.style.display = 'none'; // Oculta el gráfico de duración
+    durationChartCanvas.style.display = 'none';
     pieChartCanvas.style.display = 'none';
     document.getElementById("btnLessonsChart").style.display = 'none';
     document.getElementById("btnDurationChart").style.display = 'none';
     document.getElementById("btnPieChart").style.display = 'none';
+
+    // Oculta el selector de fecha
+    document.getElementById("week-picker").style.display = 'none';
+    document.querySelector("label[for='week-picker']").style.display = 'none';
+    document.querySelector("label[for='chart-selector']").style.display = 'none';
+    document.getElementById("filter-button").style.display = 'none';
+    document.getElementById("chart-selector").style.display = 'none';
+
 }
+
 
 
 // Función para mostrar el gráfico correspondiente
 function showChart(chartType) {
     // Ocultar todos los gráficos
-    document.getElementById("lessonsChart").style.display = 'none';
-    document.getElementById("durationChart").style.display = 'none';
-    document.getElementById("pieChart").style.display = 'none';
+    document.getElementById("chart-selector").style.display = 'block';
 
-    // Mostrar el gráfico correspondiente
-    if (chartType === 'lessons') {
-        document.getElementById("lessonsChart").style.display = 'block';
-    } else if (chartType === 'duration') {
-        document.getElementById("durationChart").style.display = 'block';
-    } else if (chartType === 'pie') {
-        document.getElementById("pieChart").style.display = 'block';
-    }
 
     // Mostrar la vista de gráficos (y ocultar la tabla si está visible)
     document.getElementById("lessonsTable").style.display = 'none';
 
-    // Mostrar los botones (si necesitas hacer algo adicional con ellos)
-    document.getElementById("btnLessonsChart").style.display = 'block';
-    document.getElementById("btnDurationChart").style.display = 'block';
-    document.getElementById("btnPieChart").style.display = 'block';
+    // Muestra el selector de fecha
+    document.getElementById("week-picker").style.display = 'block';
+    document.querySelector("label[for='week-picker']").style.display = 'block';
+    document.querySelector("label[for='chart-selector']").style.display = 'block';
+    document.getElementById("filter-button").style.display = 'block';
+
+
+    document.getElementById("chart-selector").addEventListener("change", function() {
+        // Obtiene el valor seleccionado
+        const selectedChart = this.value;
+    
+        // Oculta todos los gráficos
+        document.getElementById("lessonsChart").style.display = 'none';
+        document.getElementById("durationChart").style.display = 'none';
+        document.getElementById("pieChart").style.display = 'none';
+    
+        // Muestra el gráfico correspondiente
+        if (selectedChart === "lessonsChart") {
+            document.getElementById("lessonsChart").style.display = 'block';
+        } else if (selectedChart === "durationChart") {
+            document.getElementById("durationChart").style.display = 'block';
+        } else if (selectedChart === "pieChart") {
+            document.getElementById("pieChart").style.display = 'block';
+        }
+    });
+    
+    // Mostrar lessonsChart por defecto al cargar la página
+    document.getElementById("lessonsChart").style.display = 'block';
+    
+
 }
+
+
 
 // Agregar eventos a los botones
 tableViewButton.addEventListener('click', showTable);
@@ -116,9 +142,10 @@ chartViewButton.addEventListener('click', showChart);
 
 
 
+const lessons = [];
+
 // Mostrar las lecciones del alumno y renderizar el gráfico
 db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
-    const lessons = [];
     if (querySnapshot.empty) {
         lessonsTableBody.innerHTML = `<tr><td colspan="7">No hay lecciones disponibles.</td></tr>`;
     } else {
@@ -331,22 +358,100 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
 
 
 
+
+
+
+// Función para mostrar la alerta
+function showAlert(message) {
+    const alertContainer = document.getElementById('alert-container');
+    alertContainer.textContent = message;
+    alertContainer.style.display = 'block';
+}
+
+// Función para ocultar la alerta
+function hideAlert() {
+    const alertContainer = document.getElementById('alert-container');
+    alertContainer.style.display = 'none';
+}
+
+// Función para obtener el rango de fechas de la semana de una fecha seleccionada
+function getWeekRange(date) {
+    const startOfWeek = new Date(date);
+    const endOfWeek = new Date(date);
+
+    // Ajustar al inicio de la semana (lunes)
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // Ajustar al final de la semana (domingo)
+    endOfWeek.setDate(endOfWeek.getDate() - endOfWeek.getDay() + 7);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    return { start: startOfWeek, end: endOfWeek };
+}
+
+// Función para filtrar lecciones por semana
+function filtrarsemanda() {
+    const selectedDate = document.getElementById('week-picker').value;
+    if (!selectedDate) {
+        alert("Por favor, selecciona una fecha.");
+        return;
+    }
+
+    const selectedDateObject = new Date(selectedDate);
+    const { start, end } = getWeekRange(selectedDateObject);
+
+    // Filtrar las lecciones por la semana seleccionada
+    const filteredLessons = lessons.filter(lesson => {
+        const lessonDate = new Date(lesson.startTime);
+        return lessonDate >= start && lessonDate <= end;
+    });
+
+    // Mostrar/ocultar alerta dependiendo del resultado del filtro
+    if (filteredLessons.length === 0) {
+        showAlert("No hay datos disponibles para la semana seleccionada.");
+    } else {
+        hideAlert();
+        // Renderizar los gráficos con las lecciones filtradas
+        renderLessonsChart(filteredLessons);
+        renderDurationChart(filteredLessons);
+        renderPieChart(filteredLessons);
+        showChart();
+    }
+}
+
+// Añadir evento al botón para activar el filtrado
+document.getElementById('filter-button').addEventListener('click', filtrarsemanda);
+
+
+
+
+
+
+
+
 // Función para renderizar el gráfico
 function renderLessonsChart(lessons) {
-    const labels = lessons.map(lesson => lesson.tema); // Extrae los temas de las lecciones
-    const data = lessons.map(lesson => lesson.puntaje); // Cambiado a puntaje
+    const labels = lessons.map(lesson => lesson.tema);
+    const data = lessons.map(lesson => lesson.puntaje);
+    const fehca = lessons.filter(lesson => lesson.startTime);
 
-    console.log(lessons); // Para verificar qué datos se están pasando
+    console.log(lessons);
 
     const ctx = lessonsChartCanvas.getContext('2d');
 
-    if (labels.length === 0 || data.length === 0) {
-        console.error("No hay datos para renderizar el gráfico");
-        return; // Evitar renderizar si no hay datos
+    // Verificar si ya existe un gráfico y destruirlo
+    if (window.lessonsChartInstance) {
+        window.lessonsChartInstance.destroy();
     }
 
-    const lessonsChart = new Chart(ctx, {
-        type: 'bar', // Tipo de gráfico (puedes cambiar a 'line' para un gráfico de líneas)
+    if (labels.length === 0 || data.length === 0) {
+        console.error("No hay datos para renderizar el gráfico");
+        return;
+    }
+
+    window.lessonsChartInstance = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{
@@ -367,28 +472,42 @@ function renderLessonsChart(lessons) {
         }
     });
 }
-// Función para renderizar el gráfico de duración
-function renderDurationChart(lessons) {
-    const labels = lessons.map(lesson => lesson.tema); // Extrae los temas de las lecciones
-    const data = lessons.map(lesson => lesson.duration / 60000); // Convertir a minutos
 
-    const ctx = durationChartCanvas.getContext('2d'); // Canvas para el gráfico de duración
+function formatDuration(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function renderDurationChart(lessons) {
+    const labels = lessons.map(lesson => lesson.tema);
+    const data = lessons.map(lesson => lesson.duration); // Mantener en milisegundos
+
+    const ctx = durationChartCanvas.getContext('2d');
+
+    // Verificar si ya existe un gráfico y destruirlo
+    if (window.durationChartInstance) {
+        window.durationChartInstance.destroy();
+    }
 
     if (labels.length === 0 || data.length === 0) {
         console.error("No hay datos para renderizar el gráfico de duración");
-        return; // Evitar renderizar si no hay datos
+        return;
     }
 
-    const durationChart = new Chart(ctx, {
-        type: 'bar', // Tipo de gráfico (puedes cambiar a 'line' para un gráfico de líneas)
+    window.durationChartInstance = new Chart(ctx, {
+        type: 'line', // Gráfico de líneas
         data: {
             labels: labels,
             datasets: [{
-                label: 'Duración de la Lección (minutos)',
-                data: data,
+                label: 'Duración de la Lección',
+                data: data, // Mantener los milisegundos como están
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1
+                borderWidth: 2,
+                tension: 0.4, // Suavizar las líneas
+                fill: true // Rellenar debajo de la línea
             }]
         },
         options: {
@@ -396,15 +515,29 @@ function renderDurationChart(lessons) {
             scales: {
                 y: {
                     beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return formatDuration(value); // Formatear en MM:SS
+                        }
+                    },
                     title: {
                         display: true,
-                        text: 'Duración (minutos)' // Título del eje Y
+                        text: 'Duración en Minutos'
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Tema' // Título del eje X
+                        text: 'Tema'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Duración: ${formatDuration(context.raw)}`;
+                        }
                     }
                 }
             }
@@ -412,40 +545,48 @@ function renderDurationChart(lessons) {
     });
 }
 
+
+
+
 // Función para renderizar el gráfico de pastel
 function renderPieChart(lessons) {
-    // Contar lecciones completadas y en progreso
-    const completedCount = lessons.filter(lesson => lesson.estado === true).length; // Contar lecciones completadas
-    const inProgressCount = lessons.length - completedCount; // Contar lecciones en proceso
+    const completedCount = lessons.filter(lesson => lesson.estado === true).length;
+    const inProgressCount = lessons.length - completedCount;
+    const fehca = lessons.filter(lesson => lesson.startTime);
 
-    const ctx = pieChartCanvas.getContext('2d'); // Canvas para el gráfico de pastel
+    const ctx = pieChartCanvas.getContext('2d');
+
+    // Verificar si ya existe un gráfico y destruirlo
+    if (window.pieChartInstance) {
+        window.pieChartInstance.destroy();
+    }
 
     if (completedCount === 0 && inProgressCount === 0) {
         console.error("No hay datos para renderizar el gráfico de pastel");
-        return; // Evitar renderizar si no hay datos
+        return;
     }
 
-    const pieChart = new Chart(ctx, {
-        type: 'pie', // Tipo de gráfico
+    window.pieChartInstance = new Chart(ctx, {
+        type: 'pie',
         data: {
             labels: ['Completadas', 'En Proceso'],
             datasets: [{
                 data: [completedCount, inProgressCount],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)', // Color para completadas
-                    'rgba(153, 102, 255, 0.6)' // Color para en proceso
+                    'rgba(75, 192, 192, 0.6)', 
+                    'rgba(153, 102, 255, 0.6)'
                 ],
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Desactiva la relación de aspecto
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'top',
                     labels: {
                         font: {
-                            size: 14 // Tamaño de la fuente de la leyenda
+                            size: 14
                         }
                     }
                 },
@@ -453,16 +594,14 @@ function renderPieChart(lessons) {
                     display: true,
                     text: 'Estado de las Lecciones',
                     font: {
-                        size: 18 // Tamaño de la fuente del título
+                        size: 18
                     }
                 }
             },
-            // Puedes ajustar el tamaño del gráfico usando los siguientes valores
-            aspectRatio: 1, // Relación de aspecto cuadrada para el gráfico
+            aspectRatio: 1,
         }
     });
 
-    // Cambiar el tamaño del canvas (gráfico) sin afectar el texto
-    pieChartCanvas.style.width = '150px'; // Reducción del tamaño
-    pieChartCanvas.style.height = '150px'; // Reducción del tamaño
+    pieChartCanvas.style.width = '150px';
+    pieChartCanvas.style.height = '150px';
 }

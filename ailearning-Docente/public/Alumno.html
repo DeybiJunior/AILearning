@@ -42,7 +42,8 @@
             </button>
         </div>
         
-        
+        <div id="alert-container" style="display:none;"></div>
+
         
         <table id="lessonsTable">
             <thead>
@@ -61,21 +62,42 @@
             </thead>
             <tbody></tbody>
         </table>
-        <!-- Botones para seleccionar los gráficos -->
-        <div style="display: flex; justify-content: center; gap: 10px;">
-            <button id="btnLessonsChart" onclick="showChart('lessons')">Ver Gráfico de Puntaje</button>
-            <button id="btnDurationChart" onclick="showChart('duration')">Ver Gráfico de Duración</button>
-            <button id="btnPieChart" onclick="showChart('pie')">Ver Gráfico de Estado de Lecciones</button>
-        </div>
 
-        <!-- Lienzo para el gráfico -->
+        <!-- Calendario para seleccionar una fecha -->
+        <label for="week-picker">Selecciona una fecha para la semana:</label>
+        <input type="date" id="week-picker">
+        <button id="filter-button">Filtrar semana</button>
+
+        
+
+
+
+        <label for="chart-selector">Selecciona un gráfico:</label>
+        <select id="chart-selector">
+            <option value="lessonsChart">Gráfico de lecciones</option>
+            <option value="durationChart">Gráfico de duración</option>
+            <option value="pieChart">Gráfico circular</option>
+        </select>
+
+
+            <!-- Lienzo para el gráfico -->
+            <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
+            <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
+            <div style="padding:50px">
+                <canvas id="pieChart"></canvas>
+            </div>
+
+</div>
+
+
+
+
+        <!-- Lienzo para los gráficos -->
         <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
         <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
-        <div style="padding:50px">
+        <div style="padding: 50px;">
             <canvas id="pieChart"></canvas>
         </div>
-
-
 
     </div>
 
@@ -86,5 +108,6 @@
             window.history.back(); 
         });
     </script>
+
 </body>
 </html>
