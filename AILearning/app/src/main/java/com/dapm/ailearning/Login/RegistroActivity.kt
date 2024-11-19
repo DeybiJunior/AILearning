@@ -171,8 +171,6 @@ class RegistroActivity : AppCompatActivity() {
             edadLayout.error = getString(R.string.error_edad)
             return
         }
-
-// Validación de correo electrónico
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailLayout.error = getString(R.string.error_email)
             return

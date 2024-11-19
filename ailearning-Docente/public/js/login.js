@@ -1,13 +1,4 @@
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyB4-pMStnoDR2vcY-HDYTM8QBfWKwQDX2U",
-    authDomain: "ailearning-8e9ab.firebaseapp.com",
-    projectId: "ailearning-8e9ab",
-    storageBucket: "ailearning-8e9ab.appspot.com",
-    messagingSenderId: "519801064675",
-    appId: "1:519801064675:web:54c94242246a57ed6f09d6",
-    measurementId: "G-H4VKHQQVKW"
-};
+import firebaseConfig from './firebaseConfig.js';  // Asegúrate de que la ruta sea correcta
 
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
@@ -17,38 +8,73 @@ const db = firebase.firestore(); // Inicializa Firestore
 // Manejar el inicio de sesión
 const loginForm = document.getElementById('loginForm');
 
+window.addEventListener('DOMContentLoaded', () => {
+    const alertContainer = document.getElementById('alert-container');
+    const message = sessionStorage.getItem('logoutMessage');
+    const messageType = sessionStorage.getItem('messageType');
+
+    if (message) {
+        alertContainer.textContent = message;
+        if (messageType === 'success') {
+            alertContainer.classList.add('success');
+        }
+        alertContainer.style.display = 'block';
+
+        // Borrar el mensaje después de mostrarlo
+        sessionStorage.removeItem('logoutMessage');
+        sessionStorage.removeItem('messageType');
+
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+            alertContainer.style.display = 'none';
+        }, 3000);
+    }
+});
+
+
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
     // Mostrar el cargador
     document.getElementById('loader').style.display = 'flex';
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    // Validar inicio de sesión en Firebase Authentication
     auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
             const user = userCredential.user;
 
-            // Verificar si el usuario está en la colección users_docentes
             return db.collection('users_docentes').doc(user.uid).get();
         })
         .then(doc => {
             // Ocultar el cargador
             document.getElementById('loader').style.display = 'none';
-            
+        
             if (doc.exists) {
-                alert('Inicio de sesión exitoso');
-                window.location.href = 'Dashboard.html';
+                sessionStorage.setItem('successMessage', 'Inicio de sesión exitoso'); // Guardar mensaje en sessionStorage
+                window.location.href = 'Dashboard.html'; // Redirigir inmediatamente
             } else {
                 auth.signOut();
-                alert('No tienes permiso para acceder.');
+                showAlert('No tienes permiso para acceder.');
             }
         })
         .catch(error => {
             // Ocultar el cargador en caso de error
             document.getElementById('loader').style.display = 'none';
-            alert('Error en el inicio de sesión: ' + error.message);
+            showAlert('Error en el inicio de sesión: ' + error.message);
         });
 });
+
+
+function showAlert(message, isSuccess = false) {
+    const alertContainer = document.getElementById('alert-container');
+    alertContainer.textContent = message;
+    alertContainer.className = isSuccess ? 'success' : ''; // Aplica la clase "success" si es un mensaje positivo
+    alertContainer.style.display = 'block';
+
+    // Ocultar el mensaje después de 3 segundos
+    setTimeout(() => {
+        alertContainer.style.display = 'none';
+    }, 3000);
+}

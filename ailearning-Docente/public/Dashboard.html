@@ -5,56 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="css/styles.Dashboard.css">
-    
+    <!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- Cargar Firebase con compatibilidad -->
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <h3>¿Deseas cerrar sesión?</h3>
+            <div class="modal-actions">
+                <button id="confirmLogout">Sí</button>
+                <button id="cancelLogout">No</button>
+            </div>
+        </div>
+    </div>
+    
+
     <header>
         <div class="header-container">
             <img src="Recursos/Logo.png" alt="Logo" class="logo">
-            <h1>Dashboard</h1>
             <div class="profile-info">
-                <span id="teacherName">Nombre del Docente</span>
-                <button id="logoutButton">Logout</button>
+                <span id="teacherName"><i class="bi bi-person-circle"></i>Docente</span>
+                <!-- Icono de logout agregado al botón -->
+                <button id="logoutButton">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
             </div>
+            
         </div>
     </header>
     
+    <h1>Bienvenido a AILearning</h1>
 
 
 <div class="container">
-    <h2>Alumnos del Docente</h2>
+
+    <div id="alert-container"></div>
+
+    <h2>Alumnos Registrados</h2>
     <div class="filters">
         <input type="text" id="searchName" placeholder="Buscar por nombre" />
         <select id="filterGrado">
             <option value="">Seleccionar Grado</option>
             <option value="1">1er Grado</option>
-            <option value="2">2er Grado</option>
+            <option value="2">2do Grado</option>
             <option value="3">3er Grado</option>
-            <option value="4">4er Grado</option>
-            <option value="5">5er Grado</option>
-
-            <!-- Añadir más opciones según sea necesario -->
+            <option value="4">4to Grado</option>
+            <option value="5">5to Grado</option>
+            <!-- Añadir más opciones si es necesario -->
         </select>
         <select id="filterSeccion">
             <option value="">Seleccionar Sección</option>
             <option value="A">Sección A</option>
             <option value="B">Sección B</option>
+            <!-- Añadir más opciones si es necesario -->
         </select>
-        <button id="applyFilters">Aplicar Filtros</button>
-        
+        <button id="applyFilters">
+            <i class="bi bi-funnel"></i> Aplicar Filtros
+        </button>
     </div>
-    
+</div>
+
+<div class="container">
     <table id="userTable">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Edad</th>
-                <th>Nivel</th>
                 <th>Grado</th> 
                 <th>Sección</th> 
                 <th>Lecciones Completadas</th>
@@ -65,7 +88,7 @@
 </div>
     
 
-    <script src="js/dashboard.js"></script>
-    <script src="js/logout.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/logout.js"></script>
 </body>
 </html>

@@ -1,13 +1,4 @@
-// Configuración de Firebase 
-const firebaseConfig = {
-    apiKey: "AIzaSyB4-pMStnoDR2vcY-HDYTM8QBfWKwQDX2U",
-    authDomain: "ailearning-8e9ab.firebaseapp.com",
-    projectId: "ailearning-8e9ab",
-    storageBucket: "ailearning-8e9ab.appspot.com",
-    messagingSenderId: "519801064675",
-    appId: "1:519801064675:web:54c94242246a57ed6f09d6",
-    measurementId: "G-H4VKHQQVKW"
-};
+import firebaseConfig from './firebaseConfig.js';  // Asegúrate de que la ruta sea correcta
 
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
@@ -25,6 +16,27 @@ auth.onAuthStateChanged(user => {
         obtenerNombreDocente(user.uid);
     }
 });
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const alertContainer = document.getElementById('alert-container');
+    const message = sessionStorage.getItem('successMessage');
+
+    if (message) {
+        alertContainer.textContent = message;
+        alertContainer.className = 'success'; // Estilo para mensajes de éxito
+        alertContainer.style.display = 'block';
+
+        // Eliminar el mensaje después de mostrarlo
+        sessionStorage.removeItem('successMessage');
+
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+            alertContainer.style.display = 'none';
+        }, 3000);
+    }
+});
+
 
 // Función para cargar los datos del dashboard
 // Función para cargar los datos del dashboard
@@ -48,7 +60,6 @@ function cargarUsuarios(docenteId) {
                 <td>${userData.nombres}</td>
                 <td>${userData.apellidos}</td>
                 <td>${userData.edad}</td>
-                <td>${userData.nivel}</td>
                 <td>${userData.grado}</td>
                 <td>${userData.seccion}</td>
                 <td id="completed-${doc.id}">0</td>
@@ -125,8 +136,8 @@ function obtenerNombreDocente(uid) {
         .then(doc => {
             if (doc.exists) {
                 const docenteData = doc.data();
-                // Mostrar el nombre del docente en el dashboard
-                document.getElementById('teacherName').innerText = `${docenteData.nombre} ${docenteData.apellido}`;
+                // Mostrar el nombre del docente con ícono en el dashboard
+                document.getElementById('teacherName').innerHTML = `<i class="bi bi-person-circle"></i> ${docenteData.nombre} ${docenteData.apellido}`;
             } else {
                 console.error("No se encontraron datos del docente");
             }
@@ -135,4 +146,3 @@ function obtenerNombreDocente(uid) {
             console.error("Error al obtener los datos del docente: ", error);
         });
 }
-

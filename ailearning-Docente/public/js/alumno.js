@@ -1,17 +1,22 @@
-// Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyB4-pMStnoDR2vcY-HDYTM8QBfWKwQDX2U",
-    authDomain: "ailearning-8e9ab.firebaseapp.com",
-    projectId: "ailearning-8e9ab",
-    storageBucket: "ailearning-8e9ab.appspot.com",
-    messagingSenderId: "519801064675",
-    appId: "1:519801064675:web:54c94242246a57ed6f09d6",
-    measurementId: "G-H4VKHQQVKW"
-};
+import firebaseConfig from './firebaseConfig.js';  // Asegúrate de que la ruta sea correcta
+
 
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
+
+// Verificar el estado de autenticación del usuario
+auth.onAuthStateChanged(user => {
+    if (!user) {
+        // Si no hay usuario, redirigir a la página de inicio de sesión
+        window.location.href = 'logindocente.html';
+    } else {
+        // Si hay un usuario autenticado, cargar los datos del dashboard
+        cargarUsuarios(user.uid);
+        obtenerNombreDocente(user.uid);
+    }
+});
 
 // Obtener el ID del usuario desde la URL
 const params = new URLSearchParams(window.location.search);
@@ -46,12 +51,19 @@ Promise.all([totalLessonsPromise, completedLessonsPromise]) // Esperar ambas pro
     const totalCount = totalLessonsSnapshot.size; // Total de lecciones
     const completedCount = completedLessonsSnapshot.size; // Lecciones completadas
     
-    // Mostrar el número de lecciones en el formato deseado
-    lessonsCompleted.innerHTML = `<p><strong>Lecciones Completadas:</strong> ${completedCount}/${totalCount}</p>`;
+    // Calcular el nivel
+    const level = Math.min(Math.floor(completedCount / 5), 10); // Cada 5 lecciones es 1 nivel, con un máximo de 10 niveles
+
+    // Mostrar el número de lecciones y el nivel
+    lessonsCompleted.innerHTML = `
+      <p><strong>Lecciones Completadas:</strong> ${completedCount}/${totalCount}</p>
+      <p><strong>Nivel:</strong> ${level}</p>
+    `;
   })
   .catch(error => {
     console.error("Error al obtener las lecciones:", error);
   });
+
 
 
 // Mostrar las lecciones del alumno
@@ -62,6 +74,7 @@ const durationChartCanvas = document.getElementById('durationChart'); // Canvas 
 const pieChartCanvas= document.getElementById('pieChart');
 const tableViewButton = document.getElementById('tableViewButton');
 const chartViewButton = document.getElementById('chartViewButton');
+document.querySelector(".chart-filter-container").style.display = 'none';
 
 
 // Mostrar la tabla al cargar
@@ -71,9 +84,11 @@ durationChartCanvas.style.display = 'none'; // Asegúrate de ocultar el gráfico
 pieChartCanvas.style.display = 'none';
 
 
-
 // Función para mostrar la tabla
 function showTable() {
+
+    document.querySelector(".chart-filter-container").style.display = 'none';
+
     lessonsTable.style.display = 'table';
     lessonsChartCanvas.style.display = 'none';
     durationChartCanvas.style.display = 'none';
@@ -82,43 +97,40 @@ function showTable() {
     document.getElementById("btnDurationChart").style.display = 'none';
     document.getElementById("btnPieChart").style.display = 'none';
 
-    // Oculta el selector de fecha
+    // Ocultar el selector de fecha y la forma de gráficos
     document.getElementById("week-picker").style.display = 'none';
     document.querySelector("label[for='week-picker']").style.display = 'none';
     document.querySelector("label[for='chart-selector']").style.display = 'none';
     document.getElementById("filter-button").style.display = 'none';
     document.getElementById("chart-selector").style.display = 'none';
 
+    // Ocultar el contenedor de la forma (para gráficos)
+    document.querySelector(".chart-filter-container").style.display = 'none';
 }
-
-
 
 // Función para mostrar el gráfico correspondiente
 function showChart(chartType) {
-    // Ocultar todos los gráficos
-    document.getElementById("chart-selector").style.display = 'block';
-
-
     // Mostrar la vista de gráficos (y ocultar la tabla si está visible)
     document.getElementById("lessonsTable").style.display = 'none';
 
-    // Muestra el selector de fecha
+    // Mostrar el contenedor de gráficos y el selector de fecha
+    document.querySelector(".chart-filter-container").style.display = 'block';
     document.getElementById("week-picker").style.display = 'block';
     document.querySelector("label[for='week-picker']").style.display = 'block';
     document.querySelector("label[for='chart-selector']").style.display = 'block';
     document.getElementById("filter-button").style.display = 'block';
+    document.getElementById("chart-selector").style.display = 'block';
 
-
+    // Agregar el event listener para cambiar los gráficos según el selector
     document.getElementById("chart-selector").addEventListener("change", function() {
-        // Obtiene el valor seleccionado
         const selectedChart = this.value;
     
-        // Oculta todos los gráficos
+        // Ocultar todos los gráficos
         document.getElementById("lessonsChart").style.display = 'none';
         document.getElementById("durationChart").style.display = 'none';
         document.getElementById("pieChart").style.display = 'none';
     
-        // Muestra el gráfico correspondiente
+        // Mostrar el gráfico correspondiente
         if (selectedChart === "lessonsChart") {
             document.getElementById("lessonsChart").style.display = 'block';
         } else if (selectedChart === "durationChart") {
@@ -127,19 +139,19 @@ function showChart(chartType) {
             document.getElementById("pieChart").style.display = 'block';
         }
     });
-    
+
     // Mostrar lessonsChart por defecto al cargar la página
     document.getElementById("lessonsChart").style.display = 'block';
-    
-
 }
 
+// Agregar eventos a los botones (asegurándote de no interferir con la visibilidad)
+tableViewButton.addEventListener('click', function() {
+    showTable();
+});
 
-
-// Agregar eventos a los botones
-tableViewButton.addEventListener('click', showTable);
-chartViewButton.addEventListener('click', showChart);
-
+chartViewButton.addEventListener('click', function() {
+    showChart();
+});
 
 
 const lessons = [];
@@ -296,7 +308,6 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                 <td>${lessonData.estado ? 'Completado' : 'En Proceso'}</td>
                 <td>${lessonData.puntaje}</td>
                 <td>${startTime}</td>
-                <td>${completionDate}</td>
                 <td>${minutes}:${seconds.toString().padStart(2, '0')} min</td>
                 <td>
                     <button id="btnAbrirModal-${uniqueId}" class="ver-leccion">

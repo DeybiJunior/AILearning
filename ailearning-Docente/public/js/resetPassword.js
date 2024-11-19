@@ -1,21 +1,13 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Configuración de Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyB4-pMStnoDR2vcY-HDYTM8QBfWKwQDX2U",
-        authDomain: "ailearning-8e9ab.firebaseapp.com",
-        projectId: "ailearning-8e9ab",
-        storageBucket: "ailearning-8e9ab.appspot.com",
-        messagingSenderId: "519801064675",
-        appId: "1:519801064675:web:54c94242246a57ed6f09d6",
-        measurementId: "G-H4VKHQQVKW"
-    };
+import firebaseConfig from './firebaseConfig.js';
 
+document.addEventListener('DOMContentLoaded', function () {
     // Inicializar Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     // Manejar la recuperación de contraseña
     const resetForm = document.getElementById('resetForm');
+    const alertContainer = document.getElementById('alert-container');
 
     resetForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -24,14 +16,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (email) {
             auth.sendPasswordResetEmail(email)
                 .then(() => {
-                    alert('Se ha enviado un enlace para restablecer la contraseña a ' + email);
+                    sessionStorage.setItem('logoutMessage', 'Se ha enviado un enlace para restablecer la contraseña a ' + email); // Guardar mensaje en sessionStorage
+                    sessionStorage.setItem('messageType', 'success'); // Guardar tipo de mensaje
                     window.location.href = 'logindocente.html'; // Redirigir a login
                 })
                 .catch(error => {
-                    alert('Error al enviar el correo de restablecimiento: ' + error.message);
+                    showAlert('Error al enviar el correo de restablecimiento: ' + error.message, 'error');
                 });
         } else {
-            alert('Por favor, ingresa tu correo electrónico.');
+            showAlert('Por favor, ingresa tu correo electrónico.', 'error');
         }
     });
+
+    function showAlert(message, isSuccess = false) {
+        const alertContainer = document.getElementById('alert-container');
+        alertContainer.textContent = message;
+        alertContainer.className = isSuccess ? 'success' : ''; // Aplica la clase "success" si es un mensaje positivo
+        alertContainer.style.display = 'block';
+    
+        // Ocultar el mensaje después de 3 segundos
+        setTimeout(() => {
+            alertContainer.style.display = 'none';
+        }, 5000);
+    }
 });

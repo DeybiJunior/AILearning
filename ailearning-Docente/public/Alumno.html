@@ -30,9 +30,11 @@
                 <!-- Información de lecciones completadas -->
             </div>
         </div>
+        
+    </div>
 
-        <h2>Lecciones</h2>
-        <!-- Botones para elegir vista -->
+    <div class="container">
+
         <div class="button-container">
             <button id="tableViewButton">
                 <i class="fas fa-table"></i> Ver en Tabla
@@ -41,7 +43,9 @@
                 <i class="fas fa-chart-bar"></i> Ver en Gráfico
             </button>
         </div>
-        
+
+        <h2>Resumen de Lecciones</h2>
+
         <div id="alert-container" style="display:none;"></div>
 
         
@@ -54,8 +58,7 @@
                     <th>Tema</th>
                     <th>Estado</th>
                     <th>Puntaje</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha de Fin</th>
+                    <th>Fecha</th>
                     <th>Duración</th>
                     <th>Ver Lección</th>
                 </tr>
@@ -63,45 +66,35 @@
             <tbody></tbody>
         </table>
 
-        <!-- Calendario para seleccionar una fecha -->
-        <label for="week-picker">Selecciona una fecha para la semana:</label>
-        <input type="date" id="week-picker">
-        <button id="filter-button">Filtrar semana</button>
 
-        
+    <div class="chart-filter-container">
+        <div class="filter-row">
+            <div class="date-picker-container">
+                <label for="week-picker">Filtrar por semana:</label>
+                <input type="date" id="week-picker">
+                <button id="filter-button">Filtrar semana</button>
+            </div>
+            <div class="chart-selector-container">
+                <label for="chart-selector">Seleccionar gráfico:</label>
+                <select id="chart-selector">
+                    <option value="lessonsChart">Puntaje / Temas</option>
+                    <option value="durationChart">Tiempo / Temas</option>
+                    <option value="pieChart">Lecciones Completas</option>
+                </select>
+            </div>
+        </div>
 
 
-
-        <label for="chart-selector">Selecciona un gráfico:</label>
-        <select id="chart-selector">
-            <option value="lessonsChart">Gráfico de lecciones</option>
-            <option value="durationChart">Gráfico de duración</option>
-            <option value="pieChart">Gráfico circular</option>
-        </select>
-
-
-            <!-- Lienzo para el gráfico -->
+        <div class="charts-container">
             <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
             <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
             <div style="padding:50px">
                 <canvas id="pieChart"></canvas>
             </div>
-
-</div>
-
-
-
-
-        <!-- Lienzo para los gráficos -->
-        <canvas id="lessonsChart" width="400" height="200" style="display: none;"></canvas>
-        <canvas id="durationChart" width="400" height="200" style="display: none;"></canvas>
-        <div style="padding: 50px;">
-            <canvas id="pieChart"></canvas>
         </div>
-
     </div>
-
-    <script src="js/alumno.js"></script>
+    
+    <script type="module" src="js/alumno.js"></script>
 
     <script>
         document.getElementById('backButton').addEventListener('click', function() {

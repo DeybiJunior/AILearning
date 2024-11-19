@@ -69,12 +69,37 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                     alertDialog.dismiss()  // Cierra el cuadro de diálogo
                 }
 
+
+
                 buttonConfirm.setOnClickListener {
-                    // Eliminar la lección si el usuario confirma
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
                     leccionViewModel.deleteLeccion(leccion)
                     Toast.makeText(this, "Lección eliminada", Toast.LENGTH_SHORT).show()
                     alertDialog.dismiss()  // Cierra el cuadro de diálogo
+
+                    if (userId != null) {
+                        // Eliminar de Firestore
+                        db.collection("users")
+                            .document(userId)
+                            .collection("lecciones")
+                            .document(leccion.lessonId.toString())
+                            .delete()
+                            .addOnSuccessListener {
+                                // Si se elimina correctamente de Firebase, eliminar localmente
+                                leccionViewModel.deleteLeccion(leccion)
+                                Toast.makeText(this, "Lección eliminada.", Toast.LENGTH_SHORT).show()
+                                alertDialog.dismiss()  // Cierra el cuadro de diálogo
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Firebase", "Error al eliminar la lección. ${leccion.lessonId}", e)
+                                Toast.makeText(this, "Error al eliminar la lección.", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "Error: Usuario no autenticado.", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
 
                 alertDialog.show()
             }

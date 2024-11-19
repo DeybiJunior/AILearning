@@ -11,12 +11,195 @@ body {
     line-height: 1.6;
 }
 
+
+
+.filter-row {
+    display: flex;
+    justify-content: space-evenly; /* Espacios iguales entre elementos */
+    align-items: center; /* Centra verticalmente los elementos */
+    padding: 10px;
+}
+
+.date-picker-container, .chart-selector-container {
+    text-align: center; /* Opcional: Centra el texto dentro de los contenedores */
+}
+
+
+
+.date-picker-container {
+    text-align: left; /* Alinea el contenido a la izquierda */
+    
+}
+
+.chart-selector-container {
+    text-align: right; /* Alinea el contenido a la derecha */
+}
+
+
+
+/* Diseño general para el contenedor del filtro de gráfico */
+.chart-filter-container {
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrar el contenedor */
+    padding: 20px;
+    align-content: center;
+    justify-content: center;
+    background-color: transparent; /* Fondo claro para el contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+
+/* Estilos para las etiquetas */
+.chart-filter-container label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-right: 15px;
+    text-align: left;
+    width: 200px; /* Fija el ancho de las etiquetas para una alineación consistente */
+}
+
+/* Estilos para el input tipo fecha */
+.chart-filter-container input[type="date"] {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+/* Efecto al poner el foco sobre el input */
+.chart-filter-container input[type="date"]:focus {
+    border-color: #645A70;
+    box-shadow: 0 0 5px rgba(100, 90, 112, 0.4);
+}
+
+/* Estilos para el botón */
+.chart-filter-container button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #6A4C93;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Efecto al poner el foco sobre el botón */
+.chart-filter-container button:hover {
+    background-color: #4e3b69;
+    transform: scale(1.05); /* Efecto de agrandado suave */
+}
+
+/* Estilos para el selector de gráfico */
+.chart-filter-container select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 250px;
+}
+
+/* Efecto al poner el foco sobre el select */
+.chart-filter-container select:focus {
+    border-color: #645A70;
+    box-shadow: #4e3b69;
+}
+
+#alert-container {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8d7da; /* Fondo rojo claro para error */
+    color: #721c24; /* Texto rojo oscuro */
+    border: 1px solid #f5c6cb; /* Borde rojo claro */
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out;
+}
+
+#alert-container.success {
+    background-color: #d4edda; /* Fondo verde claro */
+    color: #155724; /* Texto verde oscuro */
+    border: 1px solid #c3e6cb; /* Borde verde claro */
+}
+
+
+/* Optional: Animation for the alert to slide in */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+
+
+
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #EDDCFF;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-actions {
+    display: flex; /* Alineación horizontal */
+    justify-content: center; /* Centrar los botones */
+    gap: 5px; /* Separación horizontal entre botones */
+    padding: 5px; /* Espaciado interno alrededor de los botones */
+}
+
+.modal-actions #confirmLogout {
+    background-color: #d9534f; /* Rojo para confirmar */
+    color: #fff;
+}
+
+.modal-actions #cancelLogout {
+    background-color: #555; /* Azul para cancelar */
+    color: #fff;
+}
+
+
 .filter-container {
     display: flex; /* Usar flexbox para disposición horizontal */
     justify-content: space-between; /* Espaciar elementos */
     align-items: center; /* Centrar verticalmente */
     margin: 20px 0; /* Margen superior e inferior */
-    background-color: #EDDCFF; /* Fondo para el contenedor de filtros */
+    background-color: transparent; /* Fondo para el contenedor de filtros */
     padding: 15px; /* Espaciado interno */
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
@@ -33,24 +216,53 @@ body {
     color: #5d2c85; /* Color de las etiquetas */
 }
 
+/* Contenedor general */
+.filters {
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    margin: 20px auto; /* Centrado del contenedor */
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Permitir que los elementos se ajusten en varias filas */
+    gap: 10px; /* Espaciado entre elementos */
+    background-color: #EDDCFF; /* Fondo claro */
+    border-radius: 8px; /* Bordes redondeados */
+    justify-content: center; /* Centrar elementos horizontalmente */
+    align-items: center; /* Centrar elementos verticalmente */
+}
+
+/* Estilos para los campos de entrada y selectores */
 #filterGrado, #filterSeccion, #searchName {
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #645A70; /* Borde para campos de entrada */
-    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 15px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    border: 2px solid #ddd; /* Borde */
+    border-radius: 8px; /* Bordes redondeados */
+    outline: none; /* Sin borde de enfoque predeterminado */
+    transition: all 0.3s ease; /* Transición suave */
+    width: 250px; /* Ancho uniforme */
 }
 
+/* Efecto al enfocar campos de entrada */
+#filterGrado:focus, #filterSeccion:focus, #searchName:focus {
+    border-color: #645A70; /* Cambio de color del borde */
+    box-shadow: 0 0 5px rgba(100, 90, 112, 0.4); /* Sombra al enfocar */
+}
+
+/* Estilo para el botón */
 #applyFilters {
-    background-color: #645A70; /* Color de fondo del botón */
-    color: white; /* Color del texto del botón */
+    padding: 12px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de la fuente */
+    color: #fff; /* Color del texto */
+    background-color: #6A4C93; /* Color de fondo */
     border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
     cursor: pointer; /* Cursor de puntero */
-    transition: background-color 0.3s ease; /* Transición suave */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transición suave */
 }
 
-#applyFilters:hover {
-    background-color: rgb(95, 59, 66); /* Color de fondo más oscuro al pasar el cursor */
+/* Estilo para el placeholder */
+#searchName::placeholder {
+    color: #aaa; /* Color del texto del placeholder */
+    font-style: italic; /* Estilo cursivo */
 }
 
 
@@ -115,10 +327,10 @@ h2 {
 
 table {
     width: 100%; /* Ancho total */
-    border-collapse: collapse; /* Colapsar bordes */
     margin-top: 20px; /* Espacio superior */
     border-radius: 15px; /* Bordes redondeados */
     overflow: hidden; /* Esconde el desbordamiento */
+    table-layout: fixed;
 }
 
 th, td {
