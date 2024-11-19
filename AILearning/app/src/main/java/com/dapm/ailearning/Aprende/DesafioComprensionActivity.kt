@@ -90,14 +90,18 @@ class DesafioComprensionActivity : AppCompatActivity() {
 
         initializeDatabase()
 
-
-
         closeImageView = findViewById(R.id.clouse)
         closeImageView.setOnClickListener {
             finish()
         }
 
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
+
         if (idLeccion != -1) {
             loadLesson(idLeccion)
         }
@@ -168,6 +172,12 @@ class DesafioComprensionActivity : AppCompatActivity() {
                 val selectedId = optionsGroup.checkedRadioButtonId
                 val selectedOption = findViewById<RadioButton>(selectedId)
                 if (selectedOption != null) {
+
+                    //Repuestas seleccionadas
+                    CoroutineScope(Dispatchers.Main).launch {
+                        leccionDao.agregarRespuestasSeleccionadas(idLeccion, selectedOption.text.toString())
+                    }
+
                     // Verifica la respuesta
                     if (selectedOption.text == quizList[currentQuestionIndex].correct_answer) {
                         score++ // Incrementa el puntaje por respuesta correcta
@@ -346,7 +356,5 @@ class DesafioComprensionActivity : AppCompatActivity() {
         animator.interpolator = DecelerateInterpolator()
         animator.start()
     }
-
-
 
 }

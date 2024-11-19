@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.dapm.ailearning.Datos.AppDatabase
 import com.dapm.ailearning.Aprende.DateQuiz.LeccionJson
+import com.dapm.ailearning.Datos.LeccionDao
 import com.dapm.ailearning.R
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -36,7 +37,7 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
-
+    private lateinit var leccionDao: LeccionDao
     private lateinit var tvPregunta: TextView
     private lateinit var radioGroup: RadioGroup
     private lateinit var radioOpcion1: RadioButton
@@ -102,6 +103,8 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         constraintLayout.visibility = View.GONE
         linearLayoutContent.visibility = View.VISIBLE
 
+        initializeDatabase()
+
         // Inicializar Text-to-Speech
         tts = TextToSpeech(this, this)
 
@@ -109,6 +112,11 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         actualizarPuntaje()
         // Obtener el idLeccion desde el intent
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
 
         if (idLeccion != -1) {
             cargarLeccion(idLeccion)
@@ -138,6 +146,11 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
 
+    }
+
+    private fun initializeDatabase() {
+        val db = AppDatabase.getDatabase(applicationContext) // Usa el método getDatabase
+        leccionDao = db.leccionDao() // Inicializa leccionDao
     }
 
     private fun leerTexto() {
@@ -299,6 +312,11 @@ class EscuchaActivaActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
         val respuestaSeleccionada = findViewById<RadioButton>(selectedOptionId).text.toString()
+
+        //Repuestas seleccionadas
+        CoroutineScope(Dispatchers.Main).launch {
+            leccionDao.agregarRespuestasSeleccionadas(idLeccion, respuestaSeleccionada)
+        }
 
         if (respuestaSeleccionada == respuestaCorrecta) {
             score++ // Incrementa el puntaje por respuesta correcta

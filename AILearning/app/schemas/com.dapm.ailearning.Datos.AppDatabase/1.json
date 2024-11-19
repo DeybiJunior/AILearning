@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a8ed4adbd48832a7b698893c63c12324",
+    "identityHash": "84ee948b04ae60d62e3f5ccbdcc5ad3e",
     "entities": [
       {
         "tableName": "lecciones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `tipo` TEXT NOT NULL, `dificultad` TEXT NOT NULL, `tema` TEXT NOT NULL, `json` TEXT NOT NULL, `estado` INTEGER NOT NULL, `puntaje` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `completionDate` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`lessonId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` TEXT NOT NULL, `tipo` TEXT NOT NULL, `dificultad` TEXT NOT NULL, `tema` TEXT NOT NULL, `json` TEXT NOT NULL, `estado` INTEGER NOT NULL, `puntaje` INTEGER NOT NULL, `startTime` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `completionDate` INTEGER NOT NULL, `respuestasSeleccionadas` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "lessonId",
@@ -73,6 +73,12 @@
             "columnName": "completionDate",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "respuestasSeleccionadas",
+            "columnName": "respuestasSeleccionadas",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -88,7 +94,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8ed4adbd48832a7b698893c63c12324')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '84ee948b04ae60d62e3f5ccbdcc5ad3e')"
     ]
   }
 }

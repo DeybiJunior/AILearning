@@ -175,6 +175,7 @@ class InicioSesionActivity : AppCompatActivity() {
                         dificultad = document.getString("dificultad") ?: "",
                         tema = document.getString("tema") ?: "",
                         json = document.getString("json") ?: "",
+                        respuestasSeleccionadas = document.getString("respuestasSeleccionadas") ?: "",
                         estado = document.getBoolean("estado") ?: false,
                         puntaje = document.getLong("puntaje")?.toInt() ?: 0,
                         startTime = document.getLong("startTime") ?: 0,

@@ -7,12 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LeccionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: LeccionRepository
     private val _leccionesPorUsuario = MutableLiveData<List<Leccion>>()
-    val leccionesPorUsuario: LiveData<List<Leccion>> get() = _leccionesPorUsuario
+    val leccionesPorUsuario: LiveData<List<Leccion>> = _leccionesPorUsuario
+
 
     init {
         val leccionDao = AppDatabase.getDatabase(application).leccionDao()
@@ -30,8 +32,16 @@ class LeccionViewModel(application: Application) : AndroidViewModel(application)
         _leccionesPorUsuario.postValue(lecciones)  // Actualiza el LiveData
     }
 
-    // Función para eliminar una lección
     fun deleteLeccion(leccion: Leccion) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(leccion)
+        repository.delete(leccion) // Elimina la lección en el repositorio
+
+        // Actualiza la lista de lecciones en el LiveData
+        val listaActualizada = _leccionesPorUsuario.value?.toMutableList() ?: mutableListOf()
+        listaActualizada.remove(leccion)
+
+        // Notifica el cambio en el hilo principal
+        withContext(Dispatchers.Main) {
+            _leccionesPorUsuario.value = listaActualizada
+        }
     }
 }

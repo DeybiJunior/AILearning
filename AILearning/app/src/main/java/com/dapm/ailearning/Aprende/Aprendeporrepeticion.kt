@@ -37,6 +37,7 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.LeccionDao
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +49,7 @@ class Aprendeporrepeticion : AppCompatActivity() {
     private lateinit var frases: List<Frase>
     private var Indexprogres = 0
     private var idLeccion: Int = -1
-
+    private lateinit var leccionDao: LeccionDao
     private var fraseIndex = 0
     private var puntajeUsuarioPorLeccion = 0
     private var totalFrases = 0
@@ -88,9 +89,17 @@ class Aprendeporrepeticion : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aprendeporrepeticion)
 
+        initializeDatabase()
+
         startTime = System.currentTimeMillis()
 
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
+
         if (idLeccion != -1) {
             // Cargar las frases en un hilo separado
             cargarFrases(idLeccion)
@@ -107,6 +116,11 @@ class Aprendeporrepeticion : AppCompatActivity() {
         closeButton.setOnClickListener {
             finish()
         }
+    }
+
+    private fun initializeDatabase() {
+        val db = AppDatabase.getDatabase(applicationContext) // Usa el método getDatabase
+        leccionDao = db.leccionDao() // Inicializa leccionDao
     }
 
 
@@ -189,9 +203,24 @@ class Aprendeporrepeticion : AppCompatActivity() {
         Log.d("FraseOriginal", fraseOriginal)
         Log.d("FraseEscuchada", fraseEscuchada)
 
+        if(esPrimerClick){
+            //Repuestas seleccionadas
+            if (etSpeechResult.text.toString()=="") {
+                CoroutineScope(Dispatchers.Main).launch {
+                    leccionDao.agregarRespuestasSeleccionadas(idLeccion,"sin respuesta")
+                }
+            }
+            else{
+                CoroutineScope(Dispatchers.Main).launch {
+                    leccionDao.agregarRespuestasSeleccionadas(idLeccion,etSpeechResult.text.toString())
+                }
+            }
+        }
+
         // Cambia el color por defecto a verde
         val defaultColor = resources.getColor(R.color.holo_green_ligth, null)
         val redColor = resources.getColor(R.color.md_theme_error, null)
+
 
         // Si coincide
         if (validarFrase(fraseOriginal, fraseEscuchada)) {

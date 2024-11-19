@@ -15,5 +15,6 @@ data class Leccion(
     val puntaje: Int,
     val startTime: Long = 0,
     val duration: Long = 0,
-    val completionDate: Long = 0
+    val completionDate: Long = 0,
+    val respuestasSeleccionadas: String = ""
 )

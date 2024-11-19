@@ -92,6 +92,12 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             finish()
         }
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
+
         if (idLeccion != -1) {
             loadLesson(idLeccion)
         }
@@ -192,6 +198,12 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
                 val selectedOption = findViewById<RadioButton>(selectedId)
 
                 if (selectedOption != null) {
+
+                    //Repuestas seleccionadas
+                    CoroutineScope(Dispatchers.Main).launch {
+                        leccionDao.agregarRespuestasSeleccionadas(idLeccion, selectedOption.text.toString())
+                    }
+
                     val correctAnswer = quizList[currentQuestionIndex].correct_answer
                     if (selectedOption.text == correctAnswer) {
                         // If the answer is correct

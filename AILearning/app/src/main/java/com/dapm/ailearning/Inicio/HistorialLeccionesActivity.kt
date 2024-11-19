@@ -18,6 +18,7 @@ import com.dapm.ailearning.Aprende.DesafioCartasActivity
 import com.dapm.ailearning.Aprende.DesafioComprensionActivity
 import com.dapm.ailearning.Aprende.EscuchaActivaActivity
 import com.dapm.ailearning.Aprende.FrasesEnAccionActivity
+import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
 import com.google.firebase.auth.FirebaseAuth
@@ -55,55 +56,55 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                 }
             },
             onDelete = { leccion ->
-                // Mostrar el AlertDialog con diseño personalizado
                 val dialogView = layoutInflater.inflate(R.layout.dialog_confirm_delete, null)
-
                 val alertDialog = AlertDialog.Builder(this)
                     .setView(dialogView)
                     .create()
                 alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
                 val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancel)
                 val buttonConfirm = dialogView.findViewById<Button>(R.id.buttonConfirm)
 
                 buttonCancel.setOnClickListener {
-                    alertDialog.dismiss()  // Cierra el cuadro de diálogo
+                    alertDialog.dismiss()
                 }
-
-
 
                 buttonConfirm.setOnClickListener {
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-                    leccionViewModel.deleteLeccion(leccion)
-                    Toast.makeText(this, "Lección eliminada", Toast.LENGTH_SHORT).show()
-                    alertDialog.dismiss()  // Cierra el cuadro de diálogo
-
                     if (userId != null) {
-                        // Eliminar de Firestore
                         db.collection("users")
                             .document(userId)
                             .collection("lecciones")
                             .document(leccion.lessonId.toString())
                             .delete()
                             .addOnSuccessListener {
-                                // Si se elimina correctamente de Firebase, eliminar localmente
+                                // Eliminar la lección del ViewModel
                                 leccionViewModel.deleteLeccion(leccion)
                                 Toast.makeText(this, "Lección eliminada.", Toast.LENGTH_SHORT).show()
-                                alertDialog.dismiss()  // Cierra el cuadro de diálogo
+
+                                // Actualizar la lista en el adaptador con el orden invertido
+                                val leccionesActualizadas = leccionViewModel.leccionesPorUsuario.value?.toMutableList()
+                                leccionesActualizadas?.remove(leccion)
+
+                                leccionesActualizadas?.let {
+                                    leccionAdapter.submitList(it.reversed()) // Mantener el orden invertido
+                                }
                             }
                             .addOnFailureListener { e ->
-                                Log.e("Firebase", "Error al eliminar la lección. ${leccion.lessonId}", e)
+                                Log.e("Firebase", "Error al eliminar la lección: ${leccion.lessonId}", e)
                                 Toast.makeText(this, "Error al eliminar la lección.", Toast.LENGTH_SHORT).show()
                             }
                     } else {
                         Toast.makeText(this, "Error: Usuario no autenticado.", Toast.LENGTH_SHORT).show()
                     }
-                }
 
+                    alertDialog.dismiss()
+                }
 
                 alertDialog.show()
             }
-            )
+        )
         recyclerView.adapter = leccionAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -115,8 +116,7 @@ class HistorialLeccionesActivity : AppCompatActivity() {
             leccionViewModel.getLeccionesByUserId(userId)
             leccionViewModel.leccionesPorUsuario.observe(this) { lecciones ->
                 lecciones?.let {
-                    val leccionesInvertidas = it.reversed()
-                    leccionAdapter.submitList(leccionesInvertidas)
+                    leccionAdapter.submitList(it.reversed()) // Mostrar en orden invertido
                 }
             }
 
@@ -141,8 +141,27 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error: No has iniciado sesión", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", null)
+
+        if (userId != null) {
+            leccionViewModel.getLeccionesByUserId(userId)
+            leccionViewModel.leccionesPorUsuario.observe(this) { lecciones ->
+                lecciones?.let {
+                    leccionAdapter.submitList(it.reversed()) // Asegura el orden invertido al reanudar
+                }
+            }
+        } else {
+            Log.e("HistorialLeccionesActivity", "El userId es nulo, no se pueden recargar las lecciones.")
+        }
+    }
+
 
     private fun enviarLeccionesAFirebase(userId: String) {
         leccionViewModel.leccionesPorUsuario.value?.let { lecciones ->
@@ -161,6 +180,7 @@ class HistorialLeccionesActivity : AppCompatActivity() {
                     "dificultad" to leccion.dificultad,
                     "tema" to leccion.tema,
                     "json" to leccion.json,
+                    "respuestasSeleccionadas" to leccion.respuestasSeleccionadas,
                     "estado" to leccion.estado,
                     "puntaje" to leccion.puntaje,
                     "startTime" to leccion.startTime,
@@ -191,6 +211,6 @@ class HistorialLeccionesActivity : AppCompatActivity() {
             Toast.makeText(this, "No hay lecciones para enviar.", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
+
 

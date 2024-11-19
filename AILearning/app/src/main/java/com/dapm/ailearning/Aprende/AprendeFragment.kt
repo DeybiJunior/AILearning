@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.Inicio.SeleccionTemaActivity
 import com.dapm.ailearning.R
@@ -20,7 +21,7 @@ class AprendeFragment : Fragment() {
 
     private lateinit var leccionViewModel: LeccionViewModel
     private lateinit var linearLayout: LinearLayout
-    private lateinit var LinearNoLecciones: LinearLayout
+    private lateinit var linearNoLecciones: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +32,7 @@ class AprendeFragment : Fragment() {
 
         // Encuentra el LinearLayout donde se agregarán las cards
         linearLayout = view.findViewById(R.id.linearLayoutContainer)
-        LinearNoLecciones = view.findViewById(R.id.LinearNoLecciones)
+        linearNoLecciones = view.findViewById(R.id.LinearNoLecciones)
 
         return view
     }
@@ -51,39 +52,12 @@ class AprendeFragment : Fragment() {
         val btnSeleccionTema: Button = view.findViewById(R.id.btnSeleccionTema)
 
         if (userId != null) {
-            // Cargar las lecciones del usuario
-            leccionViewModel.getLeccionesByUserId(userId)
-
             // Observar los cambios en las lecciones
-            leccionViewModel.leccionesPorUsuario.observe(viewLifecycleOwner, { lecciones ->
+            leccionViewModel.leccionesPorUsuario.observe(viewLifecycleOwner) { lecciones ->
                 lecciones?.let {
-                    // Filtrar las lecciones con estado false
-                    val leccionesFiltradas = it.filter { leccion -> !leccion.estado }
-
-                    // Ordenar las lecciones filtradas por lessonId de manera descendente
-                    val leccionesOrdenadas = leccionesFiltradas.sortedByDescending { leccion -> leccion.lessonId }
-
-                    // Limpiar el LinearLayout antes de agregar nuevas lecciones
-                    linearLayout.removeAllViews()
-
-                    if (leccionesOrdenadas.isEmpty()) {
-                        // Mostrar mensaje y botón si no hay lecciones
-                        tvNoLecciones.visibility = View.VISIBLE
-                        btnSeleccionTema.visibility = View.VISIBLE
-                        LinearNoLecciones.visibility = View.VISIBLE
-                    } else {
-                        // Ocultar mensaje y botón si hay lecciones
-                        tvNoLecciones.visibility = View.GONE
-                        btnSeleccionTema.visibility = View.GONE
-                        LinearNoLecciones.visibility = View.GONE
-
-                        // Crear una card para cada lección en el orden descendente
-                        for (leccion in leccionesOrdenadas) {
-                            crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId)
-                        }
-                    }
+                    actualizarLecciones(it)
                 }
-            })
+            }
 
             // Configurar el botón para redirigir a SeleccionTemaActivity
             btnSeleccionTema.setOnClickListener {
@@ -91,10 +65,43 @@ class AprendeFragment : Fragment() {
                 startActivity(intent)
             }
         }
-
     }
 
+    override fun onResume() {
+        super.onResume()
 
+        // Recargar las lecciones al volver al fragmento
+        val sharedPreferences = requireActivity().getSharedPreferences("user_data", AppCompatActivity.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", null)
+
+        if (userId != null) {
+            leccionViewModel.getLeccionesByUserId(userId)
+        }
+    }
+
+    private fun actualizarLecciones(lecciones: List<Leccion>) {
+        // Filtrar las lecciones con estado false
+        val leccionesFiltradas = lecciones.filter { leccion -> !leccion.estado }
+
+        // Ordenar las lecciones filtradas por lessonId de manera descendente
+        val leccionesOrdenadas = leccionesFiltradas.sortedByDescending { leccion -> leccion.lessonId }
+
+        // Limpiar el LinearLayout antes de agregar nuevas lecciones
+        linearLayout.removeAllViews()
+
+        if (leccionesOrdenadas.isEmpty()) {
+            // Mostrar mensaje y botón si no hay lecciones
+            linearNoLecciones.visibility = View.VISIBLE
+        } else {
+            // Ocultar mensaje y botón si hay lecciones
+            linearNoLecciones.visibility = View.GONE
+
+            // Crear una card para cada lección en el orden descendente
+            for (leccion in leccionesOrdenadas) {
+                crearCardLeccion(leccion.tipo, leccion.dificultad, leccion.lessonId)
+            }
+        }
+    }
 
     private fun crearCardLeccion(nombre: String, nivel: String, lessonId: Int) {
         // Inflar el diseño del CardView
@@ -145,7 +152,4 @@ class AprendeFragment : Fragment() {
         // Añadir el CardView al LinearLayout
         linearLayout.addView(cardView)
     }
-
-
 }
-

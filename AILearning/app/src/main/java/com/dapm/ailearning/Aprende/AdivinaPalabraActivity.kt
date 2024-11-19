@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.dapm.ailearning.Aprende.Adivina.AdivinaJson
 import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.LeccionDao
 import com.dapm.ailearning.R
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AdivinaPalabraActivity : AppCompatActivity() {
-
+    private lateinit var leccionDao: LeccionDao
     private lateinit var clueTextView: TextView
     private lateinit var guessEditText: EditText
     private lateinit var submitGuessButton: Button
@@ -61,6 +62,8 @@ class AdivinaPalabraActivity : AppCompatActivity() {
     private var startTime: Long = 0
     private var endTime: Long = 0
 
+    private var resp = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +85,15 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
         imagenResultado = findViewById(R.id.imagenResultado)
 
+        initializeDatabase()
 
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
+
         startTime = System.currentTimeMillis()
         Log.d("AdivinaPalabraActivity", "startTime initialized: $startTime")
 
@@ -98,6 +108,19 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             checkGuess()
         }
         btSiguiente.setOnClickListener {
+
+            resp = guessEditText.text.toString()
+            Log.d("DEBUG_RESP", "Valor de resp: $resp")
+            // Guardar la respuesta seleccionada para la pregunta actual
+            if (resp=="") {
+                CoroutineScope(Dispatchers.Main).launch {
+                    leccionDao.agregarRespuestasSeleccionadas(idLeccion, "sin respuesta")
+                }
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    leccionDao.agregarRespuestasSeleccionadas(idLeccion, resp)
+                }
+            }
             nextQuestion()
         }
 
@@ -138,6 +161,11 @@ class AdivinaPalabraActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun initializeDatabase() {
+        val db = AppDatabase.getDatabase(applicationContext) // Usa el método getDatabase
+        leccionDao = db.leccionDao() // Inicializa leccionDao
     }
 
     private fun initializeLetterButtons(length: Int) {
@@ -379,5 +407,3 @@ class AdivinaPalabraActivity : AppCompatActivity() {
 
 
 }
-
-

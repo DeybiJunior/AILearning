@@ -195,9 +195,22 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                     if (Array.isArray(frasesArray)) {
                         contenidoHTML += `<h4>Frases:</h4>`;
                         contenidoHTML += `<ul style="list-style-type: circle; padding-left: 20px;">`;
-                        frasesArray.forEach(fraseObj => {
+                        frasesArray.forEach((fraseObj, index) => {
                             if (fraseObj.ID && fraseObj.frase) {
                                 contenidoHTML += `<li>${fraseObj.ID}. ${fraseObj.frase}</li>`;
+                                
+                                // Mostrar la respuesta seleccionada correspondiente
+                                const respuestas = (lessonData.respuestasSeleccionadas || "").split(',');
+                                let respuestaAlumno = respuestas[index] || 'No proporcionada';
+                                
+                                // Comparar la respuesta del alumno con la correcta
+                                let respuestaCorrectaLower = fraseObj.frase.toLowerCase();  // Suponiendo que la respuesta correcta es la frase misma
+                                let respuestaAlumnoLower = respuestaAlumno.toLowerCase();
+                                
+                                // Asignar el color de la respuesta en función de si es correcta o no
+                                let colorRespuesta = (respuestaAlumnoLower === respuestaCorrectaLower) ? 'green' : 'red';
+                                
+                                contenidoHTML += `<p><strong>Respuesta del alumno:</strong> <span style="color: ${colorRespuesta};">${respuestaAlumno}</span></p>`;
                             }
                         });
                         contenidoHTML += `</ul>`;
@@ -211,16 +224,31 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                     const desafioArray = JSON.parse(lessonData.json);
                     if (Array.isArray(desafioArray)) {
                         desafioArray.forEach(desafioObj => {
-                            contenidoHTML += `<h4>Lectura:</h4><p>${desafioObj.reading};</p></br><h4>Preguntas:</h4>`;
+                            contenidoHTML += `<h4>Lectura:</h4><p>${desafioObj.reading}</p></br><h4>Preguntas:</h4>`;
+                            
                             desafioObj.quiz.forEach((quizItem, index) => {
                                 contenidoHTML += `<p>${index + 1}. ${quizItem.question}</p>`;
+                                
                                 // Usamos un estilo para que todos los ítems sean círculos
                                 contenidoHTML += `<ul style="list-style-type: circle; padding-left: 20px;">`;
                                 quizItem.options.forEach(option => {
                                     contenidoHTML += `<li>${option}</li>`;
                                 });
                                 contenidoHTML += `</ul>`;
+                                
                                 contenidoHTML += `<p><strong>Respuesta Correcta:</strong> ${quizItem.correct_answer}</p>`;
+                                
+                                // Mostrar la respuesta seleccionada por el alumno con color según la comparación
+                                const respuestas = (lessonData.respuestasSeleccionadas || "").split(',');
+                                let respuestaAlumno = respuestas[index] || 'No proporcionada';
+                                
+                                // Convertir ambas respuestas a minúsculas y comparar
+                                let respuestaCorrectaLower = quizItem.correct_answer.toLowerCase();
+                                let respuestaAlumnoLower = respuestaAlumno.toLowerCase();
+                                
+                                let colorRespuesta = (respuestaAlumnoLower === respuestaCorrectaLower) ? 'green' : 'red';
+                                
+                                contenidoHTML += `<p><strong>Respuesta del Alumno:</strong> <span style="color: ${colorRespuesta};">${respuestaAlumno}</span></p>`;
                                 contenidoHTML += `</br>`;
                             });
                         });
@@ -238,13 +266,27 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                             contenidoHTML += `<h4>Preguntas:</h4>`;
                             fraseAccionObj.quiz.forEach((quizItem, index) => {
                                 contenidoHTML += `<p>${index + 1}. ${quizItem.frase}</p>`;
+                                
                                 // Usamos un estilo para que todos los ítems sean círculos
                                 contenidoHTML += `<ul style="list-style-type: circle; padding-left: 20px;">`;
                                 quizItem.options.forEach((option, optIndex) => {
                                     contenidoHTML += `<li>${String.fromCharCode(65 + optIndex)}. ${option}</li>`;
                                 });
                                 contenidoHTML += `</ul>`;
+                                
                                 contenidoHTML += `<p><strong>Respuesta Correcta:</strong> ${quizItem.correct_answer}</p>`;
+                                
+                                // Mostrar la respuesta seleccionada por el alumno con color según la comparación
+                                const respuestas = (lessonData.respuestasSeleccionadas || "").split(',');
+                                let respuestaAlumno = respuestas[index] || 'No proporcionada';
+                                
+                                // Convertir ambas respuestas a minúsculas y comparar
+                                let respuestaCorrectaLower = quizItem.correct_answer.toLowerCase();
+                                let respuestaAlumnoLower = respuestaAlumno.toLowerCase();
+                                
+                                let colorRespuesta = (respuestaAlumnoLower === respuestaCorrectaLower) ? 'green' : 'red';
+                                
+                                contenidoHTML += `<p><strong>Respuesta del Alumno:</strong> <span style="color: ${colorRespuesta};">${respuestaAlumno}</span></p>`;
                                 contenidoHTML += `</br>`;
                             });
                         });
@@ -253,7 +295,7 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                     console.error('Formato de JSON inválido para Frases en Acción:', error);
                     contenidoHTML = '<p style="color:red;">JSON inválido</p>';
                 }
-            }else if (lessonData.tipo === 'Desafío de Cartas') {
+            } else if (lessonData.tipo === 'Desafío de Cartas') {
                 // Nueva sección para el tipo "Desafío de Cartas"
                 try {
                     const desafioCartasArray = JSON.parse(lessonData.json);
@@ -277,18 +319,34 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                     console.error('Formato de JSON inválido para Desafío de Cartas:', error);
                     contenidoHTML = '<p style="color:red;">JSON inválido</p>';
                 }
-            }else if (lessonData.tipo === 'Adivina la Palabra') {
+            } else if (lessonData.tipo === 'Adivina la Palabra') {
                 // Nueva sección para el tipo "Adivina la Palabra"
                 try {
                     const adivinaArray = JSON.parse(lessonData.json);
                     if (Array.isArray(adivinaArray)) {
                         contenidoHTML += `<h4>Palabras a Adivinar:</h4>`;
                         adivinaArray.forEach((adivinaObj, index) => {
-                            contenidoHTML += `<p>${index + 1}.</strong> ${adivinaObj.clue}</p>`;
+                            contenidoHTML += `<p>${index + 1}. ${adivinaObj.clue}</p>`;
+                            
+                            // Mostrar la respuesta correcta
                             contenidoHTML += `<ul style="list-style-type: circle; padding-left: 20px;">`;
                             contenidoHTML += `<li><strong>Respuesta Correcta:</strong> ${adivinaObj.oneword}</li>`;
-                            contenidoHTML += `</br>`;
+                            
+                            // Mostrar la respuesta proporcionada por el alumno con color según la comparación
+                            // console.log(lessonData.respuestasSeleccionadas);  // Verifica su valor antes de usarlo
+                            const respuestas = (lessonData.respuestasSeleccionadas || "").split(',');
+
+                            let respuestaAlumno = respuestas[index] || 'No proporcionada';
+                            
+                            // Convertir ambas respuestas a minúsculas y comparar
+                            let respuestaCorrectaLower = adivinaObj.oneword.toLowerCase();
+                            let respuestaAlumnoLower = respuestaAlumno.toLowerCase();
+            
+                            let colorRespuesta = (respuestaAlumnoLower === respuestaCorrectaLower) ? 'green' : 'red';
+            
+                            contenidoHTML += `<li><strong>Respuesta del Alumno:</strong> <span style="color: ${colorRespuesta};">${respuestaAlumno}</span></li>`;
                             contenidoHTML += `</ul>`;
+                            contenidoHTML += `</br>`;
                         });
                     }
                 } catch (error) {
@@ -296,9 +354,6 @@ db.collection(`users/${userId}/lecciones`).get().then(querySnapshot => {
                     contenidoHTML = '<p style="color:red;">JSON inválido</p>';
                 }
             }
-
-                        
-
 
             lessonRow.innerHTML = `
                 <td>${lessonData.idLeccion}</td>
