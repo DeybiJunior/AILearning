@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dapm.ailearning.Datos.AppDatabase
+import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.Usuario
 import com.dapm.ailearning.MainActivity
 import com.dapm.ailearning.R
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RegistroActivity : AppCompatActivity() {
 
@@ -123,6 +125,7 @@ class RegistroActivity : AppCompatActivity() {
 
 
 
+
     private fun handleRegister(
         nombresLayout: TextInputLayout, nombres: String,
         apellidosLayout: TextInputLayout, apellidos: String,
@@ -144,7 +147,7 @@ class RegistroActivity : AppCompatActivity() {
         passwordLayout.error = null
         confirmPasswordLayout.error = null
 
-// Validación de nombres
+        // Validación de nombres
         if (nombres.isEmpty()) {
             nombresLayout.error = getString(R.string.error_nombres)
             return
@@ -171,14 +174,11 @@ class RegistroActivity : AppCompatActivity() {
             edadLayout.error = getString(R.string.error_edad)
             return
         }
+
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailLayout.error = getString(R.string.error_email)
             return
-        } else if (!email.matches(Regex("^[a-zA-Z0-9._%+-]{2,}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"))) {
-            emailLayout.error = getString(R.string.error_email)
-            return
         }
-
 
 // Validación para la sección
         val sectionValue = sectionAutoCompleteTextView.text.toString().trim()
@@ -239,10 +239,12 @@ class RegistroActivity : AppCompatActivity() {
                             .addOnSuccessListener {
                                 guardarUsuarioEnSharedPreferences(Usuario(userId, nombres, apellidos, edad, nivel, section, grade))
 
+                                obtenerYGuardarLecciones(userId)
                                 // Redirigir al usuario a MainActivity
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
+
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "Error al guardar datos del usuario en Firestore: $e", Toast.LENGTH_SHORT).show()
@@ -293,5 +295,66 @@ class RegistroActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun obtenerYGuardarLecciones(userId: String) {
+        Log.d("TestActivity", "Iniciando la obtención de lecciones de Firestore...")
+        val firestore = FirebaseFirestore.getInstance()
+
+        firestore.collection("ejemploleccion")  // Cambia aquí para apuntar a la colección EjemplosLeccion
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d("TestActivity", "Datos obtenidos de Firestore con éxito.")
+                val leccionesList = mutableListOf<Leccion>()
+
+                for (document in result) {
+                    Log.d("TestActivity", "Procesando documento: ${document.id}")
+
+                    val leccion = Leccion(
+                        userId = userId,
+                        tipo = document.getString("tipo") ?: "",
+                        dificultad = document.getString("dificultad") ?: "",
+                        tema = document.getString("tema") ?: "",
+                        json = document.getString("json") ?: "",
+                        respuestasSeleccionadas = document.getString("respuestasSeleccionadas") ?: "",
+                        estado = document.getBoolean("estado") ?: false,
+                        puntaje = document.getLong("puntaje")?.toInt() ?: 0,
+                        startTime = document.getLong("startTime") ?: 0L,
+                        duration = document.getLong("duration") ?: 0L,
+                        completionDate = document.getLong("completionDate") ?: 0L
+                    )
+
+                    // Ahora el ID del documento Firestore se guarda como userId en Room, como se desea
+                    leccionesList.add(leccion)
+
+                    // Añadir un log para ver los datos de la lección que se va a guardar
+                    Log.d("TestActivity", "Lección procesada: ${leccion.toString()}")
+                }
+                Log.d("TestActivity", "Guardando lecciones en Room...")
+                guardarLeccionesEnRoom(leccionesList)
+            }
+            .addOnFailureListener { e ->
+                Log.e("TestActivity", "Error al cargar lecciones: ${e.message}")
+                showToast("Error al cargar lecciones: ${e.message}")
+            }
+    }
+
+    private fun guardarLeccionesEnRoom(lecciones: List<Leccion>) {
+        val db = AppDatabase.getDatabase(applicationContext)
+        val leccionDao = db.leccionDao()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Log para ver los datos antes de guardarlos
+                Log.d("TestActivity", "Datos a guardar en Room: ${lecciones.toString()}")
+                leccionDao.insertAll(*lecciones.toTypedArray())
+                Log.d("TestActivity", "Lecciones guardadas con éxito en la base de datos local.")
+            } catch (e: Exception) {
+                Log.e("TestActivity", "Error al guardar lecciones en Room: ${e.message}")
+            }
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
 }

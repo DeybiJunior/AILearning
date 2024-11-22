@@ -64,6 +64,9 @@ class AprendeFragment : Fragment() {
                 val intent = Intent(requireContext(), SeleccionTemaActivity::class.java)
                 startActivity(intent)
             }
+
+
+
         }
     }
 

@@ -19,7 +19,7 @@ object ApiService {
 
     var frasesList: List<Frase>? = null
 
-    fun solicitarAPI2(prompt: String, context: Context, onFailure: (Throwable?) -> Unit, onSuccess: (String) -> Unit) {
+    fun solicitarAPI(prompt: String, context: Context, onFailure: (Throwable?) -> Unit, onSuccess: (String) -> Unit) {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(300, TimeUnit.SECONDS)
             .readTimeout(300, TimeUnit.SECONDS)
@@ -28,7 +28,7 @@ object ApiService {
 
         // Configura Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.105:11434/api/")
+            .baseUrl("http://192.168.43.248:11434/api/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

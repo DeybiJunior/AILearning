@@ -22,6 +22,10 @@ interface LeccionDao {
     @Delete
     suspend fun delete(lesson: Leccion)
 
+    @Query("DELETE FROM lecciones")
+    suspend fun deleteAll()
+
+
     @Query("SELECT json FROM lecciones WHERE lessonId = :lessonId")
     suspend fun getJsonByLessonId(lessonId: Int): String
 

@@ -1,9 +1,11 @@
 package com.dapm.ailearning.Perfil
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -125,12 +127,38 @@ class PerfilFragment : Fragment() {
             alertDialog.dismiss()
         }
         customView.findViewById<Button>(R.id.confirmButton).setOnClickListener {
+            val sharedPreferences = requireContext().getSharedPreferences("user_data", MODE_PRIVATE)
+            sharedPreferences.edit().clear().apply()
+            Log.d("SharedPrefs", "Datos de usuario eliminados de SharedPreferences")
+
+            val misPreferencias = requireContext().getSharedPreferences("mis_preferencias", MODE_PRIVATE)
+            misPreferencias.edit().clear().apply()
+            Log.d("SharedPrefs", "Datos eliminados de 'mis_preferencias'")
+
+            // Eliminar datos de la base de datos
+            lifecycleScope.launch {
+                try {
+                    val database = AppDatabase.getDatabase(requireContext())
+                    database.leccionDao().deleteAll()
+                    Log.d("RoomDatabase", "Todas las lecciones han sido eliminadas")
+                } catch (e: Exception) {
+                    Log.e("RoomDatabase", "Error al eliminar lecciones: ${e.message}")
+                }
+            }
+
+            // Cerrar sesión de Firebase (si se usa Firebase Auth)
             auth.signOut()
+            Log.d("FirebaseAuth", "El usuario ha cerrado sesión correctamente")
+
+            // Redirigir a la actividad de inicio de sesión
             val intent = Intent(requireContext(), InicioSesionActivity::class.java)
             startActivity(intent)
             activity?.finish()
+
+            // Cerrar el diálogo
             alertDialog.dismiss()
         }
+
         alertDialog.show()
     }
 

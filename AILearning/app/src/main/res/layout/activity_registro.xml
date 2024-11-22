@@ -98,6 +98,7 @@
                     android:id="@+id/nombresEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="50"
                     android:hint="Nombres"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,6 +120,7 @@
                     android:id="@+id/apellidosEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="50"
                     android:hint="Apellidos"
                     android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -141,6 +143,7 @@
                     android:id="@+id/edadEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="2"
                     android:hint="Edad"
                     android:inputType="number"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -163,6 +166,7 @@
                     android:id="@+id/emailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="50"
                     android:hint="Email"
                     android:inputType="textEmailAddress"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -245,6 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Contraseña"
+                    android:maxLength="50"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -263,6 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Confirmar contraseña"
+                    android:maxLength="50"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout

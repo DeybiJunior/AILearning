@@ -220,7 +220,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                 }
 
                 // Llamar al ApiService para generar el JSON
-                ApiService.solicitarAPI2(prompt, this, { throwable ->
+                ApiService.solicitarAPI(prompt, this, { throwable ->
                     // Manejar error al obtener frases
                     progressDialog.dismiss()
                     Log.e("BusquedaLeccionActivity", "Error al obtener frases: ${throwable?.message}")
