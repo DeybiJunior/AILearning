@@ -309,7 +309,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Registrar"
-                app:backgroundTint="@color/md_theme_primary"
+                app:backgroundTint="@drawable/button_state"
                 app:iconTint="@color/md_theme_onPrimary"
                 app:cornerRadius="15dp"
                 android:textColor="@color/md_theme_onPrimary" />

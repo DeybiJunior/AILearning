@@ -3,6 +3,8 @@ package com.dapm.ailearning.Login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -72,6 +74,8 @@ class RegistroActivity : AppCompatActivity() {
 
 
         val registerButton = findViewById<Button>(R.id.registerButton)
+        // Inicialmente deshabilita el botón
+        registerButton.isEnabled = false
 
         //TERMINOS Y CONDICIONES
         // Inicializa el CheckBox
@@ -98,6 +102,43 @@ class RegistroActivity : AppCompatActivity() {
 
         val gradeAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, grades)
         gradeAutoCompleteTextView.setAdapter(gradeAdapter)
+
+
+        // Función para verificar si todos los campos están completos
+        fun validateFields() {
+            registerButton.isEnabled = nombresEditText.text.isNotEmpty() &&
+                    apellidosEditText.text.isNotEmpty() &&
+                    edadEditText.text.isNotEmpty() &&
+                    emailEditText.text.isNotEmpty() &&
+                    passwordEditText.text.isNotEmpty() &&
+                    confirmPasswordEditText.text.isNotEmpty() &&
+                    sectionAutoCompleteTextView.text.isNotEmpty() &&
+                    gradeAutoCompleteTextView.text.isNotEmpty() &&
+                    checkBoxTerminos.isChecked
+        }
+        // Listener para los campos de texto
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                validateFields()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+        // Agrega el TextWatcher a todos los EditText
+        nombresEditText.addTextChangedListener(textWatcher)
+        apellidosEditText.addTextChangedListener(textWatcher)
+        edadEditText.addTextChangedListener(textWatcher)
+        emailEditText.addTextChangedListener(textWatcher)
+        passwordEditText.addTextChangedListener(textWatcher)
+        confirmPasswordEditText.addTextChangedListener(textWatcher)
+        sectionAutoCompleteTextView.addTextChangedListener(textWatcher)
+        gradeAutoCompleteTextView.addTextChangedListener(textWatcher)
+
+        // Listener para el CheckBox
+        checkBoxTerminos.setOnCheckedChangeListener { _, _ ->
+            validateFields()
+        }
 
 
         //REGISTRO
