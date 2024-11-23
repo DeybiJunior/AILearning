@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
@@ -53,6 +55,23 @@ class InicioSesionActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         var attemptCount = prefs.getInt("attemptCount", 0)
         val lockoutTime = prefs.getLong("lockoutTime", 0)
+
+        // Deshabilita el botón inicialmente
+        loginButton.isEnabled = false
+
+        // Agrega un TextWatcher para habilitar el botón cuando ambos campos estén completos
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Habilita el botón si ambos campos están completos
+                loginButton.isEnabled = emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        // Añade el TextWatcher a ambos EditText
+        emailEditText.addTextChangedListener(textWatcher)
+        passwordEditText.addTextChangedListener(textWatcher)
 
         // Revisar si el tiempo de bloqueo ha terminado
         if (SystemClock.elapsedRealtime() < lockoutTime) {

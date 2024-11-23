@@ -123,7 +123,7 @@
             android:id="@+id/btnGuardar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/buttonBackground2"
+            android:backgroundTint="@drawable/button_tema_state"
             android:text="  Continuar  "
             android:textColor="@android:color/white"
             android:textStyle="bold"

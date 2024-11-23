@@ -3,6 +3,8 @@ package com.dapm.ailearning.Inicio
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -33,30 +35,43 @@ class SeleccionTemaActivity : AppCompatActivity() {
         val btnGuardar = findViewById<Button>(R.id.btnGuardar)
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
 
+        // Deshabilita el botón inicialmente
+        btnGuardar.isEnabled = false
+
+        // Agrega un TextWatcher para habilitar el botón cuando ambos campos estén completos
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Habilita el botón si ambos campos están completos
+                btnGuardar.isEnabled = autoCompleteTextView.text.isNotEmpty() || temaEspecificoEditText.text.toString().isNotEmpty()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        // Añade el TextWatcher a ambos EditText
+        autoCompleteTextView.addTextChangedListener(textWatcher)
+        temaEspecificoEditText.addTextChangedListener(textWatcher)
+
         setupAutoCompleteTextView(autoCompleteTextView, temaEspecificoEditText)
 
         btnGuardar.setOnClickListener {
             val temaSeleccionado = autoCompleteTextView.text.toString().trim()
             val temaEspecifico = temaEspecificoEditText.text.toString().trim()
 
-            if (temaSeleccionado.isEmpty() && temaEspecifico.isEmpty()) {
-                showToast("Por favor selecciona un tema")
+            val temaEspecificoLayout = findViewById<TextInputLayout>(R.id.temaEspecifico)
+
+            if (temaEspecifico.length > 50) {
+                temaEspecificoLayout.error = getString(R.string.error_temaespecifico_longitud)
+            }
+            else if (!temaEspecifico.matches("^[a-zA-Z0-9 ]*$".toRegex())) {
+                temaEspecificoLayout.error = getString(R.string.error_temaespecifico_formato)
             } else {
-                val temaEspecificoLayout = findViewById<TextInputLayout>(R.id.temaEspecifico)
-
-                if (temaEspecifico.length > 50) {
-                    temaEspecificoLayout.error = getString(R.string.error_temaespecifico_longitud)
-                }
-                else if (!temaEspecifico.matches("^[a-zA-Z0-9 ]*$".toRegex())) {
-                    temaEspecificoLayout.error = getString(R.string.error_temaespecifico_formato)
-                } else {
-                    temaEspecificoLayout.error = null
-                    saveTema(temaSeleccionado, temaEspecifico)
-                    val intent = Intent(this, BusquedaLeccionActivity::class.java)
-
+                temaEspecificoLayout.error = null
+                saveTema(temaSeleccionado, temaEspecifico)
+                val intent = Intent(this, BusquedaLeccionActivity::class.java)
                     startActivity(intent)
                 }
-            }
+
         }
 
         btnBack.setOnClickListener {

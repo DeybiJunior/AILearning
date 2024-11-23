@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:text="  Generar  "
-            android:backgroundTint="@color/buttonBackground2"
+            android:backgroundTint="@drawable/button_tema_state"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:cornerRadius="15dp"

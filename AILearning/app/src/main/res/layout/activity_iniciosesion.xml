@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:text="Iniciar Sesión"
                 android:textColor="@color/md_theme_onPrimary"
-                app:backgroundTint="@color/md_theme_primary"
+                app:backgroundTint="@drawable/button_state"
                 app:cornerRadius="15dp"
                 app:iconTint="@color/md_theme_onPrimary" />
 

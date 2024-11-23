@@ -97,6 +97,12 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         prompts[getString(R.string.tipo_5)] = """Generar un JSON sobre $tema para una dificultad básica de $dificultad, sobre un cuestionario en inglés que conste de 10 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta.  La estructura debe ser: [{"ID": <number>, "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
         prompts[getString(R.string.tipo_6)] = "Genera un JSON con 3 palabra en Ingles sobre $tema de nivel básico - $dificultad. con una pista la pista debe ser significado de esta en el diccionario en español. La estructura debe ser: [{ \"ID\": <número>, \"clue\": \"<String en español>\", \"oneword\": \"<String palabra en ingles>\" }]"
 
+        val btnAgregarLeccion = findViewById<Button>(R.id.btnAgregarLeccion)
+        btnAgregarLeccion.isEnabled = false // Inicialmente deshabilitado
+
+        fun updateButtonAgregarState() {
+            btnAgregarLeccion.isEnabled = tipo.isNotEmpty()
+        }
 
         // Asignar valores a tipo según el botón clickeado y mostrar descripción adicional
         btn1.setOnClickListener {
@@ -113,6 +119,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn1.text = spannable
             btn1.setBackgroundColor(colorSeleccionado1) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
         btn2.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -128,6 +135,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn2.text = spannable
             btn2.setBackgroundColor(colorSeleccionado2) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
         btn3.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -143,6 +151,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn3.text = spannable
             btn3.setBackgroundColor(colorSeleccionado3) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
         btn4.setOnClickListener {
             resetButtons() // Restablece los textos y colores antes de cambiar
@@ -158,6 +167,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn4.text = spannable
             btn4.setBackgroundColor(colorSeleccionado4) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
 
         btn5.setOnClickListener {
@@ -174,6 +184,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn5.text = spannable
             btn5.setBackgroundColor(colorSeleccionado5) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
 
         btn6.setOnClickListener {
@@ -190,10 +201,9 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
             btn6.text = spannable
             btn6.setBackgroundColor(colorSeleccionado6) // Cambia el color del botón seleccionado
+            updateButtonAgregarState()
         }
 
-
-        val btnAgregarLeccion = findViewById<Button>(R.id.btnAgregarLeccion)
         btnAgregarLeccion.setOnClickListener {
             if (userId != null) {
                 // Verificar que tipo no esté vacío

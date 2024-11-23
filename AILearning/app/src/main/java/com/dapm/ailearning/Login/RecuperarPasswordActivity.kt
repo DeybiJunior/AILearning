@@ -3,6 +3,8 @@ package com.dapm.ailearning.Login
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -33,6 +35,23 @@ class RecuperarPasswordActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("RecuperarPasswordPrefs", Context.MODE_PRIVATE)
         var attemptCount = prefs.getInt("attemptCount", 0)
         val lockoutTime = prefs.getLong("lockoutTime", 0)
+
+        // Deshabilita el botón inicialmente
+        enviarButton.isEnabled = false
+
+        // Agrega un TextWatcher para habilitar el botón cuando ambos campos estén completos
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Habilita el botón si ambos campos están completos
+                enviarButton.isEnabled = emailEditText.text.isNotEmpty()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        // Añade el TextWatcher a ambos EditText
+        emailEditText.addTextChangedListener(textWatcher)
+
 
         // Revisar si el tiempo de bloqueo ha terminado
         if (SystemClock.elapsedRealtime() < lockoutTime) {
