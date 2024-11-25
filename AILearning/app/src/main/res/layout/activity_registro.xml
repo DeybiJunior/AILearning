@@ -99,7 +99,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLength="50"
-                    android:hint="Nombres"/>
+                    android:hint="Nombres"
+                    android:inputType="text|textNoSuggestions"
+                    android:digits="abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ "/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Espacio entre campos -->
@@ -122,7 +124,8 @@
                     android:layout_height="wrap_content"
                     android:maxLength="50"
                     android:hint="Apellidos"
-                    android:inputType="text"/>
+                    android:inputType="text|textNoSuggestions"
+                    android:digits="abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZ "/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Espacio entre campos -->
