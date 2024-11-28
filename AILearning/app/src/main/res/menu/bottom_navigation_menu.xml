@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_inicio"
-        android:icon="@drawable/icon_inicio"
+        android:icon="@drawable/outline_home_24"
         android:title="Inicio" />
     <item
         android:id="@+id/nav_aprende"
-        android:icon="@drawable/icon_aprende"
+        android:icon="@drawable/outline_book_24"
         android:title="Aprende" />
     <item
         android:id="@+id/nav_perfil"
-        android:icon="@drawable/icon_perfil"
+        android:icon="@drawable/outline_person_24"
         android:title="Perfil" />
 </menu>
 
