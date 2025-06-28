@@ -1,7 +1,6 @@
 package com.dapm.ailearning.Inicio
 
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -14,12 +13,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
-import com.dapm.ailearning.SolicituLocal.ApiService
+import com.dapm.ailearning.Solicitudnuve.ApiService
 import kotlin.properties.Delegates
 
 class BusquedaLeccionActivity : AppCompatActivity() {
@@ -230,12 +227,19 @@ class BusquedaLeccionActivity : AppCompatActivity() {
                 }
 
                 // Llamar al ApiService para generar el JSON
-                ApiService.solicitarAPI(prompt, this, { throwable ->
+// Llamar al ApiService para generar el JSON
+                ApiService.solicitarAGemini(prompt, this, { throwable ->
                     // Manejar error al obtener frases
                     progressDialog.dismiss()
-                    Log.e("BusquedaLeccionActivity", "Error al obtener frases: ${throwable?.message}")
-                    Toast.makeText(this, "Error al obtener frases de la API", Toast.LENGTH_SHORT).show()
+                    Log.e("BusquedaLeccionActivity", "Error al obtener frases de Gemini: ${throwable?.message}")
+                    Toast.makeText(this, "Error al obtener frases de Gemini", Toast.LENGTH_SHORT).show()
                 }) { jsonFrases ->
+
+                    val jsonFrases = jsonFrases
+                        .replace("```json", "", ignoreCase = true)
+                        .replace("```", "")
+                        .trim()
+
                     // Esta es la nueva función de callback para recibir el JSON
                     progressDialog.dismiss()
                     val nuevaLeccion = Leccion(

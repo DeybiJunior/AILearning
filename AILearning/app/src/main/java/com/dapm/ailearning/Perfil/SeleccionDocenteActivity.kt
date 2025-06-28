@@ -1,6 +1,8 @@
 // SeleccionDocenteActivity.kt
 package com.dapm.ailearning.Perfil
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,10 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dapm.ailearning.R
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,6 +33,8 @@ class SeleccionDocenteActivity : AppCompatActivity() {
     private lateinit var Docentecard: CardView
     private lateinit var tvMensaje: TextView
     private lateinit var tvDocente: TextView
+    private lateinit var botonUnirme: Button
+    private lateinit var layoutDocente: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +54,21 @@ class SeleccionDocenteActivity : AppCompatActivity() {
         btnEliminarDocente.setOnClickListener {
             mostrarCuadroAdvertencia()
         }
+        val textViewEnlace = findViewById<TextView>(R.id.textView3)
+        layoutDocente = findViewById(R.id.constraint)
+
+        botonUnirme = findViewById(R.id.unirme_button)
+        botonUnirme.setOnClickListener {
+            try {
+                val url = "https://ailearning-8e9ab.web.app/"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("URL Intent Error", "Error abriendo el navegador: ${e.message}")
+                Toast.makeText(this, "Error al abrir el navegador", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
         // Check if there is an assigned teacher
         checkAssignedDocente()
@@ -59,12 +80,15 @@ class SeleccionDocenteActivity : AppCompatActivity() {
     }
 
     private fun checkAssignedDocente() {
+
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
         if (userId == null) {
             tvMensaje.text = "Usuario no autenticado"
             tvMensaje.visibility = View.VISIBLE
             tvDocente.visibility = View.GONE
+            layoutDocente.visibility = View.VISIBLE
+
             return
         }
 
@@ -79,12 +103,14 @@ class SeleccionDocenteActivity : AppCompatActivity() {
                     } else {
                         tvMensaje.visibility = View.GONE
                         tvDocente.visibility = View.GONE
+                        layoutDocente.visibility = View.VISIBLE
                         mostrarDatosDocente(docenteId)
                         btnEliminarDocente.visibility = Button.VISIBLE // Show delete button
                     }
                 } else {
                     tvDocente.text = "Selección Docente"
                     tvDocente.visibility = View.VISIBLE
+                    layoutDocente.visibility = View.VISIBLE
                     Toast.makeText(this, "No tiene docente asignado", Toast.LENGTH_SHORT).show()
                     cargarDocentes() // Load teachers
                     btnEliminarDocente.visibility = Button.GONE // Hide the button
@@ -100,6 +126,7 @@ class SeleccionDocenteActivity : AppCompatActivity() {
         // Primero, asegurarse de que la CardView esté oculta al iniciar la carga de datos
         val docenteCard = findViewById<CardView>(R.id.Docentecard)
         docenteCard.visibility = View.GONE // Ocultar inicialmente
+        layoutDocente.visibility = View.GONE
 
         firestore.collection("users_docentes").document(docenteId)
             .get()

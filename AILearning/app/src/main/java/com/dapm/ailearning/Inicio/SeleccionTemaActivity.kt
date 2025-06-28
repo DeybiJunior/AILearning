@@ -62,9 +62,6 @@ class SeleccionTemaActivity : AppCompatActivity() {
 
             if (temaEspecifico.length > 50) {
                 temaEspecificoLayout.error = getString(R.string.error_temaespecifico_longitud)
-            }
-            else if (!temaEspecifico.matches("^[a-zA-Z0-9 ]*$".toRegex())) {
-                temaEspecificoLayout.error = getString(R.string.error_temaespecifico_formato)
             } else {
                 temaEspecificoLayout.error = null
                 saveTema(temaSeleccionado, temaEspecifico)
