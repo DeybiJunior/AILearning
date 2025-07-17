@@ -49,7 +49,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         // Obtener el userId desde SharedPreferences
         val sharedPreferences = getSharedPreferences("user_data", MODE_PRIVATE)
         val userId = sharedPreferences.getString("user_id", null)
-        val dificultad = sharedPreferences.getString("dificultad", "Básico") ?: "Básico" // Valor por defecto: "Básico"
+        val dificultad = sharedPreferences.getString("dificultad", "Básico") ?: "Básico"
 
 
         // Obtener el tema desde SharedPreferences
@@ -87,12 +87,197 @@ class BusquedaLeccionActivity : AppCompatActivity() {
 
         resetButtons()
 
-        prompts[getString(R.string.tipo_1)] = "Genera un JSON con una lista de 10 frases en inglés de nivel básico $dificultad sobre $tema. La estructura debe ser: [{ \"ID\": <número>, \"frase\": \"<String>\" }, ...]"
-        prompts[getString(R.string.tipo_2)] = """Generar un JSON con 1 lectura corta (máximo 50 palabras, en inglés) sobre $tema para una dificultad básica de $dificultad, todo el textto en idioma inglés. Realizar un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta.  La estructura debe ser: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_3)] = """Genera un JSON con 1 lectura corta (max 50 palabras) en Ingles sobre $tema de nivel básico - $dificultad. Hacer un cuestionario sobre lectura que conste de 3 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "reading": "<String>", "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_4)] = """Genera un JSON con 5 frases cortas en inglés basico-$dificultad faciles sobre $tema, cada frase con una palabra faltante en el medio (_), que sea una palabra de gramática general, como un artículo, pronombre, verbo o adjetivo, y no un nombre propio ni algo similar.. 4 opciones multiples 3 opciones incorrectas y una respuesta correcta. Estructura de Ejemplo: [{"ID": <number>, "quiz": [{"frase": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_5)] = """Generar un JSON sobre $tema para una dificultad básica de $dificultad, sobre un cuestionario en inglés que conste de 10 preguntas de opción múltiple con 4 opciones y 1 respuesta correcta.  La estructura debe ser: [{"ID": <number>, "quiz": [{"question": "<String>", "options": ["<option 1>", "<option 2>", "<option 3>", "<option 4>"], "correct_answer": "<option n>"}]}]"""
-        prompts[getString(R.string.tipo_6)] = "Genera un JSON con 3 palabra en Ingles sobre $tema de nivel básico - $dificultad. con una pista la pista debe ser significado de esta en el diccionario en español. La estructura debe ser: [{ \"ID\": <número>, \"clue\": \"<String en español>\", \"oneword\": \"<String palabra en ingles>\" }]"
+
+        val (contextoNivel, cantidadElementos) = when (dificultad.lowercase()) {
+            "básico" -> Pair(
+                "nivel muy básico para niños de 4-8 años, vocabulario extremadamente simple, palabras de uso diario",
+                mapOf("frases" to 3, "lecturas" to 2, "quiz_preguntas" to 5, "palabras" to 2)
+            )
+            "intermedio" -> Pair(
+                "nivel intermedio para estudiantes de 9-12 años, vocabulario moderado, estructuras gramaticales básicas",
+                mapOf("frases" to 5, "lecturas" to 3, "quiz_preguntas" to 8, "palabras" to 3)
+            )
+            "avanzado" -> Pair(
+                "nivel avanzado para estudiantes de 13+ años, vocabulario amplio, estructuras gramaticales complejas",
+                mapOf("frases" to 7, "lecturas" to 5, "quiz_preguntas" to 10, "palabras" to 6)
+            )
+            else -> Pair(
+                "nivel básico para principiantes, vocabulario fundamental",
+                mapOf("frases" to 5, "lecturas" to 3, "quiz_preguntas" to 7, "palabras" to 3)
+            )
+        }
+
+        // PROMPT TIPO 1 - FRASES SIMPLES
+                prompts[getString(R.string.tipo_1)] = """
+        Eres un experto en enseñanza de inglés. Genera un JSON con frases en inglés sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de frases: ${cantidadElementos["frases"]}
+        
+        Requisitos específicos:
+        - Frases cortas apropiadas para el nivel
+        - Vocabulario adecuado para la edad y nivel
+        - Gramática simple y clara
+        - Temas familiares y cotidianos
+        - Usar tiempos verbales básicos
+        - Evitar jerga o modismos complejos
+        
+        Estructura JSON requerida:
+        [{"ID": <número>, "frase": "<frase en inglés>"}, {"ID": <número>, "frase": "<frase en inglés>"}, ...]
+        
+        Responde ÚNICAMENTE con el JSON válido, sin texto adicional.
+        """
+
+        // PROMPT TIPO 2 - LECTURA CON COMPRENSIÓN
+                prompts[getString(R.string.tipo_2)] = """
+        Eres un creador de contenido educativo para aprendizaje de inglés. Crea una lectura corta sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de preguntas: ${cantidadElementos["lecturas"]}
+        
+        Requisitos para la lectura:
+        - Longitud: 40-60 palabras
+        - Vocabulario apropiado para el nivel especificado
+        - Oraciones simples y claras
+        - Tema interesante y relevante
+        - Uso de gramática adecuada al nivel
+        - Evitar palabras técnicas innecesarias
+        
+        Requisitos para el quiz:
+        - Preguntas de comprensión basadas en el texto
+        - Respuestas encontrables directamente en la lectura
+        - Opciones claras y diferentes
+        - Una respuesta correcta obvia
+        - Distractores plausibles pero incorrectos
+        
+        Estructura JSON requerida:
+        [{"ID": <número>, "reading": "<texto de la lectura>", "quiz": [{"question": "<pregunta>", "options": ["<opción>", "<opción>", "<opción>", "<opción>"], "correct_answer": "<respuesta correcta>"}]}]
+        
+        Responde ÚNICAMENTE con el JSON válido, sin texto adicional.
+        """
+
+        // PROMPT TIPO 3 - LECTURA CON COMPRENSIÓN (VERSIÓN ALTERNATIVA)
+                prompts[getString(R.string.tipo_3)] = """
+        Eres un especialista en material didáctico para inglés. Crea una lectura educativa sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de preguntas: ${cantidadElementos["lecturas"]}
+        
+        Especificaciones para la lectura:
+        - Longitud: 40-80 palabras
+        - Vocabulario adaptado al nivel especificado
+        - Estructura narrativa simple
+        - Información clara y factual
+        - Uso de conectores apropiados al nivel
+        - Evitar abstracciones complejas
+        
+        Especificaciones para las preguntas:
+        - Preguntas sobre información explícita del texto
+        - Evaluar comprensión literal apropiada al nivel
+        - Opciones de respuesta balanceadas
+        - Distractores creíbles pero claramente incorrectos
+        - Preguntas variadas (quién, qué, dónde, cuándo, por qué)
+        
+        Estructura JSON requerida:
+        [{"ID": <número>, "reading": "<texto de la lectura>", "quiz": [{"question": "<pregunta>", "options": ["<opción>", "<opción>", "<opción>", "<opción>"], "correct_answer": "<respuesta correcta>"}]}]
+        
+        Responde ÚNICAMENTE con el JSON válido, sin texto adicional.
+        """
+
+        // PROMPT TIPO 4 - COMPLETAR FRASES
+                prompts[getString(R.string.tipo_4)] = """
+        Eres un experto en gramática inglesa para principiantes. Crea ejercicios de completar frases sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de ejercicios: ${cantidadElementos["quiz_preguntas"]}
+        
+        Requisitos para las frases:
+        - Frases cortas y simples apropiadas al nivel
+        - Una sola palabra faltante marcada con "_"
+        - Palabra faltante debe ser gramática básica: artículos, verbos auxiliares, preposiciones básicas, pronombres
+        - Contexto claro que indique la respuesta correcta
+        - Vocabulario familiar y apropiado al nivel
+        - Evitar nombres propios o términos técnicos
+        
+        Requisitos para las opciones:
+        - 4 opciones por pregunta
+        - 1 respuesta claramente correcta
+        - 3 distractores plausibles pero incorrectos
+        - Opciones de la misma categoría gramatical
+        - Evitar opciones obviamente incorrectas
+        
+        Estructura JSON requerida:
+        [{"ID": 1, "quiz": [{"frase": "<frase con _>", "options": ["<opción>", "<opción>", "<opción>", "<opción>"], "correct_answer": "<respuesta correcta>"}]}]
+        
+        REGLAS CRÍTICAS:
+        - Generar UN SOLO objeto con ID: 1
+        - Crear la cantidad de ejercicios especificada en el array "quiz"
+        - Cada frase debe tener UNA palabra faltante con "_"
+        - Responder SOLO con JSON válido, sin texto adicional
+        """
+
+        // PROMPT TIPO 5 - QUIZ GENERAL
+                prompts[getString(R.string.tipo_5)] = """
+        Eres un creador de evaluaciones de inglés. Diseña un quiz completo sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de preguntas: ${cantidadElementos["quiz_preguntas"]}
+        
+        Requisitos para las preguntas:
+        - Preguntas variadas sobre el tema
+        - Preguntas claras y directas
+        - Vocabulario apropiado para el nivel
+        - Mezclar tipos: vocabulario, gramática, comprensión
+        - Evitar preguntas demasiado específicas o técnicas
+        - Incluir contexto suficiente para responder
+        
+        Requisitos para las opciones:
+        - 4 opciones balanceadas por pregunta
+        - 1 respuesta correcta obvia para el nivel
+        - 3 distractores creíbles pero incorrectos
+        - Opciones de longitud similar
+        - Evitar opciones como "todas las anteriores" o "ninguna"
+        
+        Estructura JSON requerida:
+        [{"ID": <número>, "quiz": [{"question": "<pregunta>", "options": ["<opción>", "<opción>", "<opción>", "<opción>"], "correct_answer": "<respuesta correcta>"}]}]
+        
+        REGLAS CRÍTICAS:
+        - Generar UN SOLO objeto con ID: 1
+        - Crear la cantidad de preguntas especificada en el array "quiz"
+        - Preguntas progresivas en dificultad dentro del nivel
+        - Responder SOLO con JSON válido, sin texto adicional
+        """
+
+        // PROMPT TIPO 6 - PALABRAS CON PISTAS
+                prompts[getString(R.string.tipo_6)] = """
+        Eres un especialista en vocabulario inglés para principiantes. Crea ejercicios de palabras con pistas sobre $tema.
+        
+        Nivel de dificultad: $contextoNivel
+        Cantidad de palabras: ${cantidadElementos["palabras"]}
+        
+        Requisitos para las palabras:
+        - Palabras en inglés relacionadas con el tema
+        - Palabras básicas y comunes del vocabulario
+        - Evitar palabras técnicas o complejas
+        - Palabras que los estudiantes del nivel puedan usar
+        - Preferir sustantivos, verbos y adjetivos básicos
+        
+        Requisitos para las pistas:
+        - Definiciones claras en español
+        - Explicaciones simples y directas
+        - Incluir contexto de uso cuando sea útil
+        - Evitar definiciones circulares
+        - Usar vocabulario español accesible
+        
+        Estructura JSON requerida:
+        [{"ID": <número>, "clue": "<pista en español>", "oneword": "<palabra en inglés>"}, {"ID": <número>, "clue": "<pista en español>", "oneword": "<palabra en inglés>"}, ...]
+        
+        REGLAS CRÍTICAS:
+        - Generar la cantidad especificada de objetos con IDs consecutivos
+        - Pistas en español, palabras en inglés
+        - Relación directa entre pista y palabra
+        - Responder SOLO con JSON válido, sin texto adicional
+        """
 
         val btnAgregarLeccion = findViewById<Button>(R.id.btnAgregarLeccion)
         btnAgregarLeccion.isEnabled = false // Inicialmente deshabilitado

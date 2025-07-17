@@ -192,7 +192,6 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
                 }
             }
 
-
             submitButton.setOnClickListener {
                 val selectedId = optionsGroup.checkedRadioButtonId
                 val selectedOption = findViewById<RadioButton>(selectedId)
@@ -302,7 +301,6 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         }, 5000)
     }
 
-
     private fun guardarDuracionLeccion() {
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
@@ -318,35 +316,28 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         }
     }
 
-
     private fun actualizarLeccion(puntajeFinal: Int) {
         // Log to confirm startTime
         Log.d("ActualizarLeccion", "startTime at call: $startTime")
-
         // Determine the score to send based on the final score value
         val puntajeEnvio = when {
-            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
+            puntajeFinal >= 3 -> 10
             puntajeFinal == 2 -> 8
             puntajeFinal == 1 -> 5
             puntajeFinal == 0 -> 0
             else -> 0
         }
-
         val estadoFinal = true
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
-
         CoroutineScope(Dispatchers.IO).launch {
             val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao()
-
             leccionDao.updateLessonDurationAndCompletionDate(idLeccion, duration, endTime, startTime)
             leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
-
             Log.d("GuardarDuracionLeccion", "Duración: $duration ms, Tiempo de finalización: $endTime ms, Tiempo de inicio: $startTime ms")
             Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
         }
     }
-
     private fun mostrarEstrellas(estrellas: Int) {
         // Cambiar la imagen según el puntaje
         when (estrellas) {
@@ -358,12 +349,10 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             2 -> {
                 imageViewEstrellas.setImageResource(R.drawable.estrella2)
                 imagenResultado.setImageResource(R.drawable.excelente)
-
             }
             1 -> {
                 imageViewEstrellas.setImageResource(R.drawable.estrella1)
                 imagenResultado.setImageResource(R.drawable.excelente)
-
             }
             0 -> {
                 imageViewEstrellas.setImageResource(R.drawable.vuelveintentar)
@@ -371,7 +360,6 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
 
             }
         }
-
         imageViewEstrellas.alpha = 0f
         imageViewEstrellas.visibility = View.VISIBLE
         imageViewEstrellas.animate()
@@ -379,7 +367,6 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             .setDuration(500) // Duración de la animación
             .start() // Iniciar la animación
     }
-
     private fun calcularEstrellas(): Int {
         return when {
             score >= 3 -> 3 // 3 estrellas
@@ -388,14 +375,6 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             else -> 0 // Sin estrellas
         }
     }
-
-
-
-
-
-    // Función para cargar la pregunta en la UI
-
-
     // Función para actualizar el progreso
     private fun actualizarProgreso(totalPreguntas: Int) {
         indexProgres++
@@ -406,7 +385,4 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
         animator.interpolator = DecelerateInterpolator()
         animator.start()
     }
-
-
-
 }

@@ -17,7 +17,7 @@ object ApiService {
 
     private const val BASE_URL_GEMINI = "https://generativelanguage.googleapis.com/v1beta/"
     // Reemplaza con tu clave de API de Gemini (¡Mantén esta clave segura!)
-    private const val API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+    private const val API_KEY = "xxxxxxxxxxxxxxxxx"
     private const val MODEL_NAME = "gemini-2.0-flash"
 
     fun solicitarAGemini(prompt: String, context: Context, onFailure: (Throwable?) -> Unit, onSuccess: (String) -> Unit) {
