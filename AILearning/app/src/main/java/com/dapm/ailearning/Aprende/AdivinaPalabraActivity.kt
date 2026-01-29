@@ -3,11 +3,13 @@ package com.dapm.ailearning.Aprende
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -16,6 +18,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -58,12 +61,14 @@ class AdivinaPalabraActivity : AppCompatActivity() {
 
     private lateinit var tvProgreso: TextView
     private lateinit var clouse: ImageView
-    private lateinit var  pista: TextView
+    private lateinit var pista: TextView
     private var startTime: Long = 0
     private var endTime: Long = 0
 
     private var resp = ""
 
+    // Nuevo: Container para los intentos
+    private lateinit var attemptsContainer: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +90,9 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         imageViewEstrellas = findViewById(R.id.imageViewEstrellas)
         imagenResultado = findViewById(R.id.imagenResultado)
 
+        // Nuevo: Inicializar container para los intentos
+        attemptsContainer = findViewById(R.id.attemptsContainer)
+
         initializeDatabase()
 
         idLeccion = intent.getIntExtra("idLeccion", -1)
@@ -103,16 +111,15 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             Toast.makeText(this, "No se encontró el ID de la lección", Toast.LENGTH_SHORT).show()
         }
 
-
         submitGuessButton.setOnClickListener {
             checkGuess()
         }
-        btSiguiente.setOnClickListener {
 
+        btSiguiente.setOnClickListener {
             resp = guessEditText.text.toString()
             Log.d("DEBUG_RESP", "Valor de resp: $resp")
             // Guardar la respuesta seleccionada para la pregunta actual
-            if (resp=="") {
+            if (resp == "") {
                 CoroutineScope(Dispatchers.Main).launch {
                     leccionDao.agregarRespuestasSeleccionadas(idLeccion, "sin respuesta")
                 }
@@ -129,7 +136,6 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         clouseImageView.setOnClickListener {
             finish() // Cierra la actividad actual
         }
-
     }
 
     private fun cargarLeccion(lessonId: Int) {
@@ -182,93 +188,126 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         }
     }
 
-
     private fun checkGuess() {
         val userGuess = guessEditText.text.toString().trim()
         val correctAnswer = frases[currentQuestionIndex].oneword
 
-        // Asegúrate de que la longitud de userGuess sea igual a la longitud de correctAnswer
-        if (userGuess.length != correctAnswer.length) {
-            feedbackTextView.text = "La palabra debe tener ${correctAnswer.length} letras."
+        // Validar que el usuario ingresó algo
+        if (userGuess.isEmpty()) {
+            Toast.makeText(this, "Por favor ingresa una palabra", Toast.LENGTH_SHORT).show()
             return
         }
+
+        // Asegúrate de que la longitud de userGuess sea igual a la longitud de correctAnswer
+        if (userGuess.length != correctAnswer.length) {
+            Toast.makeText(this, "La palabra debe tener ${correctAnswer.length} letras.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Crear un nuevo intento visual
+        createAttemptView(userGuess, correctAnswer)
 
         if (userGuess.equals(correctAnswer, ignoreCase = true)) {
             feedbackTextView.text = "¡Correcto!"
             guessEditText.isEnabled = false
+            submitGuessButton.isEnabled = false
 
             score++
             tvPuntaje.text = "Puntaje: $score"
 
-            // Cambiar todos los botones a verde si la respuesta es correcta
-            val buttonsCount = letterButtonsLayout.childCount
-            for (i in 0 until buttonsCount) {
-                val button = letterButtonsLayout.getChildAt(i) as Button
-                button.setBackgroundColor(ContextCompat.getColor(this, R.color.basicoColor))
-                button.text = correctAnswer[i].toString() // Muestra la letra correcta
-            }
             return
         } else {
             failedAttempts--
-            feedbackTextView.text = "Intenta de nuevo, la palabra no es la correcta, te quedan $failedAttempts intentos ."
 
             if (failedAttempts <= 0) {
                 guessEditText.isEnabled = false
+                submitGuessButton.isEnabled = false
                 feedbackTextView.text = "Has agotado tus intentos. La palabra era \"$correctAnswer\""
                 return
+            } else {
+                feedbackTextView.text = "Intenta de nuevo, te quedan $failedAttempts intentos."
             }
+        }
 
-            // Cambia colores de botones según el guess
-            val buttonsCount = letterButtonsLayout.childCount
-            val colorMap = mutableMapOf<Char, Int>()
+        // Limpiar el campo de entrada para el siguiente intento
+        guessEditText.text.clear()
+    }
 
+    private fun createAttemptView(userGuess: String, correctAnswer: String) {
+        // Crear un LinearLayout horizontal para este intento
+        val attemptLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 8, 0, 8)
+            }
+        }
 
-            // Contar letras correctas
-            for (i in correctAnswer.indices) {
-                val button = letterButtonsLayout.getChildAt(i) as Button
-                if (userGuess[i].equals(correctAnswer[i], ignoreCase = true)) {
-                    button.setBackgroundColor(ContextCompat.getColor(this, R.color.basicoColor))
-                    button.text = userGuess[i].toString() // Muestra la letra correcta
-                    colorMap[userGuess[i]] = 1 // Marcar letra como correcta
-                } else {
-                    colorMap[userGuess[i]] = 0 // Marcar letra como incorrecta
+        // Crear botones para cada letra del intento
+        for (i in correctAnswer.indices) {
+            val letterButton = Button(this).apply {
+                text = userGuess.getOrNull(i)?.toString()?.uppercase() ?: ""
+                layoutParams = LinearLayout.LayoutParams(0, 120, 1f).apply {
+                    setMargins(4, 0, 4, 0)
                 }
-            }
+                textSize = 18f
+                typeface = Typeface.DEFAULT_BOLD
 
-            // Cambia a amarillo si la letra está en la palabra pero en la posición incorrecta
-            for (i in correctAnswer.indices) {
-                if (userGuess[i] != correctAnswer[i] && correctAnswer.contains(userGuess[i])) {
-                    val button = letterButtonsLayout.getChildAt(i) as Button
-                    if (colorMap[userGuess[i]] == 0) {
-                        button.setBackgroundColor(ContextCompat.getColor(this, R.color.intermedioColor))
-                        button.text = userGuess[i].toString() // Muestra la letra
+                // Determinar el color basado en la lógica de Wordle
+                val backgroundColor = when {
+                    i < userGuess.length && userGuess[i].equals(correctAnswer[i], ignoreCase = true) -> {
+                        // Letra correcta en posición correcta (Verde)
+                        ContextCompat.getColor(this@AdivinaPalabraActivity, R.color.basicoColor)
+                    }
+                    i < userGuess.length && correctAnswer.contains(userGuess[i], ignoreCase = true) -> {
+                        // Letra correcta en posición incorrecta (Amarillo)
+                        ContextCompat.getColor(this@AdivinaPalabraActivity, R.color.intermedioColor)
+                    }
+                    else -> {
+                        // Letra incorrecta (Gris)
+                        Color.GRAY
                     }
                 }
-            }
 
-            for (i in 0 until buttonsCount) {
-                val button = letterButtonsLayout.getChildAt(i) as Button
-                if (button.text == "_") {
-                    button.setBackgroundColor(Color.GRAY) // Gris si no hay coincidencias
-                }
+                setBackgroundColor(backgroundColor)
+                setTextColor(Color.WHITE)
             }
+            attemptLayout.addView(letterButton)
+        }
+
+        // Agregar el intento al container
+        attemptsContainer.addView(attemptLayout)
+
+        // Hacer scroll hacia abajo para mostrar el último intento
+        val scrollView = findViewById<ScrollView>(R.id.scrollView)
+        scrollView?.post {
+            scrollView.fullScroll(ScrollView.FOCUS_DOWN)
         }
     }
 
-
     private fun nextQuestion() {
-        if (currentQuestionIndex < frases.size - 1) { // Asegúrate de que no se salga de los límites
-            currentQuestionIndex++ // Incrementa el índice antes de mostrar la nueva pista
+        if (currentQuestionIndex < frases.size - 1) {
+            currentQuestionIndex++
+
+            // Limpiar todos los intentos anteriores
+            attemptsContainer.removeAllViews()
+
+            // Restablecer la interfaz para la nueva pregunta
             clueTextView.text = frases[currentQuestionIndex].clue
-            guessEditText.text.clear() // Limpia el campo de entrada
+            guessEditText.text.clear()
             guessEditText.isEnabled = true
+            submitGuessButton.isEnabled = true
             failedAttempts = 10
-            feedbackTextView.text = "" // Limpia el mensaje de retroalimentación
+            feedbackTextView.text = ""
+
             actualizarProgreso(totalPreguntas)
             initializeLetterButtons(frases[currentQuestionIndex].oneword.length)
 
-
         } else {
+            // Ocultar elementos del juego
             clueTextView.visibility = View.GONE
             guessEditText.visibility = View.GONE
             submitGuessButton.visibility = View.GONE
@@ -280,6 +319,7 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             tvPuntaje.visibility = View.GONE
             clouse.visibility = View.GONE
             pista.visibility = View.GONE
+            attemptsContainer.visibility = View.GONE
 
             mostrarPuntajeFinal()
             actualizarLeccion(score)
@@ -290,14 +330,22 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         // Log to confirm startTime
         Log.d("ActualizarLeccion", "startTime at call: $startTime")
 
-        // Determine the score to send based on the final score value
-        val puntajeEnvio = when {
-            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
-            puntajeFinal == 2 -> 8
-            puntajeFinal == 1 -> 5
-            puntajeFinal == 0 -> 0
-            else -> 0
+        // Determinar la dificultad basada en la cantidad de palabras
+        val dificultadEjercicio = when (totalPreguntas) {
+            2 -> "BÁSICO"
+            3 -> if (Math.random() > 0.5) "INTERMEDIO" else "DEFAULT" // Ambos tienen 3 palabras
+            6 -> "AVANZADO"
+            else -> "DEFAULT"
         }
+
+        // Calcular el puntaje sobre 10 basado en la proporción de respuestas correctas
+        val puntajeEnvio = if (totalPreguntas > 0) {
+            ((puntajeFinal.toFloat() / totalPreguntas.toFloat()) * 10).toInt()
+        } else {
+            0
+        }
+
+        Log.d("ActualizarLeccion", "Dificultad detectada: $dificultadEjercicio, Total preguntas: $totalPreguntas, Respuestas correctas: $puntajeFinal, Puntaje enviado: $puntajeEnvio")
 
         val estadoFinal = true
         val endTime = System.currentTimeMillis()
@@ -314,7 +362,6 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         }
     }
 
-
     private fun actualizarProgreso(totalPreguntas: Int) {
         indexProgres++
         val progreso = ((indexProgres) * 100) / totalPreguntas
@@ -325,33 +372,29 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         animator.start()
     }
 
-
     private fun mostrarPuntajeFinal() {
         tvPuntajeFinal.visibility = View.VISIBLE
         imagenResultado.visibility = View.VISIBLE
-        tvPuntajeFinal.alpha = 0f // Comienza invisible
-        tvPuntajeFinal.text = "Puntaje Final: 0" // Comienza en 0
+        tvPuntajeFinal.alpha = 0f
+        tvPuntajeFinal.text = "Puntaje Final: 0"
 
         val startValue = 0
-        val endValue = score // Usamos la variable de puntaje calculada
+        val endValue = score
 
-        // Crea un ValueAnimator para animar el puntaje
         val animator = ValueAnimator.ofInt(startValue, endValue)
-        animator.duration = 2000 // Duración de 2 segundos
+        animator.duration = 2000
         animator.addUpdateListener { animation ->
             val animatedValue = animation.animatedValue as Int
             tvPuntajeFinal.text = "Puntaje Final: $animatedValue"
         }
         animator.start()
 
-        // Animación de desvanecimiento para el puntaje
         tvPuntajeFinal.animate()
             .alpha(1f)
-            .setDuration(1000) // Duración de la animación de desvanecimiento
+            .setDuration(1000)
             .setInterpolator(AccelerateDecelerateInterpolator())
             .start()
 
-        // Calcular y mostrar estrellas
         val estrellas = calcularEstrellas()
         mostrarEstrellas(estrellas)
 
@@ -360,9 +403,7 @@ class AdivinaPalabraActivity : AppCompatActivity() {
         }, 5000)
     }
 
-
     private fun mostrarEstrellas(estrellas: Int) {
-        // Cambiar la imagen según el puntaje
         when (estrellas) {
             3 -> {
                 imageViewEstrellas.setImageResource(R.drawable.estrella3)
@@ -372,38 +413,37 @@ class AdivinaPalabraActivity : AppCompatActivity() {
             2 -> {
                 imageViewEstrellas.setImageResource(R.drawable.estrella2)
                 imagenResultado.setImageResource(R.drawable.excelente)
-
             }
             1 -> {
                 imageViewEstrellas.setImageResource(R.drawable.estrella1)
                 imagenResultado.setImageResource(R.drawable.excelente)
-
             }
             0 -> {
                 imageViewEstrellas.setImageResource(R.drawable.vuelveintentar)
                 imagenResultado.setImageResource(R.drawable.losentimos)
-
             }
         }
 
         imageViewEstrellas.alpha = 0f
         imageViewEstrellas.visibility = View.VISIBLE
         imageViewEstrellas.animate()
-            .alpha(1f) // Animar a alpha 1 (visible)
-            .setDuration(500) // Duración de la animación
-            .start() // Iniciar la animación
+            .alpha(1f)
+            .setDuration(500)
+            .start()
     }
 
     private fun calcularEstrellas(): Int {
+        val porcentajeAciertos = if (totalPreguntas > 0) {
+            (score.toFloat() / totalPreguntas.toFloat()) * 100
+        } else {
+            0f
+        }
+
         return when {
-            score >= 3 -> 3 // 3 estrellas
-            score >= 2 -> 2 // 2 estrellas
-            score >= 1 -> 1 // 1 estrella
-            else -> 0 // Sin estrellas
+            porcentajeAciertos >= 80 -> 3
+            porcentajeAciertos >= 60 -> 2
+            porcentajeAciertos >= 40 -> 1
+            else -> 0
         }
     }
-
-
-
-
 }

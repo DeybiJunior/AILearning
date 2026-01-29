@@ -453,12 +453,29 @@ class Aprendeporrepeticion : AppCompatActivity() {
     private fun actualizarLeccion(puntajeFinal: Int) {
         val estadoFinal = true // Estado de la lección completada
 
+        // Determinar la dificultad basada en la cantidad de frases
+        val dificultadEjercicio = when (totalFrases) {
+            3 -> "BÁSICO"
+            5 -> if (Math.random() > 0.5) "INTERMEDIO" else "DEFAULT" // Ambos tienen 5 frases
+            7 -> "AVANZADO"
+            else -> "DEFAULT"
+        }
+
+        // Calcular el puntaje sobre 10 basado en la proporción de respuestas correctas
+        val puntajeEnvio = if (totalFrases > 0) {
+            ((puntajeFinal.toFloat() / totalFrases.toFloat()) * 10).toInt()
+        } else {
+            0
+        }
+
+        Log.d("ActualizarLeccion", "Dificultad detectada: $dificultadEjercicio, Total frases: $totalFrases, Respuestas correctas: $puntajeFinal, Puntaje enviado: $puntajeEnvio")
+
         CoroutineScope(Dispatchers.IO).launch {
             val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
 
-            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeFinal)
+            leccionDao.updateLeccion(idLeccion, estadoFinal, puntajeEnvio)
 
-            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeFinal, Estado = $estadoFinal")
+            Log.d("ActualizarLeccion", "Lección actualizada: ID = $idLeccion, Puntaje = $puntajeEnvio, Estado = $estadoFinal")
         }
     }
 
@@ -466,12 +483,18 @@ class Aprendeporrepeticion : AppCompatActivity() {
 
 
     private fun calcularEstrellas(): Int {
-        val porcentajeCorrectas = (puntajeUsuarioPorLeccion.toDouble() / totalFrases) * 100
+        // Calcular estrellas basado en el porcentaje de aciertos
+        val porcentajeCorrectas = if (totalFrases > 0) {
+            (puntajeUsuarioPorLeccion.toFloat() / totalFrases.toFloat()) * 100
+        } else {
+            0f
+        }
+        
         return when {
-            porcentajeCorrectas == 100.0 -> 3 // Tres estrellas
-            porcentajeCorrectas > 80.0 -> 2 // Dos estrellas
-            porcentajeCorrectas >= 50 -> 1 // Una estrella
-            else -> 0 // Cero estrellas
+            porcentajeCorrectas >= 80 -> 3 // 3 estrellas (80% o más)
+            porcentajeCorrectas >= 60 -> 2 // 2 estrellas (60% - 79%)
+            porcentajeCorrectas >= 40 -> 1 // 1 estrella (40% - 59%)
+            else -> 0 // Sin estrellas (menos de 40%)
         }
     }
 

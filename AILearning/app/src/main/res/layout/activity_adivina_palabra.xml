@@ -68,93 +68,135 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <!-- Segundo LinearLayout: layout vertical debajo del progreso -->
-        <LinearLayout
+        <!-- ScrollView para contener el contenido del juego -->
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="0dp"
             android:padding="16dp"
             app:layout_constraintTop_toBottomOf="@id/progreso"
+            app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/pista"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Pista:"
-                android:textStyle="bold"
-                android:textSize="20dp" />
-
-            <TextView
-                android:id="@+id/clueTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Clue will appear here"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/feedbackTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:visibility="visible" />
-
-
-            <LinearLayout
-                android:id="@+id/letterButtonsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:gravity="center"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                app:layout_constraintTop_toBottomOf="@id/feedbackTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout3"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/pista"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Ingresa tu predicción">
+                    android:padding="8dp"
+                    android:text="Pista:"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/guessEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/clueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Clue will appear here"
+                    android:textSize="18sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submitGuessButton"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/buttonBackground6"
-                    android:contentDescription="Enviar respuesta"
-                    android:padding="12dp"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="16dp"
-                    app:icon="@drawable/icon_envio"
-                    app:iconGravity="textStart"
-                    app:iconPadding="0dp"
-                    app:iconTint="@android:color/white" />
+                <TextView
+                    android:id="@+id/feedbackTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="visible" />
+
+                <!-- Container para mostrar los intentos estilo Wordle -->
+                <LinearLayout
+                    android:id="@+id/attemptsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"/>
+
+                <LinearLayout
+                    android:id="@+id/letterButtonsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"/>
+
             </LinearLayout>
 
+        </ScrollView>
 
-        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/md_theme_inverseOnSurface"
+        android:padding="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Ingresa tu predicción">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/guessEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitGuessButton"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/buttonBackground6"
+                android:contentDescription="Enviar respuesta"
+                android:padding="12dp"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp"
+                app:icon="@drawable/icon_envio"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@android:color/white" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:padding="12dp"
+            android:id="@+id/btnSiguiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttonBackground6"
+            android:text="  Siguiente  "
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:cornerRadius="15dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -224,30 +266,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/md_theme_inverseOnSurface"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:padding="12dp"
-            android:id="@+id/btnSiguiente"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/buttonBackground6"
-            android:text="  SIguiente  "
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cornerRadius="15dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

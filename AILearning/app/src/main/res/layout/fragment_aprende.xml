@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/md_theme_background">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:padding="16dp"
+
         android:text="LECCIONES "
         android:textSize="32dp"
         android:textStyle="bold" />
@@ -49,7 +50,6 @@
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconTint="@color/blancosiempre" />
-         1
 
     </LinearLayout>
 
@@ -62,6 +62,7 @@
         android:layout_marginTop="16dp">
 
         <LinearLayout
+            android:paddingHorizontal="16dp"
             android:id="@+id/linearLayoutContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

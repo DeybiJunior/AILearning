@@ -99,6 +99,12 @@ class DesafioCartasActivity : AppCompatActivity() {
             finish()
         }
         idLeccion = intent.getIntExtra("idLeccion", -1)
+
+        // Reinicio de Respuestas seleccionadas
+        CoroutineScope(Dispatchers.IO).launch {
+            leccionDao.updateRespuestasSeleccionadas(idLeccion, "")
+        }
+
         if (idLeccion != -1) {
             loadLesson(idLeccion)
         }
@@ -151,6 +157,17 @@ class DesafioCartasActivity : AppCompatActivity() {
                 val selectedOption = findViewById<RadioButton>(selectedId)
 
                 if (selectedOption != null) {
+                    // Desactivar el botón por 5 segundos
+                    submitButton.isEnabled = false
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        submitButton.isEnabled = true
+                    }, 5000)
+
+                    // Guardar la respuesta seleccionada
+                    CoroutineScope(Dispatchers.Main).launch {
+                        leccionDao.agregarRespuestasSeleccionadas(idLeccion, selectedOption.text.toString())
+                    }
+
                     optionsGroup.visibility = View.GONE
                     cardBack.text = "Respuesta Correcta: \n" + quizList[currentQuestionIndex].correct_answer
                     // Verifica la respuesta
@@ -276,6 +293,27 @@ class DesafioCartasActivity : AppCompatActivity() {
     private fun actualizarLeccion(puntajeFinal: Int) {
         val estadoFinal = true // Estado de la lección completada
 
+        // Obtener el total de preguntas del quiz
+        val totalPreguntas = lessonContent.quiz.size
+
+        // Determinar la dificultad basada en la cantidad de preguntas
+        val dificultadEjercicio = when (totalPreguntas) {
+            5 -> "BÁSICO"
+            7 -> "DEFAULT"
+            8 -> "INTERMEDIO"
+            10 -> "AVANZADO"
+            else -> "DEFAULT"
+        }
+
+        // Calcular el puntaje sobre 10 basado en la proporción de respuestas correctas
+        val puntajeEnvio = if (totalPreguntas > 0) {
+            ((puntajeFinal.toFloat() / totalPreguntas.toFloat()) * 10).toInt()
+        } else {
+            0
+        }
+
+        Log.d("ActualizarLeccion", "Dificultad detectada: $dificultadEjercicio, Total preguntas: $totalPreguntas, Respuestas correctas: $puntajeFinal, Puntaje enviado: $puntajeEnvio")
+
         // Crear una corrutina para actualizar la lección en la base de datos
         CoroutineScope(Dispatchers.IO).launch {
             val leccionDao = AppDatabase.getDatabase(applicationContext).leccionDao() // Obtén una instancia de tu DAO
@@ -321,16 +359,23 @@ class DesafioCartasActivity : AppCompatActivity() {
     }
 
     private fun calcularEstrellas(): Int {
+        // Obtener el total de preguntas del quiz
+        val totalPreguntas = lessonContent.quiz.size
+        
+        // Calcular estrellas basado en el porcentaje de aciertos
+        val porcentajeAciertos = if (totalPreguntas > 0) {
+            (score.toFloat() / totalPreguntas.toFloat()) * 100
+        } else {
+            0f
+        }
+        
         return when {
-            score >= 3 -> 3 // 3 estrellas
-            score >= 2 -> 2 // 2 estrellas
-            score >= 1 -> 1 // 1 estrella
-            else -> 0 // Sin estrellas
+            porcentajeAciertos >= 80 -> 3 // 3 estrellas (80% o más)
+            porcentajeAciertos >= 60 -> 2 // 2 estrellas (60% - 79%)
+            porcentajeAciertos >= 40 -> 1 // 1 estrella (40% - 59%)
+            else -> 0 // Sin estrellas (menos de 40%)
         }
     }
-
-
-
 
 
     // Función para cargar la pregunta en la UI

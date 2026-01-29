@@ -319,14 +319,30 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
     private fun actualizarLeccion(puntajeFinal: Int) {
         // Log to confirm startTime
         Log.d("ActualizarLeccion", "startTime at call: $startTime")
-        // Determine the score to send based on the final score value
-        val puntajeEnvio = when {
-            puntajeFinal >= 3 -> 10
-            puntajeFinal == 2 -> 8
-            puntajeFinal == 1 -> 5
-            puntajeFinal == 0 -> 0
-            else -> 0
+        
+        // Obtener el total de ejercicios del quiz
+        val totalEjercicios = lessonContent.quiz.size
+
+        // Determinar la dificultad basada en la cantidad de ejercicios
+        val dificultadEjercicio = when (totalEjercicios) {
+            5 -> "BÁSICO"
+            7 -> "DEFAULT"
+            8 -> "INTERMEDIO"
+            10 -> "AVANZADO"
+            else -> "DEFAULT"
         }
+
+        // Calcular el puntaje sobre 10 basado en la proporción de respuestas correctas
+        // Nota: El score se incrementa en 2 por respuesta correcta, por lo que dividimos entre 2
+        val respuestasCorrectas = puntajeFinal / 2
+        val puntajeEnvio = if (totalEjercicios > 0) {
+            ((respuestasCorrectas.toFloat() / totalEjercicios.toFloat()) * 10).toInt()
+        } else {
+            0
+        }
+
+        Log.d("ActualizarLeccion", "Dificultad detectada: $dificultadEjercicio, Total ejercicios: $totalEjercicios, Respuestas correctas: $respuestasCorrectas, Puntaje enviado: $puntajeEnvio")
+        
         val estadoFinal = true
         val endTime = System.currentTimeMillis()
         val duration = endTime - startTime
@@ -368,11 +384,24 @@ class FrasesEnAccionActivity : AppCompatActivity()  {
             .start() // Iniciar la animación
     }
     private fun calcularEstrellas(): Int {
+        // Obtener el total de ejercicios del quiz
+        val totalEjercicios = lessonContent.quiz.size
+        
+        // Calcular respuestas correctas (el score se incrementa en 2 por respuesta correcta)
+        val respuestasCorrectas = score / 2
+        
+        // Calcular estrellas basado en el porcentaje de aciertos
+        val porcentajeAciertos = if (totalEjercicios > 0) {
+            (respuestasCorrectas.toFloat() / totalEjercicios.toFloat()) * 100
+        } else {
+            0f
+        }
+        
         return when {
-            score >= 3 -> 3 // 3 estrellas
-            score >= 2 -> 2 // 2 estrellas
-            score >= 1 -> 1 // 1 estrella
-            else -> 0 // Sin estrellas
+            porcentajeAciertos >= 80 -> 3 // 3 estrellas (80% o más)
+            porcentajeAciertos >= 60 -> 2 // 2 estrellas (60% - 79%)
+            porcentajeAciertos >= 40 -> 1 // 1 estrella (40% - 59%)
+            else -> 0 // Sin estrellas (menos de 40%)
         }
     }
     // Función para actualizar el progreso

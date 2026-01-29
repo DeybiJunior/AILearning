@@ -193,7 +193,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         
         Requisitos para las frases:
         - Frases cortas y simples apropiadas al nivel
-        - Una sola palabra faltante marcada con "_"
+        - Una sola palabra faltante marcada con "_" (solo colocar unguion bajo)
         - Palabra faltante debe ser gramática básica: artículos, verbos auxiliares, preposiciones básicas, pronombres
         - Contexto claro que indique la respuesta correcta
         - Vocabulario familiar y apropiado al nivel
@@ -201,7 +201,7 @@ class BusquedaLeccionActivity : AppCompatActivity() {
         
         Requisitos para las opciones:
         - 4 opciones por pregunta
-        - 1 respuesta claramente correcta
+        - 1 respuesta claramente correcta (en orden aletorio)
         - 3 distractores plausibles pero incorrectos
         - Opciones de la misma categoría gramatical
         - Evitar opciones obviamente incorrectas

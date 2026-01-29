@@ -257,14 +257,25 @@ class DesafioComprensionActivity : AppCompatActivity() {
         // Log to confirm startTime
         Log.d("ActualizarLeccion", "startTime at call: $startTime")
 
-        // Determine the score to send based on the final score value
-        val puntajeEnvio = when {
-            puntajeFinal >= 3 -> 10 // Si puntajeFinal es mayor a 3, asignar 10
-            puntajeFinal == 2 -> 8
-            puntajeFinal == 1 -> 5
-            puntajeFinal == 0 -> 0
-            else -> 0
+        // Obtener el total de preguntas del quiz
+        val totalPreguntas = lessonContent.quiz.size
+
+        // Determinar la dificultad basada en la cantidad de preguntas
+        val dificultadEjercicio = when (totalPreguntas) {
+            2 -> "BÁSICO"
+            3 -> if (Math.random() > 0.5) "INTERMEDIO" else "DEFAULT" // Ambos tienen 3 preguntas
+            5 -> "AVANZADO"
+            else -> "DEFAULT"
         }
+
+        // Calcular el puntaje sobre 10 basado en la proporción de respuestas correctas
+        val puntajeEnvio = if (totalPreguntas > 0) {
+            ((puntajeFinal.toFloat() / totalPreguntas.toFloat()) * 10).toInt()
+        } else {
+            0
+        }
+
+        Log.d("ActualizarLeccion", "Dificultad detectada: $dificultadEjercicio, Total preguntas: $totalPreguntas, Respuestas correctas: $puntajeFinal, Puntaje enviado: $puntajeEnvio")
 
         val estadoFinal = true
         val endTime = System.currentTimeMillis()
@@ -315,11 +326,21 @@ class DesafioComprensionActivity : AppCompatActivity() {
     }
 
     private fun calcularEstrellas(): Int {
+        // Obtener el total de preguntas del quiz
+        val totalPreguntas = lessonContent.quiz.size
+        
+        // Calcular estrellas basado en el porcentaje de aciertos
+        val porcentajeAciertos = if (totalPreguntas > 0) {
+            (score.toFloat() / totalPreguntas.toFloat()) * 100
+        } else {
+            0f
+        }
+        
         return when {
-            score >= 3 -> 3 // 3 estrellas
-            score >= 2 -> 2 // 2 estrellas
-            score >= 1 -> 1 // 1 estrella
-            else -> 0 // Sin estrellas
+            porcentajeAciertos >= 80 -> 3 // 3 estrellas (80% o más)
+            porcentajeAciertos >= 60 -> 2 // 2 estrellas (60% - 79%)
+            porcentajeAciertos >= 40 -> 1 // 1 estrella (40% - 59%)
+            else -> 0 // Sin estrellas (menos de 40%)
         }
     }
 
