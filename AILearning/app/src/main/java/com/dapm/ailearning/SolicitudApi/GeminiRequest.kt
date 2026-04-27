@@ -1,4 +1,4 @@
-package com.dapm.ailearning.Solicitudnuve
+package com.dapm.ailearning.SolicitudApi
 
 data class GeminiRequest(
     val contents: List<Content>

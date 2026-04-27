@@ -1,4 +1,4 @@
-package com.dapm.ailearning.Solicitudnuve
+package com.dapm.ailearning.SolicitudApi
 
 data class GeminiResponse(
     val candidates: List<Candidate>

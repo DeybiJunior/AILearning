@@ -1,7 +1,5 @@
-package com.dapm.ailearning.Solicitudnuve
+package com.dapm.ailearning.SolicitudApi
 
-import com.dapm.ailearning.SolicitudApi.GeminiRequest
-import com.dapm.ailearning.SolicitudApi.GeminiResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

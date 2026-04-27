@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dapm.ailearning.Datos.Leccion
 import com.dapm.ailearning.Datos.LeccionViewModel
 import com.dapm.ailearning.R
-import com.dapm.ailearning.Solicitudnuve.ApiService
+import com.dapm.ailearning.SolicitudApi.ApiService
 import kotlin.properties.Delegates
 
 class BusquedaLeccionActivity : AppCompatActivity() {

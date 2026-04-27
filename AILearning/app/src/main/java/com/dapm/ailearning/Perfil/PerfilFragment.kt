@@ -35,6 +35,7 @@ class PerfilFragment : Fragment() {
     private lateinit var textViewDocenteSeleccionado: TextView
     private lateinit var textViewdificultad: TextView
     private lateinit var leccionesCompletasText: TextView
+    private lateinit var textViewApiKeyStatus: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,6 +45,7 @@ class PerfilFragment : Fragment() {
         textViewDocenteSeleccionado = view.findViewById(R.id.textViewDocenteSeleccionado)
         textViewdificultad = view.findViewById(R.id.textViewdificultad)
         leccionesCompletasText = view.findViewById(R.id.leccionesCompletasText)
+        textViewApiKeyStatus = view.findViewById(R.id.textViewApiKeyStatus)
 
         val database = AppDatabase.getDatabase(requireContext())
         leccionDao = database.leccionDao()
@@ -53,6 +55,7 @@ class PerfilFragment : Fragment() {
         val nivel = getUserLevel() // Obtén el nivel o 0 si no existe
         updateProgress(nivel)
         increaseProgress(nivel) // Pasa el nivel recuperado
+        actualizarEstadoApiKey()
     }
 
     override fun onResume() {
@@ -102,6 +105,11 @@ class PerfilFragment : Fragment() {
         cardViewSeleccionDocente.setOnClickListener {
             val intent = Intent(requireContext(), SeleccionDocenteActivity::class.java)
             startActivity(intent)
+        }
+
+        val cardViewApiKey: CardView = view.findViewById(R.id.cardViewApiKey)
+        cardViewApiKey.setOnClickListener {
+            mostrarDialogoApiKey()
         }
 
         circularProgressIndicator = view.findViewById(R.id.circularProgressIndicator)
@@ -253,5 +261,50 @@ class PerfilFragment : Fragment() {
                 }
             }
         }, 500)
+    }
+
+    private fun actualizarEstadoApiKey() {
+        val apiKey = obtenerApiKey()
+        textViewApiKeyStatus.text = if (apiKey.isNullOrEmpty()) {
+            "No configurada"
+        } else {
+            "Configurada ✓ (${apiKey.take(8)}...)"
+        }
+    }
+
+    private fun obtenerApiKey(): String? {
+        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
+        return sharedPref?.getString("gemini_api_key", null)
+    }
+
+    private fun mostrarDialogoApiKey() {
+        val input = android.widget.EditText(requireContext()).apply {
+            hint = "Ingresa tu API Key de Gemini"
+            setText(obtenerApiKey() ?: "")
+            setPadding(48, 32, 48, 16)
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or
+                    android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Configurar API Key")
+            .setMessage("Ingresa tu API Key de Google Gemini. Se guardará solo en este dispositivo.")
+            .setView(input)
+            .setPositiveButton("Guardar") { _, _ ->
+                val apiKey = input.text.toString().trim()
+                guardarApiKey(apiKey)
+                actualizarEstadoApiKey()
+            }
+            .setNeutralButton("Eliminar") { _, _ ->
+                guardarApiKey("")
+                actualizarEstadoApiKey()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun guardarApiKey(apiKey: String) {
+        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
+        sharedPref?.edit()?.putString("gemini_api_key", apiKey)?.apply()
     }
 }
