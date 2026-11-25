@@ -97,6 +97,28 @@
 
     <string name="searchbar_hint">Buscar docentes</string>
 
+    <!-- Configuración de Gemini -->
+    <string name="gemini_api_key_card_title">API Key de Gemini</string>
+    <string name="gemini_api_key_not_configured">No configurada · Toca para obtenerla</string>
+    <string name="gemini_api_key_configured">Configurada y lista para usar</string>
+    <string name="gemini_api_key_dialog_title">Conecta Gemini</string>
+    <string name="gemini_api_key_intro">Consigue tu clave personal en Google AI Studio y pégala aquí para generar tus lecciones.</string>
+    <string name="gemini_api_key_open_ai_studio">Obtener clave en Google AI Studio</string>
+    <string name="gemini_api_key_steps">1. Inicia sesión con Google.\n2. Toca “Crear clave de API”.\n3. Copia la clave y vuelve a AI Learning.</string>
+    <string name="gemini_api_key_field_hint">API Key de Gemini</string>
+    <string name="gemini_api_key_field_helper">Puedes mostrar u ocultar la clave con el icono.</string>
+    <string name="gemini_api_key_paste">Pegar desde el portapapeles</string>
+    <string name="gemini_api_key_privacy_note">La clave se guarda únicamente en este dispositivo. No la compartas con otras personas.</string>
+    <string name="gemini_api_key_save">Guardar</string>
+    <string name="gemini_api_key_delete">Eliminar</string>
+    <string name="gemini_api_key_cancel">Cancelar</string>
+    <string name="gemini_api_key_required_error">Pega o escribe tu API Key.</string>
+    <string name="gemini_api_key_format_error">La clave parece incompleta. Cópiala de nuevo desde Google AI Studio.</string>
+    <string name="gemini_api_key_clipboard_empty">No hay texto para pegar en el portapapeles.</string>
+    <string name="gemini_api_key_saved">API Key guardada correctamente.</string>
+    <string name="gemini_api_key_deleted">API Key eliminada.</string>
+    <string name="gemini_api_key_browser_error">No se pudo abrir Google AI Studio. Revisa que tengas un navegador instalado.</string>
+
 
     <string-array name="grades">
         <item>1</item>

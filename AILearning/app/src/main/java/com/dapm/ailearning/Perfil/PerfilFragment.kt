@@ -1,7 +1,11 @@
 package com.dapm.ailearning.Perfil
 
+import android.content.ActivityNotFoundException
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,15 +15,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dapm.ailearning.Datos.AppDatabase
 import com.dapm.ailearning.Datos.LeccionDao
 import com.dapm.ailearning.Login.InicioSesionActivity
 import com.dapm.ailearning.R
+import com.dapm.ailearning.SolicitudApi.GeminiApiKeyStorage
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -264,47 +274,115 @@ class PerfilFragment : Fragment() {
     }
 
     private fun actualizarEstadoApiKey() {
-        val apiKey = obtenerApiKey()
-        textViewApiKeyStatus.text = if (apiKey.isNullOrEmpty()) {
-            "No configurada"
+        textViewApiKeyStatus.text = if (GeminiApiKeyStorage.get(requireContext()) == null) {
+            getString(R.string.gemini_api_key_not_configured)
         } else {
-            "Configurada ✓ (${apiKey.take(8)}...)"
+            getString(R.string.gemini_api_key_configured)
         }
-    }
-
-    private fun obtenerApiKey(): String? {
-        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
-        return sharedPref?.getString("gemini_api_key", null)
     }
 
     private fun mostrarDialogoApiKey() {
-        val input = android.widget.EditText(requireContext()).apply {
-            hint = "Ingresa tu API Key de Gemini"
-            setText(obtenerApiKey() ?: "")
-            setPadding(48, 32, 48, 16)
-            inputType = android.text.InputType.TYPE_CLASS_TEXT or
-                    android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        val dialogView = layoutInflater.inflate(R.layout.dialog_gemini_api_key, null)
+        val inputLayout = dialogView.findViewById<TextInputLayout>(R.id.apiKeyInputLayout)
+        val input = dialogView.findViewById<TextInputEditText>(R.id.editTextGeminiApiKey)
+        val openAiStudioButton = dialogView.findViewById<Button>(R.id.buttonOpenGeminiApiKeyPage)
+        val pasteButton = dialogView.findViewById<Button>(R.id.buttonPasteGeminiApiKey)
+        val savedApiKey = GeminiApiKeyStorage.get(requireContext())
+
+        input.setText(savedApiKey.orEmpty())
+        input.setSelection(input.text?.length ?: 0)
+        input.doAfterTextChanged {
+            inputLayout.error = null
         }
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Configurar API Key")
-            .setMessage("Ingresa tu API Key de Google Gemini. Se guardará solo en este dispositivo.")
-            .setView(input)
-            .setPositiveButton("Guardar") { _, _ ->
-                val apiKey = input.text.toString().trim()
-                guardarApiKey(apiKey)
-                actualizarEstadoApiKey()
+        openAiStudioButton.setOnClickListener {
+            abrirGoogleAiStudio()
+        }
+
+        pasteButton.setOnClickListener {
+            val clipboard = requireContext()
+                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboardText = clipboard.primaryClip
+                ?.takeIf { it.itemCount > 0 }
+                ?.getItemAt(0)
+                ?.coerceToText(requireContext())
+                ?.toString()
+                .orEmpty()
+
+            if (clipboardText.isBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.gemini_api_key_clipboard_empty,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val apiKey = GeminiApiKeyStorage.normalize(clipboardText)
+                input.setText(apiKey)
+                input.setSelection(apiKey.length)
             }
-            .setNeutralButton("Eliminar") { _, _ ->
-                guardarApiKey("")
-                actualizarEstadoApiKey()
+        }
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.gemini_api_key_dialog_title)
+            .setView(dialogView)
+            .setPositiveButton(R.string.gemini_api_key_save, null)
+            .setNeutralButton(R.string.gemini_api_key_delete, null)
+            .setNegativeButton(R.string.gemini_api_key_cancel, null)
+            .create()
+
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val apiKey = input.text?.toString().orEmpty()
+                when {
+                    apiKey.isBlank() -> {
+                        inputLayout.error = getString(R.string.gemini_api_key_required_error)
+                        input.requestFocus()
+                    }
+                    !GeminiApiKeyStorage.hasValidFormat(apiKey) -> {
+                        inputLayout.error = getString(R.string.gemini_api_key_format_error)
+                        input.requestFocus()
+                    }
+                    else -> {
+                        GeminiApiKeyStorage.save(requireContext(), apiKey)
+                        actualizarEstadoApiKey()
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.gemini_api_key_saved,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                    }
+                }
             }
-            .setNegativeButton("Cancelar", null)
-            .show()
+
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).apply {
+                isEnabled = savedApiKey != null
+                setOnClickListener {
+                    GeminiApiKeyStorage.clear(requireContext())
+                    actualizarEstadoApiKey()
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.gemini_api_key_deleted,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    dialog.dismiss()
+                }
+            }
+        }
+
+        dialog.show()
     }
 
-    private fun guardarApiKey(apiKey: String) {
-        val sharedPref = activity?.getSharedPreferences("user_data", android.content.Context.MODE_PRIVATE)
-        sharedPref?.edit()?.putString("gemini_api_key", apiKey)?.apply()
+    private fun abrirGoogleAiStudio() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(GeminiApiKeyStorage.GOOGLE_AI_STUDIO_URL))
+        try {
+            startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(
+                requireContext(),
+                R.string.gemini_api_key_browser_error,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }

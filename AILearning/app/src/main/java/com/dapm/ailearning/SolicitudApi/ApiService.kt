@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,15 +15,7 @@ import java.util.concurrent.TimeUnit
 object ApiService {
 
     private const val BASE_URL_GEMINI = "https://generativelanguage.googleapis.com/v1beta/"
-    private const val DEFAULT_API_KEY = "AIzaSyABR_EFoUdy1r5YYG8_f0mUoqbaTdC2yDU" // fallback solo en dev
-
     private const val MODEL_NAME = "gemini-3-flash-preview"
-    // Función auxiliar para obtener la key guardada por el usuario
-    private fun obtenerApiKey(context: Context): String {
-        val sharedPref = context.getSharedPreferences("user_data", Context.MODE_PRIVATE)
-        val userKey = sharedPref.getString("gemini_api_key", null)
-        return if (!userKey.isNullOrEmpty()) userKey else DEFAULT_API_KEY
-    }
 
     fun solicitarAGemini(
         prompt: String,
@@ -32,10 +23,10 @@ object ApiService {
         onFailure: (Throwable?) -> Unit,
         onSuccess: (String) -> Unit
     ) {
-        val apiKey = obtenerApiKey(context)
-
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+        val apiKey = GeminiApiKeyStorage.get(context)
+        if (apiKey == null) {
+            onFailure(IllegalStateException("Configura tu API Key de Gemini en Perfil para continuar."))
+            return
         }
 
         val apiKeyInterceptor = object : Interceptor {
@@ -57,7 +48,6 @@ object ApiService {
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(apiKeyInterceptor)
-            .addInterceptor(loggingInterceptor)
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -73,8 +63,6 @@ object ApiService {
         )
         val geminiRequest = GeminiRequest(contents = listOf(geminiPrompt))
 
-        Log.d("ApiService", "Usando key: ${apiKey.take(8)}... | Prompt: $prompt")
-
         val call = geminiApi.generateContent(MODEL_NAME, geminiRequest)
 
         call.enqueue(object : Callback<GeminiResponse> {
@@ -89,11 +77,10 @@ object ApiService {
                     }
                 } else {
                     val errorCode = response.code()
-                    val errorMsg = response.errorBody()?.string()
-                    Log.e("ApiService", "Error $errorCode: $errorMsg")
+                    Log.e("ApiService", "Error $errorCode al consultar Gemini")
 
                     // ✅ Mensaje de error más claro si es problema de autenticación
-                    val mensaje = if (errorCode == 400 || errorCode == 403) {
+                    val mensaje = if (errorCode == 400 || errorCode == 401 || errorCode == 403) {
                         "API Key inválida. Verifica tu clave en el Perfil."
                     } else {
                         "Error en Gemini: $errorCode"

@@ -309,7 +309,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="API Key de Gemini:"
+                                    android:text="@string/gemini_api_key_card_title"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
                                     android:paddingBottom="4dp"/>
@@ -318,7 +318,7 @@
                                     android:id="@+id/textViewApiKeyStatus"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="No configurada"
+                                    android:text="@string/gemini_api_key_not_configured"
                                     android:textColor="@color/md_theme_outline"
                                     android:textSize="14sp" />
                             </LinearLayout>
